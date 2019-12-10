@@ -13,7 +13,7 @@ import { FullComponent } from './layouts/full/full.component';
 import { AppHeaderComponent } from './layouts/full/header/header.component';
 import { AppSidebarComponent } from './layouts/full/sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DemoMaterialModule } from './demo-material-module';
+import { MaterialModule } from './material-module';
 
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
@@ -29,7 +29,7 @@ import { SpinnerComponent } from './shared/spinner.component';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    DemoMaterialModule,
+    MaterialModule,
     FormsModule,
     FlexLayoutModule,
     HttpClientModule,
