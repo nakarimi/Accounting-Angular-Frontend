@@ -1,7 +1,7 @@
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
@@ -17,14 +17,21 @@ import { MaterialModule } from './material-module';
 
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
+import { AuthModule } from './auth/auth.module';
+import { InvoiceModule } from './invoice/invoice.module';
+import { BillComponent } from './bill/bill.component';
 
+const routes: Routes = [
+  {path: '', pathMatch: 'full', redirectTo: 'auth'}
+];
 @NgModule({
   declarations: [
     AppComponent,
     FullComponent,
     AppHeaderComponent,
     SpinnerComponent,
-    AppSidebarComponent
+    AppSidebarComponent,
+    BillComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +41,13 @@ import { SpinnerComponent } from './shared/spinner.component';
     FlexLayoutModule,
     HttpClientModule,
     SharedModule,
-    RouterModule.forRoot(AppRoutes)
+    AuthModule,
+    InvoiceModule,
+    RouterModule.forRoot(AppRoutes),
+    RouterModule.forRoot(routes)
+  ],
+  exports: [
+    RouterModule
   ],
   providers: [
     {
