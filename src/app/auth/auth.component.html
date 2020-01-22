@@ -1,14 +1,14 @@
-<div class="container">
-    <mat-card class="col-md-6 offset-md-3 mt-5">
-        <span class="float-right" (click)="loginActionToggle()">
-            <a mat-button *ngIf="!loginAction">Login</a>
-            <a mat-button *ngIf=" loginAction">Register</a>
+<div class="container" fxLayout="row" fxLayoutAlign="center center">
+    <mat-card >
+<span class="float-right" (click)="loginActionToggle()">    
+          <a mat-button *ngIf="!loginAction">Login</a>
+          <a mat-button *ngIf="loginAction">Register</a>
         </span>
         <form *ngIf="loginAction" [formGroup]="authForm" (ngSubmit)="authentication()">
             <mat-card-header>
-                <div mat-card-avatar class="example-header-image"></div>
-                <mat-card-title>Financial Management</mat-card-title>
-                <mat-card-subtitle>Use your credentioals</mat-card-subtitle>
+                <div mat-card-avatar class="example-header-image" style="width: 100%; text-align: center;height: 100px;">
+                    <img src="../../assets/images/background/user-info.jpg" alt="" style="border-radius: 100px;width: 100px;height: 100px;">
+                </div>
             </mat-card-header>
             <mat-card-content>
                 <mat-form-field>
@@ -30,9 +30,10 @@
         </form>
         <form *ngIf="!loginAction" [formGroup]="authForm" (ngSubmit)="authentication()">
             <mat-card-header>
-                <div mat-card-avatar class="example-header-image"></div>
-                <mat-card-title>Financial Management</mat-card-title>
-                <mat-card-subtitle>Create Your Account</mat-card-subtitle>
+                <div mat-card-avatar class="example-header-image" style="width: 100%; text-align: center;height: 100px;">
+                    <img src="../../assets/images/background/user-info.jpg" alt=""
+                        style="border-radius: 100px;width: 100px;height: 100px;">
+                </div>
             </mat-card-header>
             <mat-card-content>
                 <mat-form-field>
@@ -45,7 +46,7 @@
                     <input type="password" formControlName="password" placeholder="Password" autocomplete="new-password"
                         required matInput />
                 </mat-form-field>
-                <mat-form-field>
+               <mat-form-field>
                     <input type="password" placeholder="Repeat password" autocomplete="new-password" required
                         matInput />
                 </mat-form-field>
@@ -61,5 +62,4 @@
             </div>
         </form>
     </mat-card>
-
 </div>

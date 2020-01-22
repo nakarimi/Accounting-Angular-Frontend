@@ -19,9 +19,10 @@ export class AppHeaderComponent implements OnInit{
     this.router.navigate(['/login']);
   }
   ngOnInit() {
-    const tokenOfUser = this.cookieService.get('auth-token');
-    if (!tokenOfUser) {
-      this.router.navigate(['/login']);
+    if (!this.cookieService.check('auth-token')) {
+      console.log('Not login!');
+      
+      // this.router.navigate(['/login']);
     }
   }
 }

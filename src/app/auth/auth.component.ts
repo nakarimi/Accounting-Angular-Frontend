@@ -29,11 +29,10 @@ export class AuthComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    const tokenOfUser = this.cookieService.get('auth-token');
-    
-    if (tokenOfUser) {
-      this.router.navigate(['/dashboard']);
-    }
+    this.apiService.test().subscribe();
+// if (this.cookieService.check('auth-token')) {
+    //   this.router.navigate(['/dashboard']);
+    // }
   }
 
   authentication() {
@@ -53,11 +52,17 @@ export class AuthComponent implements OnInit {
   getTokenSubscriber() {
     this.apiService.getToken(this.authForm.value).subscribe(
       (result: TokenObj) => {
-        this.cookieService.set('auth-token', result.token);
-        this.message = {text: 'Logged In Successfully! ' + result.token, type: 'success'};
-        setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-      }, 1000);
+        if (result["access"] != 'undefined') {
+          var date = new Date();
+          // Set expiration time for the cookie.
+          date.setTime(date.getTime() + 600 * 1000);
+          this.cookieService.set("auth-token", result["access"], date);  
+
+          this.message = {text: 'Logged In Successfully!', type: 'success'};
+          setTimeout(() => {
+            this.router.navigate(['/dashboard']);
+          }, 1000);
+        }
       },
       error => {
         this.message = {text: error.message, type: 'danger'};

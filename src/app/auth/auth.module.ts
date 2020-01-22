@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthComponent } from './auth.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
+import { FlexLayoutModule } from "@angular/flex-layout";
 import { 
   MatFormFieldModule,
   MatInputModule,
@@ -11,6 +12,8 @@ import {
   MatButtonModule,
   MatSlideToggleModule,
   MatGridListModule,
+  MatSpinner,
+  MatProgressSpinnerModule,
 } from '@angular/material';
 
 const routes: Routes = [
@@ -28,7 +31,10 @@ const routes: Routes = [
     MatCardModule,
     MatGridListModule,
     MatButtonModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatProgressSpinnerModule,
+    FormsModule,
+    FlexLayoutModule 
   ],
   exports: [
     RouterModule,

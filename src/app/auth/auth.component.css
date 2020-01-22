@@ -1,8 +1,47 @@
 .align-items-center {
-    max-width: 400px;
-  }
-  
-  .example-header-image {
-    /* background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg'); */
-    background-size: cover;
-  }
+  max-width: 400px;
+}
+
+.example-header-image {
+  /* background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg'); */
+  background-size: cover;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  min-height: 100vh;
+}
+.mat-card {
+  height: fit-content;
+}
+.mat-form-field {
+  display: block;
+  min-width: 300px;
+}
+
+mat-card-title,
+mat-card-content {
+  /* display: flex; */
+  justify-content: center;
+}
+
+.error {
+  padding: 16px;
+  /* width: 300px; */
+  color: white;
+  background-color: red;
+}
+
+.button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.mat-form-field-infix {
+  display: block;
+  position: relative;
+  flex: auto;
+  min-width: 0;
+  width: 180px;
+}
