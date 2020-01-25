@@ -11,22 +11,25 @@ export class ApiService {
   //   'Content-type': 'application/json',
   // });
 
-  apiUrl = "http://localhost:8000/";
-  accessToken = this.cookieService.get('auth-token');
-  headers = new HttpHeaders({
-    "Content-type": "application/json",
-    "Authorization": "Bearer " + this.accessToken,
-  });
-
   constructor(
       private httpClient: HttpClient,
       private cookieService: CookieService,
     ) {}
-
+    
+  apiUrl = "http://localhost:8000/";
+  
+  setApiHeader() {
+    const accessToken = this.cookieService.get('auth-token');
+    let headers = new HttpHeaders({
+      "Content-type": "application/json",
+      "Authorization": "Bearer " + accessToken,
+    });
+    return headers;
+  }  
   getToken(authData) {
     const body = JSON.stringify(authData);
     const token = this.httpClient.post(`${this.apiUrl}api/token/`, body, {
-      headers: this.headers
+      headers: this.setApiHeader()
     });
     return token;
   }
@@ -34,16 +37,32 @@ export class ApiService {
   registerUser(authData) {
     const body = JSON.stringify(authData);
     const user = this.httpClient.post(`${this.apiUrl}api/users/`, body, {
-      headers: this.headers
+      headers: this.setApiHeader()
     });
     return user;
   }
-  test() {
-    const user = this.httpClient.get(`${this.apiUrl}api/test`, {
-      headers: this.headers
+
+  // Get all companies from backend.
+  companyList() {
+    const companies = this.httpClient.get(`${this.apiUrl}company/`, {
+      headers: this.setApiHeader()
     });
+    return companies;
+  }
+  // Delete item based on content type.
+  deleteItem(id, type) {
+    const resp = this.httpClient.delete(`${this.apiUrl}${type}/${id}/`, {
+      headers: this.setApiHeader()
+    });
+    return resp;
+  }
+
+  test() {
+    // const user = this.httpClient.get(`${this.apiUrl}api/test`, {
+    //   headers: this.headers
+    // });
     
-    console.log(user);
-    return user;
+    console.log("This is tested");
+    // return user;
   }
 }

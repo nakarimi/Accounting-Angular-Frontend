@@ -29,7 +29,7 @@ export class AuthComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.apiService.test().subscribe();
+    // this.apiService.test().subscribe();
 // if (this.cookieService.check('auth-token')) {
     //   this.router.navigate(['/dashboard']);
     // }

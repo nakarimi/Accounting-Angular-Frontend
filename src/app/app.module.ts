@@ -22,7 +22,7 @@ import { InvoiceModule } from './invoice/invoice.module';
 import { BillComponent } from './bill/bill.component';
 
 const routes: Routes = [
-  {path: '', pathMatch: 'full', redirectTo: 'auth'}
+  {path: '', pathMatch: 'full', redirectTo: 'dashboard'}
 ];
 @NgModule({
   declarations: [
@@ -31,7 +31,7 @@ const routes: Routes = [
     AppHeaderComponent,
     SpinnerComponent,
     AppSidebarComponent,
-    BillComponent
+    BillComponent,
   ],
   imports: [
     BrowserModule,

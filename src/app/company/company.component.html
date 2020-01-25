@@ -1,0 +1,18 @@
+<!-- ============================================================== -->
+<!-- row -->
+<!-- ============================================================== -->
+<div fxLayout="row" fxLayoutWrap="wrap">
+    <!-- Card column -->
+    <div fxFlex.gt-sm="100%" fxFlex="100">
+        <mat-card>
+            <mat-card-content>
+                <mat-card-title>{{apiUrl}}</mat-card-title>
+                <mat-list>
+                    <mat-list-item *ngFor="let company of companies">
+                        <p matLine class="text-muted" (click)="openDialog(company)">{{company.com_name}}</p>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

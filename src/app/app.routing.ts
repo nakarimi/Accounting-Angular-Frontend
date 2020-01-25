@@ -9,7 +9,7 @@ export const AppRoutes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: '/dashboard',
+        redirectTo: '/login',
         pathMatch: 'full'
       },
       {
@@ -19,6 +19,10 @@ export const AppRoutes: Routes = [
       {
         path: 'invoice',
         loadChildren: () => import('./invoice/invoice.module').then(m => m.InvoiceModule)
+      },
+      {
+        path: 'company',
+        loadChildren: () => import('./company/company.module').then(m => m.CompanyModule)
       }
     ]
   }

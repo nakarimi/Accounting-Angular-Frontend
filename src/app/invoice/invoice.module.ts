@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { InvoiceComponent } from './invoice.component';
 import { InvComponent } from '../inv/inv.component';
 import { InvoiceRoutes } from './invoice.routing';
+import { MaterialModule } from '../material-module';
 
 @NgModule({
   declarations: [
@@ -12,6 +13,7 @@ import { InvoiceRoutes } from './invoice.routing';
   ],
   imports: [
     CommonModule,
+    MaterialModule,
     RouterModule.forChild(InvoiceRoutes),
   ],
   exports: [
