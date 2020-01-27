@@ -58,7 +58,7 @@ export class AuthComponent implements OnInit {
           date.setTime(date.getTime() + 600 * 1000);
           this.cookieService.set("auth-token", result["access"], date);  
 
-          this.message = {text: 'Logged In Successfully!', type: 'success'};
+          this.message = {text: 'Logged In Successfully!', type: 'accent'};
           setTimeout(() => {
             this.router.navigate(['/dashboard']);
           }, 1000);

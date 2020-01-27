@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookieService } from "ngx-cookie-service";
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: "root"
@@ -14,6 +15,7 @@ export class ApiService {
   constructor(
       private httpClient: HttpClient,
       private cookieService: CookieService,
+      private router: Router,
     ) {}
     
   apiUrl = "http://localhost:8000/";
@@ -56,13 +58,20 @@ export class ApiService {
     });
     return resp;
   }
-
-  test() {
-    // const user = this.httpClient.get(`${this.apiUrl}api/test`, {
-    //   headers: this.headers
-    // });
+  // Delete item based on content type.
+  updateItem(data, type) {
+    const body = JSON.stringify(data);
+    console.log(body);
     
-    console.log("This is tested");
-    // return user;
+    const resp = this.httpClient.put(`${this.apiUrl}${type}/${data.id}/`, data,{
+      headers: this.setApiHeader(),
+    });
+    return resp;
+  }
+
+  apiRespErrors(error) {
+    if (error.status == 401) {
+      this.router.navigate(['/login']);
+    }
   }
 }

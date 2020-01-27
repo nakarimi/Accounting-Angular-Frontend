@@ -1,4 +1,4 @@
-<img src="/{{data.com_logo}}">
+<img src="http://localhost:8000{{data.com_logo}}">
 <div mat-dialog-content>
     <mat-tab-group animationDuration="0ms">
         <mat-tab label="View">
@@ -11,21 +11,33 @@
             <p>Status: {{data.id}}</p>
         </mat-tab>
         <mat-tab label="Edit">
-            <form class="example-container" >
+            <form class="example-container" [formGroup]="companyFormControl" (ngSubmit)="UpdateCompany(data)">
                 <mat-form-field>
-                    <input matInput placeholder="Company Name">
+                    <input matInput 
+                        formControlName="com_name" 
+                        [(ngModel)]="data.com_name"
+                        placeholder="Company Name">
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput placeholder="Owner">
+                    <input matInput 
+                        formControlName="com_owner" 
+                        [(ngModel)]="data.com_owner" 
+                        placeholder="Owner">
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput placeholder="Address">
+                    <input matInput 
+                        formControlName="com_address" 
+                        [(ngModel)]="data.com_address" 
+                        placeholder="Address">
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput placeholder="Enter your email"  required>
+                    <input matInput 
+                        formControlName="com_email" 
+                        [(ngModel)]="data.com_email" 
+                        placeholder="Enter your email"  required>
                 </mat-form-field>
                 <div>
-                    <label>Float label: </label>
+                    <label>Status: </label>
                     <mat-radio-group >
                         <mat-radio-button value="auto">Auto</mat-radio-button>
                         <mat-radio-button value="always">Always</mat-radio-button>
@@ -33,7 +45,10 @@
                     </mat-radio-group>
                 </div>
                 <mat-form-field>
-                    <input matInput placeholder="Phone number" required>
+                    <input matInput 
+                        formControlName="com_phone" 
+                        [(ngModel)]="data.com_phone" 
+                        placeholder="Phone number" required>
                 </mat-form-field>
                 <button type="submit" mat-button color="primary">Update</button>
                 <button mat-button color="warn">Cancel</button>

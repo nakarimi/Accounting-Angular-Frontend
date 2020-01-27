@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ApiService } from '../api.service';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-dialog-overview-example-dialog',
@@ -17,6 +18,30 @@ export class DialogOverviewExampleDialogComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+  companyFormControl = new FormGroup({
+    com_name: new FormControl(''),
+    com_owner: new FormControl(''),
+    com_phone: new FormControl(''),
+    com_address: new FormControl(''),
+    com_email: new FormControl(''),
+    com_status: new FormControl(''),
+  });
+
+  UpdateCompany(data): void {
+    this.apiService.updateItem(data, 'company').subscribe(
+      result => {
+        this.dialogRef.close();
+      },
+      error => {
+        this.dialogRef.close();
+        this.apiService.apiRespErrors(error)
+      }
+    );
+
+    
+  }
+
   deleteSelectedItem(id): void {
 
     this.apiService.deleteItem(id, 'company').subscribe(
