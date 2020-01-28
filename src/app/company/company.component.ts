@@ -38,16 +38,24 @@ export class DialogOverviewExampleDialogComponent {
         this.apiService.apiRespErrors(error)
       }
     );
-
-    
+  }
+  CreateCompany(data): void {  
+    this.apiService.createItem(data, 'company').subscribe(
+      result => {
+        this.dialogRef.close();
+      },
+      error => {
+        this.dialogRef.close();
+        this.apiService.apiRespErrors(error)
+      }
+    );
   }
 
   deleteSelectedItem(id): void {
 
     this.apiService.deleteItem(id, 'company').subscribe(
       result => {
-        console.log(result);
-
+        this.dialogRef.close();
       },
       error => {
         console.log(error);

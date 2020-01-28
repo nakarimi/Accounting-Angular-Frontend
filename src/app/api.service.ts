@@ -54,16 +54,22 @@ export class ApiService {
   // Delete item based on content type.
   deleteItem(id, type) {
     const resp = this.httpClient.delete(`${this.apiUrl}${type}/${id}/`, {
-      headers: this.setApiHeader()
+      headers: this.setApiHeader(),
+      'responseType': 'text'
     });
     return resp;
   }
   // Delete item based on content type.
   updateItem(data, type) {
-    const body = JSON.stringify(data);
-    console.log(body);
-    
-    const resp = this.httpClient.put(`${this.apiUrl}${type}/${data.id}/`, data,{
+    const resp = this.httpClient.put(`${this.apiUrl}${type}/${data.id}/`, data, {
+      headers: this.setApiHeader(),
+    });
+    return resp;
+  }
+
+  // Delete item based on content type.
+  createItem(data, type) {
+    const resp = this.httpClient.post(`${this.apiUrl}${type}/`, data, {
       headers: this.setApiHeader(),
     });
     return resp;
