@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule,Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MaterialModule } from '../material-module';
+import { MaterialModule } from '../../material-module';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { CompanyComponent, DialogOverviewExampleDialogComponent } from './company.component';
+import { CompanyComponent, AddCompanyDialog } from './company.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { AlertModule } from 'ngx-bootstrap';
 
 export const CompanyRoutes: Routes = [{
   path: '',
@@ -19,12 +19,16 @@ export const CompanyRoutes: Routes = [{
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
+    AlertModule.forRoot(),
     RouterModule.forChild(CompanyRoutes)
   ],
-  entryComponents: [DialogOverviewExampleDialogComponent],
+  entryComponents: [
+    AddCompanyDialog,
+  ],
   declarations: [
     CompanyComponent,
-    DialogOverviewExampleDialogComponent
+    AddCompanyDialog
+    // ModalComponent,
   ]
 })
 export class CompanyModule {}

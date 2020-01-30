@@ -18,8 +18,7 @@ import { MaterialModule } from './material-module';
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { AuthModule } from './auth/auth.module';
-import { InvoiceModule } from './invoice/invoice.module';
-import { BillComponent } from './bill/bill.component';
+import { AlertModule } from 'ngx-bootstrap/alert';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'dashboard'}
@@ -31,7 +30,6 @@ const routes: Routes = [
     AppHeaderComponent,
     SpinnerComponent,
     AppSidebarComponent,
-    BillComponent,
   ],
   imports: [
     BrowserModule,
@@ -42,9 +40,9 @@ const routes: Routes = [
     HttpClientModule,
     SharedModule,
     AuthModule,
-    InvoiceModule,
     RouterModule.forRoot(AppRoutes),
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    AlertModule.forRoot()
   ],
   exports: [
     RouterModule

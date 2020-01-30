@@ -6,7 +6,9 @@
     <div fxFlex.gt-sm="100%" fxFlex="100">
         <mat-card>
             <mat-card-content>
-                <mat-card-title>Companies List</mat-card-title>
+                <mat-card-title>Companies List
+                    <button mat-raised-button mat-button (click)="openCompanyDialog()" tabindex="-1">Add</button>
+                </mat-card-title>
                 <mat-list>
                     <mat-list-item *ngFor="let company of companies">
                         <p matLine class="text-muted" (click)="openDialog(company)">{{company.com_name}}</p>

@@ -14,15 +14,11 @@ export const AppRoutes: Routes = [
       },
       {
         path: 'dashboard',
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
-      },
-      {
-        path: 'invoice',
-        loadChildren: () => import('./invoice/invoice.module').then(m => m.InvoiceModule)
+        loadChildren: () => import('./components/dashboard/dashboard.module').then(m => m.DashboardModule)
       },
       {
         path: 'company',
-        loadChildren: () => import('./company/company.module').then(m => m.CompanyModule)
+        loadChildren: () => import('./components/company/company.module').then(m => m.CompanyModule)
       }
     ]
   }
