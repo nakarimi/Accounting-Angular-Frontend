@@ -1,6 +1,6 @@
 <img src="http://localhost:8000{{data.com_logo}}" class="company-logo">
 <div mat-dialog-content>
-    <mat-tab-group animationDuration="0ms">
+    <mat-tab-group animationDuration="0ms" (selectedTabChange)="tabChanged($event)">
         <mat-tab label="View">
             <p>Name: {{data.com_name}}</p>
             <p>Owner: {{data.com_owner}}</p>
@@ -50,16 +50,16 @@
                         [(ngModel)]="data.com_phone" 
                         placeholder="Phone number" required>
                 </mat-form-field>
-                <button type="submit" mat-button color="primary">Update</button>
-                <button mat-button color="warn">Cancel</button>
             </form>
         </mat-tab>
         <mat-tab label="Delete">
             <h3>Are you sure to delete?</h3>
-            <button mat-button (click)="deleteSelectedItem(data.id)" color="warn" tabindex="-1">Delete</button>
         </mat-tab>
     </mat-tab-group>
 </div>
 <div mat-dialog-actions style="float: right;">
-    <button md-bottom-right mat-button color="accent" (click)="onNoClick()" tabindex="-1">Close</button>
+    <button *ngIf="tabAction == 'Edit'" type="submit" mat-button color="primary">Update</button>
+    <button *ngIf="tabAction == 'Edit'" mat-button color="warn">Cancel</button>
+    <button *ngIf="tabAction == 'Delete'" mat-button (click)="deleteSelectedItem(data.id)" color="warn" tabindex="-1">Delete</button>
+    <button *ngIf="tabAction != 'Edit'" md-bottom-right mat-button color="accent" (click)="onNoClick()" tabindex="-1">Close</button>
 </div>

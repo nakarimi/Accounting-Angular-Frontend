@@ -7,11 +7,13 @@
         <mat-card>
             <mat-card-content>
                 <mat-card-title>Companies List
-                    <button mat-raised-button mat-button (click)="openCompanyDialog()" tabindex="-1">Add</button>
+                    <button mat-raised-button mat-button
+                        fxLayoutAlign.gt-md="space-around right"
+                        (click)="openCompanyDialog()" tabindex="-1">Add</button>
                 </mat-card-title>
                 <mat-list>
                     <mat-list-item *ngFor="let company of companies">
-                        <p matLine class="text-muted" (click)="openDialog(company)">{{company.com_name}}</p>
+                        <p matLine class="text-muted" (click)="openTabDialog(company)">{{company.com_name}}</p>
                     </mat-list-item>
                 </mat-list>
             </mat-card-content>
