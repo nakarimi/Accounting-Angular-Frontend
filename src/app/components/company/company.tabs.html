@@ -50,6 +50,7 @@
                         [(ngModel)]="data.com_phone" 
                         placeholder="Phone number" required>
                 </mat-form-field>
+                <button *ngIf="tabAction == 'Edit'" type="submit" mat-button color="primary">Update</button>
             </form>
         </mat-tab>
         <mat-tab label="Delete">
@@ -58,7 +59,6 @@
     </mat-tab-group>
 </div>
 <div mat-dialog-actions style="float: right;">
-    <button *ngIf="tabAction == 'Edit'" type="submit" mat-button color="primary">Update</button>
     <button *ngIf="tabAction == 'Edit'" mat-button color="warn">Cancel</button>
     <button *ngIf="tabAction == 'Delete'" mat-button (click)="deleteSelectedItem(data.id)" color="warn" tabindex="-1">Delete</button>
     <button *ngIf="tabAction != 'Edit'" md-bottom-right mat-button color="accent" (click)="onNoClick()" tabindex="-1">Close</button>

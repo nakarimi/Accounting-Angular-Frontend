@@ -12,7 +12,34 @@ export interface DialogData {}
   templateUrl: 'add-company-dialog.html',
 })
 export class AddCompanyDialog {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+  constructor(
+    private apiService: ApiService,
+    public dialogRef: MatDialogRef<any>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+    ) { }
+
+  companyFormControl = new FormGroup({
+    com_name: new FormControl(''),
+    com_owner: new FormControl(''),
+    com_phone: new FormControl(''),
+    com_address: new FormControl(''),
+    com_email: new FormControl(''),
+    com_status: new FormControl(''),
+  });
+  CreateCompany(): void {
+    
+    this.apiService.createItem(this.companyFormControl.value, 'company').subscribe(
+      result => {
+        this.dialogRef.close();
+      },
+      error => {
+        this.dialogRef.close();
+        this.apiService.apiRespErrors(error)
+      }
+    );
+  }
+
+
 }
 @Component({
   selector: 'company-tabs-dialog',
@@ -53,18 +80,6 @@ export class CompanyTabDialog {
       }
     );
   }
-  CreateCompany(data): void {
-    this.apiService.createItem(data, 'company').subscribe(
-      result => {
-        this.dialogRef.close();
-      },
-      error => {
-        this.dialogRef.close();
-        this.apiService.apiRespErrors(error)
-      }
-    );
-  }
-
   deleteSelectedItem(id): void {
 
     this.apiService.deleteItem(id, 'company').subscribe(
