@@ -1,0 +1,30 @@
+<button mat-raised-button mat-button (click)="openAddDialog()" align="end" tabindex="-1">Add</button>
+
+
+
+<table border="1px">
+  <thead>
+    <tr>
+        <td>label</td>
+        <td>owner</td>
+        <td>balance</td>
+        <td>desc</td>
+        <td>status</td>
+        <td>created_at</td>
+        <td>updated_at</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of accounts" >
+        <td>{{ item.label }}</td>
+        <td>{{ item.owner }}</td>        
+        <td>{{ item.balance }}</td>
+        <td>{{ item.desc }}</td>
+        <td>{{ item.status }}</td>        
+        <td>{{ item.created_at | date:'MM/dd/yyyy'}}</td>
+        <td>{{ item.updated_at | date:'MM/dd/yyyy'}}</td>
+        <button mat-raised-button mat-button (click)="openEditDialog(item)" align="end" tabindex="-1">Edit</button>
+        <button mat-raised-button mat-button (click)="delete(item.id)" align="end" tabindex="-1">Delete</button>
+    </tr>
+  </tbody>
+</table>

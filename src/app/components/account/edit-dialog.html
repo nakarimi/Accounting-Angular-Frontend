@@ -1,0 +1,35 @@
+<h2 mat-dialog-title>Edit Account</h2>
+<mat-dialog-content class="mat-typography">
+  <form class="example-container" [formGroup]="accountFC" enctype="multipart/form-data"
+    (ngSubmit)="updateAcc(data)">
+    <mat-form-field>
+      <input matInput type="text" formControlName="label" placeholder="Label"
+        value="{{ data.label }}">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="textarea" formControlName="owner" placeholder="Owner" required
+        value="{{ data.owner }}">
+    </mat-form-field>
+    <div>
+      <label>Status: </label>
+      <mat-radio-group formControlName="status">
+        <mat-radio-button value="0">Inactive </mat-radio-button>
+        <mat-radio-button value="1">Active </mat-radio-button>
+      </mat-radio-group>
+    </div>
+    <mat-form-field>
+      <input matInput type="text" formControlName="balance" placeholder="Balance" required
+        value="{{ data.balance }}">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="text" formControlName="desc" placeholder="Description" 
+        value="{{ data.desc }}">
+    </mat-form-field>
+
+    <button align="end" type="submit" mat-button color="primary">Update</button>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Create</button>
+</mat-dialog-actions>

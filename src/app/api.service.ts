@@ -7,10 +7,6 @@ import { Router } from '@angular/router';
   providedIn: "root"
 })
 export class ApiService {
-  // apiUrl = 'http://localhost:8000/';
-  // headers = new HttpHeaders({
-  //   'Content-type': 'application/json',
-  // });
 
   constructor(
       private httpClient: HttpClient,
@@ -18,20 +14,14 @@ export class ApiService {
       private router: Router,
     ) {}
     
-  apiUrl = "http://localhost:8000/";
-  
-  setApiHeader() {
-    const accessToken = this.cookieService.get('auth-token');
-    let headers = new HttpHeaders({
-      "Content-type": "application/json",
-      "Authorization": "Bearer " + accessToken,
-    });
-    return headers;
-  }  
+  apiUrl = "http://localhost:8000/";  
+
   getToken(authData) {
     const body = JSON.stringify(authData);
     const token = this.httpClient.post(`${this.apiUrl}api/token/`, body, {
-      headers: this.setApiHeader()
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+      })
     });
     return token;
   }
@@ -39,38 +29,53 @@ export class ApiService {
   registerUser(authData) {
     const body = JSON.stringify(authData);
     const user = this.httpClient.post(`${this.apiUrl}api/users/`, body, {
-      headers: this.setApiHeader()
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+      })
     });
     return user;
   }
 
   // Get all companies from backend.
-  companyList() {
-    const companies = this.httpClient.get(`${this.apiUrl}company/`, {
-      headers: this.setApiHeader()
+  loadAll(entity) { 
+    const data = this.httpClient.get(`${this.apiUrl + entity}/`, {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + this.cookieService.get('auth-token'),
+      })
     });
-    return companies;
+    return data;
   }
   // Delete item based on content type.
-  deleteItem(id, type) {
+  delete(id, type) {
     const resp = this.httpClient.delete(`${this.apiUrl}${type}/${id}/`, {
-      headers: this.setApiHeader(),
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + this.cookieService.get('auth-token'),
+      }),
       'responseType': 'text'
     });
     return resp;
   }
   // Delete item based on content type.
-  updateItem(data, type) {
-    const resp = this.httpClient.put(`${this.apiUrl}${type}/${data.id}/`, data, {
-      headers: this.setApiHeader(),
+  update(id, data, type) {
+    const resp = this.httpClient.put(`${this.apiUrl + type}/${id}/`, data, {
+      headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + this.cookieService.get('auth-token'),
+      }),
     });
     return resp;
   }
 
   // Delete item based on content type.
-  createItem(data, type) {
-    const resp = this.httpClient.post(`${this.apiUrl}${type}/`, data, {
-      headers: this.setApiHeader(),
+  create(data, type) {
+    const resp = this.httpClient.post(`${this.apiUrl + type}/`, data, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        "Authorization": "Bearer " + this.cookieService.get('auth-token'),
+      }),
     });
     return resp;
   }
