@@ -8,6 +8,7 @@
         <td>label</td>
         <td>owner</td>
         <td>balance</td>
+        <td>currency</td>
         <td>desc</td>
         <td>status</td>
         <td>created_at</td>
@@ -18,7 +19,7 @@
     <tr *ngFor="let item of accounts" >
         <td>{{ item.label }}</td>
         <td>{{ item.owner }}</td>        
-        <td>{{ item.balance }}</td>
+        <td>{{ item.balance }} {{ item.currency }}</td>
         <td>{{ item.desc }}</td>
         <td>{{ item.status }}</td>        
         <td>{{ item.created_at | date:'MM/dd/yyyy'}}</td>

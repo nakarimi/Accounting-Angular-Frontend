@@ -16,10 +16,11 @@ export class AppHeaderComponent implements OnInit{
 
   logOutUser() {
     this.cookieService.delete('auth-token');
+    this.cookieService.delete('refresh-token');
     this.router.navigate(['/login']);
   }
   ngOnInit() {
-    if (!this.cookieService.check('auth-token')) {
+    if (!this.cookieService.check('refresh-token')) {
       this.router.navigate(['/login']);
     }
   }

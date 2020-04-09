@@ -2,6 +2,7 @@ import { Component, OnInit, Inject, Output, Input } from '@angular/core';
 import { ApiService } from '../../api.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
+import { find, findIndex } from 'rxjs/operators';
 
 @Component({
   selector: 'app-account',
@@ -19,12 +20,16 @@ export class AccountComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loadAccounts();
+  }
+  loadAccounts() {
     this.apiService.loadAll('acnt').subscribe(
       result => {
         this.accounts = result;
       },
       error => {
-        console.log(error);
+        this.apiService.refreshToken();
+        this.loadAccounts();
       }
     );
   }
@@ -43,7 +48,8 @@ export class AccountComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+            
+      console.log(this.accounts.find(3200));
     });
   }
 
@@ -75,6 +81,7 @@ export class AddDialog {
     label: new FormControl(''),
     owner: new FormControl(''),
     balance: new FormControl(''),
+    currency: new FormControl(''),
     desc: new FormControl(''),
     status: new FormControl(''),
   });
@@ -84,19 +91,13 @@ export class AddDialog {
     
     this.apiService.create(this.accountFC.value, 'acnt').subscribe(
       result => {
-        this.dialogRef.close();
-        this.apiService.loadAll('acnt').subscribe(
-          result => {
-            // this.accounts = result;
-          },
-          error => {
-            console.log(error);
-          }
-        );
+        this.dialogRef.close(result);
+        console.log(result);
+
       },
       error => {
         // this.dialogRef.close();
-        this.apiService.apiRespErrors(error)
+        // this.apiService.apiRespErrors(error)
       }
     );
     
@@ -121,6 +122,7 @@ export class EditDialog implements OnInit{
     label: new FormControl(''),
     owner: new FormControl(''),
     balance: new FormControl(''),
+    currency: new FormControl(''),
     desc: new FormControl(''),
     status: new FormControl(''),
   });
@@ -132,6 +134,7 @@ export class EditDialog implements OnInit{
     this.accountFC.setValue({
       label: this.editData.label,
       owner: this.editData.owner,
+      currency: this.editData.currency,
       balance: this.editData.balance,
       desc: this.editData.desc,
       status: this.editData.status,
@@ -141,19 +144,13 @@ export class EditDialog implements OnInit{
   updateAcc(data) {
     this.apiService.update(data.id, this.accountFC.value, 'acnt').subscribe(
       result => {
-        this.dialogRef.close();
-        this.apiService.loadAll('acnt').subscribe(
-          result => {
-            // this.accounts = result;
-          },
-          error => {
-            console.log(error);
-          }
-        );
+        this.dialogRef.close(result);
+        console.log(result);
+        
       },
       error => {
         // this.dialogRef.close();
-        this.apiService.apiRespErrors(error)
+        // this.apiService.apiRespErrors(error)
       }
     );
 

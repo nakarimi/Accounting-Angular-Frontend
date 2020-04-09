@@ -30,7 +30,7 @@ export class AuthComponent implements OnInit {
 
   ngOnInit() {
     // this.apiService.test().subscribe();
-// if (this.cookieService.check('auth-token')) {
+    // if (this.cookieService.check('auth-token')) {
     //   this.router.navigate(['/dashboard']);
     // }
   }
@@ -56,7 +56,9 @@ export class AuthComponent implements OnInit {
           var date = new Date();
           // Set expiration time for the cookie.
           date.setTime(date.getTime() + 600 * 1000);
-          this.cookieService.set("auth-token", result["access"], date);  
+          this.cookieService.set("auth-token", result["access"], date);
+          date.setTime(date.getTime() + 6000 * 1000);
+          this.cookieService.set("refresh-token", result["refresh"], date);  
 
           this.message = {text: 'Logged In Successfully!', type: 'accent'};
           setTimeout(() => {
