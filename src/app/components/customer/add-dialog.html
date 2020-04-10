@@ -1,7 +1,7 @@
-<h2 mat-dialog-title>Add Account</h2>
+<h2 mat-dialog-title>Add Customer</h2>
 <mat-dialog-content class="mat-typography">
-  <form class="example-container" [formGroup]="accountFC" enctype="multipart/form-data"
-    (ngSubmit)="createAcc()">
+  <form class="example-container" [formGroup]="customerFC" enctype="multipart/form-data"
+    (ngSubmit)="create()">
     <mat-form-field>
       <input matInput type="text" formControlName="label" placeholder="Label">
     </mat-form-field>
@@ -13,18 +13,15 @@
       <mat-checkbox formControlName="status">Active</mat-checkbox>
     </div>
     <mat-form-field>
-      <input matInput type="number" formControlName="balance" placeholder="Balance" required>
+      <input matInput type="number" formControlName="phone" placeholder="Phone" required>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" formControlName="currency" placeholder="Currency" required>
+      <input matInput type="email" formControlName="email" placeholder="Email" required>
     </mat-form-field>
-    <mat-form-field>
-      <input matInput type="text" formControlName="desc" placeholder="Description">
-    </mat-form-field>
+
     <mat-dialog-actions align="end">
       <button align="end" type="submit" mat-button color="primary">Create</button>
       <button mat-button mat-dialog-close>Cancel</button>
     </mat-dialog-actions>
-
   </form>
 </mat-dialog-content>

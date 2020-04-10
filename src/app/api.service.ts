@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookieService } from "ngx-cookie-service";
-import { Router } from '@angular/router';
-import { JsonPipe } from '@angular/common';
+// import { SpinnerComponent } from './shared/spinner.component';
 
 @Injectable({
   providedIn: "root"
@@ -11,7 +10,8 @@ export class ApiService {
 
   constructor(
       private httpClient: HttpClient,
-      private cookieService: CookieService,
+    private cookieService: CookieService,
+    // private sp: SpinnerComponent,
     ) {}
     
   apiUrl = "http://localhost:8000/";  
@@ -59,8 +59,7 @@ export class ApiService {
   }
   // Delete item based on content type.
   update(id, data, type) {
-    console.log(data);
-    
+    // this.sp.isSpinnerVisible = true;
     const resp = this.httpClient.put(`${this.apiUrl + type}/${id}/`, data, {
       headers: new HttpHeaders({
         "Content-Type": "application/json",

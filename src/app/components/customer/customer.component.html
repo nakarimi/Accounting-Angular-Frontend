@@ -1,25 +1,22 @@
-
 <button mat-raised-button mat-button (click)="openAddDialog()" align="end" tabindex="-1">Add</button>
-
 <table border="1px">
   <thead>
     <tr>
         <td>label</td>
         <td>owner</td>
-        <td>balance</td>
-        <!-- <td>currency</td> -->
-        <td>desc</td>
+        <td>phone</td>
+        <td>email</td>
         <td>status</td>
         <td>created_at</td>
         <td>updated_at</td>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let item of accounts" >
+    <tr *ngFor="let item of customers" >
         <td>{{ item.label }}</td>
         <td>{{ item.owner }}</td>        
-        <td>{{ item.balance }} {{ item.currency }}</td>
-        <td>{{ item.desc }}</td>
+        <td>{{ item.phone }}</td>
+        <td>{{ item.email }}</td>
         <td>{{ item.status }}</td>        
         <td>{{ item.created_at | date:'MM/dd/yyyy'}}</td>
         <td>{{ item.updated_at | date:'MM/dd/yyyy'}}</td>
