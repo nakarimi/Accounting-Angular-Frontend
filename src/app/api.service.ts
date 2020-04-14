@@ -1,13 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookieService } from "ngx-cookie-service";
+import { MatPaginator, MatSort } from '@angular/material';
+import { merge, throwError } from 'rxjs';
+import { startWith, switchMap, map, catchError, retry } from 'rxjs/operators';
 // import { SpinnerComponent } from './shared/spinner.component';
+
+
 
 @Injectable({
   providedIn: "root"
 })
 export class ApiService {
-
+  
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
   constructor(
       private httpClient: HttpClient,
     private cookieService: CookieService,
@@ -37,14 +44,49 @@ export class ApiService {
   }
 
   // Get all companies from backend.
-  loadAll(entity) {
-    const data = this.httpClient.get(`${this.apiUrl + entity}/`, {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + this.cookieService.get('auth-token'),
-      })
-    });
-    return data;
+  loadAll(entity, sort = '', order= '', page = '') {
+      const href = 'http://localhost:8000';
+      const requestUrl = `${href}/${entity}`;
+
+      return this.httpClient.get<any>(requestUrl);
+
+    // If the user changes the sort order, reset back to the first page.
+    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    // return merge()
+    //   .pipe(
+    //     startWith({}),
+    //     switchMap( data => {
+    //       // this.isLoadingResults = true;
+    //       return this.httpClient.get<any>(requestUrl);
+    //     }),
+    //     map(data => {
+    //       // Flip flag to show that loading has finished.
+    //       // this.isLoadingResults = false;
+    //       // this.isRateLimitReached = false;
+    //       // this.resultsLength = data.total_count;
+
+    //       // return data.items;
+    //       return data;
+    //     }),
+    //     catchError(data => {
+    //       // this.isLoadingResults = false;
+    //       // // Catch if the GitHub API has reached its rate limit. Return empty data.
+    //       // this.isRateLimitReached = true;
+    //       console.log(data);
+          
+    //       return data;
+    //     })
+    //   );
+
+
+    // const data = this.httpClient.get(`${this.apiUrl + entity}/`, {
+    //   headers: new HttpHeaders({
+    //     "Content-Type": "application/json",
+    //     "Authorization": "Bearer " + this.cookieService.get('auth-token'),
+    //   })
+    // });
+    // return data;
   }
   // Delete item based on content type.
   delete(id, type) {
@@ -83,11 +125,12 @@ export class ApiService {
 
   refreshToken() {
     var formdata = { "refresh": this.cookieService.get('refresh-token')};    
-    this.httpClient.post(`${this.apiUrl}api/token/refresh/`, formdata, {
+    const respData = this.httpClient.post(`${this.apiUrl}api/token/refresh/`, formdata, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
-    }).subscribe(
+    });
+    respData.subscribe(
       result => {
         // Update the access token again.
         var date = new Date();
@@ -98,6 +141,7 @@ export class ApiService {
         console.log(error);
       }
     );
-
+    return respData;
   }
+
 }

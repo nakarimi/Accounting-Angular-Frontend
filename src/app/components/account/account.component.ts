@@ -1,8 +1,9 @@
-import { Component, OnInit, Inject, Output, Input } from '@angular/core';
+import { Component, OnInit, Inject, Output, Input, ViewChild } from '@angular/core';
 import { ApiService } from '../../api.service';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatPaginator, MatSort } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
 import { find, findIndex } from 'rxjs/operators';
+import { ExampleHttpDatabase } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-account',
@@ -13,6 +14,17 @@ export class AccountComponent implements OnInit {
   // Define all the variable
   @Output() accounts: any
 
+  // Define all the variable
+  displayedColumns: string[] = ['label', 'owner', 'balance', 'status', 'desc', 'id'];
+  exampleDatabase: ExampleHttpDatabase | null;
+
+  resultsLength = 0;
+  isLoadingResults = true;
+  isRateLimitReached = false;
+
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+
   constructor(
     private apiService: ApiService,
     public dialog: MatDialog,
@@ -22,20 +34,24 @@ export class AccountComponent implements OnInit {
   ngOnInit() {
     this.loadAccounts();
   }
+
+
   loadAccounts() {
     this.apiService.loadAll('acnt').subscribe(
       result => {
         this.accounts = result;
       },
       error => {
-        this.apiService.refreshToken();
-        this.loadAccounts();
+        console.log(error);
+        
+        // this.apiService.refreshToken();
+        // this.loadAccounts();
       }
     );
   }
   openAddDialog() {
     const dialogRef = this.dialog.open(AddDialog, {
-      data: { name: 'austin' },
+      // data: { name: 'austin' },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -49,7 +65,7 @@ export class AccountComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
             
-      console.log(this.accounts.find(3200));
+      // console.log(this.accounts.find(3200));
     });
   }
 

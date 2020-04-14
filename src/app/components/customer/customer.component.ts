@@ -2,7 +2,6 @@ import { Component, OnInit, Inject, Output, Input, ViewChild, AfterViewInit } fr
 import { ApiService } from '../../api.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSort, MatPaginator } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
-import { find, findIndex, startWith, switchMap, map, catchError } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { merge, Observable, of as observableOf } from 'rxjs';
 @Component({
@@ -27,7 +26,6 @@ export class CustomerComponent implements AfterViewInit {
   constructor(
     private apiService: ApiService,
     public dialog: MatDialog,
-    private _httpClient: HttpClient,
   ) { }
 
   ngAfterViewInit() {
@@ -36,43 +34,11 @@ export class CustomerComponent implements AfterViewInit {
         this.customers = result;
       },
       error => {
-        this.apiService.refreshToken();
+        // this.apiService.refreshToken();
         // this.loadCustomers();
       }
     );
-    // this.exampleDatabase = new ExampleHttpDatabase(this._httpClient);
-
-    // // If the user changes the sort order, reset back to the first page.
-    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-
-    // merge(this.sort.sortChange, this.paginator.page)
-    //   .pipe(
-    //     startWith({}),
-    //     switchMap(() => {
-    //       this.isLoadingResults = true;
-    //       return this.exampleDatabase!.getRepoIssues(
-    //         this.sort.active, this.sort.direction, this.paginator.pageIndex);
-    //     }),
-    //     map(data => {
-    //       // Flip flag to show that loading has finished.
-    //       // this.isLoadingResults = false;
-    //       // this.isRateLimitReached = false;
-    //       this.resultsLength = data.total_count;
-
-    //       return data.items;
-    //     }),
-    //     catchError(() => {
-    //       // this.isLoadingResults = false;
-    //       // // Catch if the GitHub API has reached its rate limit. Return empty data.
-    //       // this.isRateLimitReached = true;
-    //       return observableOf([]);
-    //     })
-    //   ).subscribe(data => this.customers = data);
   }
-
-    // this.loadCustomers();
-  // }
-
 
 
   // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
@@ -163,6 +129,7 @@ export interface DialogData { }
   selector: 'edit-dialog',
   templateUrl: 'edit-dialog.html',
 })
+
 export class EditDialog implements OnInit{
   
   editData : any
@@ -183,7 +150,7 @@ export class EditDialog implements OnInit{
 
     // Assign Dialog data to new variable.
     // Because it return error when trying to get data.
-    this.editData = this.data;  
+    this.editData = this.data;
       
     this.customerFC.setValue({
       label: this.editData.label,
@@ -220,9 +187,13 @@ export interface GithubApi {
 
 export interface GithubIssue {
   created_at: string;
-  number: string;
-  state: string;
-  title: string;
+  updated_at: string;
+  label: string;
+  owner: string;
+  email: string;
+  id: any;
+  phone: string;
+  status: boolean;
 }
 
 /** An example database that the data source uses to retrieve data for the table. */
@@ -230,9 +201,9 @@ export class ExampleHttpDatabase {
   constructor(private _httpClient: HttpClient) { }
 
   getRepoIssues(sort: string, order: string, page: number): Observable<GithubApi> {
-    const href = 'https://api.github.com/search/issues';
+    const href = 'http://localhost:8000';
     const requestUrl =
-      `${href}?q=repo:angular/components&sort=${sort}&order=${order}&page=${page + 1}`;
+      `${href}/csmr?q=repo:angular/components&sort=${sort}&order=${order}&page=${page + 1}`;
 
     return this._httpClient.get<GithubApi>(requestUrl);
   }

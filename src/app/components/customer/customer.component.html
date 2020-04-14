@@ -1,30 +1,4 @@
-<!-- 
-  <table border="1px">
-    <thead>
-      <tr>
-        <td>label</td>
-        <td>owner</td>
-        <td>phone</td>
-        <td>email</td>
-        <td>status</td>
-        <td>created_at</td>
-        <td>updated_at</td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of customers" >
-        <td>{{ item.label }}</td>
-        <td>{{ item.owner }}</td>        
-        <td>{{ item.phone }}</td>
-        <td>{{ item.email }}</td>
-        <td>{{ item.status }}</td>        
-        <td>{{ item.created_at | date:'MM/dd/yyyy'}}</td>
-        <td>{{ item.updated_at | date:'MM/dd/yyyy'}}</td>
-        <button mat-raised-button mat-button (click)="openEditDialog(item)" align="end" tabindex="-1">Edit</button>
-        <button mat-raised-button mat-button (click)="delete(item.id)" align="end" tabindex="-1">Delete</button>
-      </tr>
-    </tbody>
-  </table> -->
+
 <button mat-raised-button mat-button (click)="openAddDialog()">Add</button>
 <br>
 <table width="100%" mat-table [dataSource]="customers" class="example-table" matSort matSortActive="label" matSortDisableClear
