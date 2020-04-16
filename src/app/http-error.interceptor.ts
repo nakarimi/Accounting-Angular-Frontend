@@ -23,13 +23,13 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request)
       .pipe(
         catchError((error: HttpErrorResponse) => {
+          let errorMessage = '';
           
           if (error.status == 401) {            
             this.apiService.refreshToken();
-            // alert('Try Again!');
+            errorMessage = 'Try Again!';
           }
           else{
-            let errorMessage = '';
             if (error.error instanceof ErrorEvent) {
               // client-side error
               errorMessage = `Error: ${error.error.message}`;
@@ -38,8 +38,8 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
             }
             // window.alert(errorMessage);
-            return throwError(errorMessage);
           }
+          return throwError(errorMessage);
         }
       ),
     )
