@@ -1,9 +1,8 @@
 import { Component, OnInit, Inject, Output, Input, ViewChild } from '@angular/core';
 import { ApiService } from '../../api.service';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatPaginator, MatSort } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
 import { find, findIndex } from 'rxjs/operators';
-import { ExampleHttpDatabase } from '../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-account',
@@ -16,14 +15,16 @@ export class AccountComponent implements OnInit {
 
   // Define all the variable
   displayedColumns: string[] = ['label', 'owner', 'balance', 'status', 'desc', 'id'];
-  exampleDatabase: ExampleHttpDatabase | null;
 
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
+  // Build the table data source based on table data.
+  tableData: any = [];
+  dataSource = new MatTableDataSource(this.tableData);
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatSort, { static: false }) msort: MatSort;
 
   constructor(
     private apiService: ApiService,
@@ -33,48 +34,91 @@ export class AccountComponent implements OnInit {
 
   ngOnInit() {
     this.loadAccounts();
+    
   }
 
 
   loadAccounts() {
     this.apiService.loadAll('acnt').subscribe(
       result => {
-        this.accounts = result;
+        this.dataSource.data = result;
+        this.dataSource.sort = this.msort;
       },
       error => {
         console.log(error);
-        
-        // this.apiService.refreshToken();
-        // this.loadAccounts();
       }
     );
   }
+
   openAddDialog() {
     const dialogRef = this.dialog.open(AddDialog, {
-      // data: { name: 'austin' },
+      // maxHeight: '80%',
+      // maxWidth: '80%',
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      // Do nothing on cancel and if it return value update table.
+      if (result) {
+        this.addToTable(result);
+      }
     });
   }
-  openEditDialog(data) { 
+
+  // Update handling Serverside and client side.
+  openEditDialog(data) {
+
     const dialogRef = this.dialog.open(EditDialog, {
       data: data,
     });
 
     dialogRef.afterClosed().subscribe(result => {
-            
-      // console.log(this.accounts.find(3200));
+      if (result) {
+        this.updateTable(data, result);
+      }
     });
   }
 
-  delete(id){
+  // Delete Item From Server.
+  delete(row) {
     if (confirm('Are sure to delete?')) {
-      this.apiService.delete(id, 'acnt').subscribe(
-        result => {}
-      );      
+      this.apiService.delete(row.id, 'acnt').subscribe(
+        result => {
+          this.deleteUI(row);
+        }
+      );
     }
+  }
+
+  // Delete Item From UI
+  deleteUI(row) {
+    this.tableData = this.dataSource.data;
+    let index: number = this.tableData.findIndex(data => data === row);
+    this.tableData.splice(index, 1);
+    this.dataSource = new MatTableDataSource<any>(this.tableData);
+    this.dataSource.sort = this.msort;
+  }
+
+  addToTable(data) {
+    this.tableData = this.dataSource.data;
+    this.dataSource.data = this.tableData.push(data);
+    this.dataSource = new MatTableDataSource<any>(this.tableData);
+    this.dataSource.sort = this.msort;
+  }
+
+  updateTable(oldRow, newRow) {
+    this.tableData = this.dataSource.data;
+    // Remove the old data from table.
+    let index: number = this.tableData.findIndex(data => data === oldRow);
+    this.tableData.splice(index, 1);
+    // Add update row.
+    this.dataSource.data = this.tableData.push(newRow);
+    this.dataSource = new MatTableDataSource<any>(this.tableData);
+    this.dataSource.sort = this.msort;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 }
 

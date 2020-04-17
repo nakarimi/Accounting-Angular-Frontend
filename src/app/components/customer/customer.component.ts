@@ -13,7 +13,7 @@ import { merge, Observable, of as observableOf } from 'rxjs';
 })
 
 export class CustomerComponent implements AfterViewInit {
-  isActive = true;
+
   // Define all the variable
   displayedColumns: string[] = ['label', 'owner', 'phone', 'email', 'status', 'id'];
 
@@ -37,7 +37,6 @@ export class CustomerComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.loadCustomers();
-    this.dataSource.sort = this.msort;
   }
 
   // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
@@ -45,6 +44,7 @@ export class CustomerComponent implements AfterViewInit {
     this.apiService.loadAll('csmr').subscribe(
       result => {
         this.dataSource.data = result;
+        this.dataSource.sort = this.msort;
       },
       error => {
         console.log(error);
@@ -117,6 +117,11 @@ export class CustomerComponent implements AfterViewInit {
     this.dataSource = new MatTableDataSource<any>(this.tableData);
     this.dataSource.sort = this.msort;
   }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }
 
 
@@ -151,7 +156,6 @@ export class AddDialog {
       },
       error => {
         // this.dialogRef.close();
-        // this.apiService.apiRespErrors(error)
       }
     );
     
@@ -204,7 +208,6 @@ export class EditDialog implements OnInit{
       },
       error => {
         // this.dialogRef.close();
-        // this.apiService.apiRespErrors(error)
       }
     );
 
