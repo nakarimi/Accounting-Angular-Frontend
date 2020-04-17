@@ -5,6 +5,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { merge, Observable, of as observableOf } from 'rxjs';
 
+
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
@@ -15,7 +16,6 @@ export class CustomerComponent implements AfterViewInit {
   isActive = true;
   // Define all the variable
   displayedColumns: string[] = ['label', 'owner', 'phone', 'email', 'status', 'id'];
-  exampleDatabase: ExampleHttpDatabase | null;
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -26,7 +26,7 @@ export class CustomerComponent implements AfterViewInit {
   dataSource = new MatTableDataSource(this.tableData);
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatSort, { static: false }) msort: MatSort;
 
   @Output() customers: any
 
@@ -37,6 +37,7 @@ export class CustomerComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.loadCustomers();
+    this.dataSource.sort = this.msort;
   }
 
   // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
@@ -58,7 +59,10 @@ export class CustomerComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.addToTable(result);
+      // Do nothing on cancel and if it return value update table.
+      if (result) {
+        this.addToTable(result);
+      }
     });
   }
   
@@ -70,8 +74,9 @@ export class CustomerComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.updateTable(data, result);
-      
+      if(result){
+        this.updateTable(data, result);
+      }
     });
   }
 
@@ -92,12 +97,14 @@ export class CustomerComponent implements AfterViewInit {
     let index: number = this.tableData.findIndex(data => data === row);
     this.tableData.splice(index, 1);
     this.dataSource = new MatTableDataSource<any>(this.tableData);
+    this.dataSource.sort = this.msort;
   }
 
   addToTable(data){
     this.tableData = this.dataSource.data;
     this.dataSource.data = this.tableData.push(data);
     this.dataSource = new MatTableDataSource<any>(this.tableData);
+    this.dataSource.sort = this.msort;
   }
 
   updateTable(oldRow, newRow) {
@@ -108,6 +115,7 @@ export class CustomerComponent implements AfterViewInit {
     // Add update row.
     this.dataSource.data = this.tableData.push(newRow);
     this.dataSource = new MatTableDataSource<any>(this.tableData);
+    this.dataSource.sort = this.msort;
   }
 }
 
@@ -200,38 +208,5 @@ export class EditDialog implements OnInit{
       }
     );
 
-  }
-}
-
-
-
-// =======================
-
-export interface GithubApi {
-  items: GithubIssue[];
-  total_count: number;
-}
-
-export interface GithubIssue {
-  created_at: string;
-  updated_at: string;
-  label: string;
-  owner: string;
-  email: string;
-  id: any;
-  phone: string;
-  status: boolean;
-}
-
-/** An example database that the data source uses to retrieve data for the table. */
-export class ExampleHttpDatabase {
-  constructor(private _httpClient: HttpClient) { }
-
-  getRepoIssues(sort: string, order: string, page: number): Observable<GithubApi> {
-    const href = 'http://localhost:8000';
-    const requestUrl =
-      `${href}/csmr?q=repo:angular/components&sort=${sort}&order=${order}&page=${page + 1}`;
-
-    return this._httpClient.get<GithubApi>(requestUrl);
   }
 }
