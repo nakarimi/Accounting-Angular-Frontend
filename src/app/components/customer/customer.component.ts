@@ -1,22 +1,29 @@
 import { Component, OnInit, Inject, Output, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { ApiService } from '../../api.service';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSort, MatPaginator } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
 import { FormGroup, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { merge, Observable, of as observableOf } from 'rxjs';
+
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
   styleUrls: ['./customer.component.css']
 })
+
 export class CustomerComponent implements AfterViewInit {
+  isActive = true;
   // Define all the variable
-  displayedColumns: string[] = ['label', 'owner', 'phone', 'email', 'id'];
+  displayedColumns: string[] = ['label', 'owner', 'phone', 'email', 'status', 'id'];
   exampleDatabase: ExampleHttpDatabase | null;
 
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
+  
+  // Build the table data source based on table data.
+  tableData: any = [];
+  dataSource = new MatTableDataSource(this.tableData);
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -29,30 +36,21 @@ export class CustomerComponent implements AfterViewInit {
   ) { }
 
   ngAfterViewInit() {
+    this.loadCustomers();
+  }
+
+  // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+  loadCustomers() {
     this.apiService.loadAll('csmr').subscribe(
       result => {
-        this.customers = result;
+        this.dataSource.data = result;
       },
       error => {
-        // this.apiService.refreshToken();
-        // this.loadCustomers();
+        console.log(error);
       }
     );
   }
 
-
-  // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-  // loadCustomers() {
-  //   this.apiService.loadAll('csmr').subscribe(
-  //     result => {
-  //       this.customers = result;
-  //     },
-  //     error => {
-  //       this.apiService.refreshToken();
-  //       this.loadCustomers();
-  //     }
-  //   );
-  // }
   openAddDialog() {
     const dialogRef = this.dialog.open(AddDialog, {
       // maxHeight: '80%',
@@ -60,9 +58,11 @@ export class CustomerComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+      this.addToTable(result);
     });
   }
+  
+  // Update handling Serverside and client side.
   openEditDialog(data) { 
     
     const dialogRef = this.dialog.open(EditDialog, {
@@ -70,16 +70,44 @@ export class CustomerComponent implements AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-
+      this.updateTable(data, result);
+      
     });
   }
 
-  delete(id){
+  // Delete Item From Server.
+  delete(row){
     if (confirm('Are sure to delete?')) {
-      this.apiService.delete(id, 'csmr').subscribe(
-        result => {}
+      this.apiService.delete(row.id, 'csmr').subscribe(
+        result => {
+          this.deleteUI(row);
+        }
       );      
     }
+  }
+
+  // Delete Item From UI
+  deleteUI(row) {
+    this.tableData = this.dataSource.data;
+    let index: number = this.tableData.findIndex(data => data === row);
+    this.tableData.splice(index, 1);
+    this.dataSource = new MatTableDataSource<any>(this.tableData);
+  }
+
+  addToTable(data){
+    this.tableData = this.dataSource.data;
+    this.dataSource.data = this.tableData.push(data);
+    this.dataSource = new MatTableDataSource<any>(this.tableData);
+  }
+
+  updateTable(oldRow, newRow) {
+    this.tableData = this.dataSource.data;
+    // Remove the old data from table.
+    let index: number = this.tableData.findIndex(data => data === oldRow);
+    this.tableData.splice(index, 1);
+    // Add update row.
+    this.dataSource.data = this.tableData.push(newRow);
+    this.dataSource = new MatTableDataSource<any>(this.tableData);
   }
 }
 
@@ -112,8 +140,6 @@ export class AddDialog {
     this.apiService.create(this.customerFC.value, 'csmr').subscribe(
       result => {
         this.dialogRef.close(result);
-        console.log(result);
-
       },
       error => {
         // this.dialogRef.close();
@@ -146,6 +172,7 @@ export class EditDialog implements OnInit{
     email: new FormControl(''),
     status: new FormControl(''),
   });
+
   ngOnInit(){
 
     // Assign Dialog data to new variable.
