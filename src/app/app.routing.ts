@@ -27,6 +27,11 @@ export const AppRoutes: Routes = [
         loadChildren: () => import('./components/customer/customer.module')
           .then(m => m.CustomerModule)
       },
+      {
+        path: 'vendor',
+        loadChildren: () => import('./components/vendor/vendor.module')
+          .then(m => m.VendorModule)
+      },
     ]
   }
 ];
