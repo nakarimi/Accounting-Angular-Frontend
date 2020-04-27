@@ -7,15 +7,24 @@ import { merge, Observable, of as observableOf } from 'rxjs';
 
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.css']
+  selector: 'app-invoice',
+  templateUrl: './invoice.component.html',
+  styleUrls: ['./invoice.component.css']
 })
 
-export class CustomerComponent implements AfterViewInit {
+export class InvoiceComponent implements AfterViewInit {
 
   // Define all the variable
-  displayedColumns: string[] = ['label', 'owner', 'phone', 'email', 'status', 'id'];
+  displayedColumns: string[] = [
+    'inv_number',
+    'items',
+    'customer',
+    'total_price',
+    'balance',
+    'due_date',
+    'status',
+    'id'
+  ];
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -28,7 +37,7 @@ export class CustomerComponent implements AfterViewInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) msort: MatSort;
 
-  @Output() customers: any
+  @Output() invoices: any
 
   constructor(
     private apiService: ApiService,
@@ -36,12 +45,12 @@ export class CustomerComponent implements AfterViewInit {
   ) { }
 
   ngAfterViewInit() {
-    this.loadCustomers();
+    this.loadInvoices();
   }
 
   // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-  loadCustomers() {
-    this.apiService.loadAll('csmr').subscribe(
+  loadInvoices() {
+    this.apiService.loadAll('inv').subscribe(
       result => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
@@ -83,7 +92,7 @@ export class CustomerComponent implements AfterViewInit {
   // Delete Item From Server.
   delete(row){
     if (confirm('Are sure to delete?')) {
-      this.apiService.delete(row.id, 'csmr').subscribe(
+      this.apiService.delete(row.id, 'inv').subscribe(
         result => {
           this.deleteUI(row);
         }
@@ -139,18 +148,21 @@ export class AddDialog {
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
-  customerFC = new FormGroup({
-    label: new FormControl(''),
-    owner: new FormControl(''),
-    phone: new FormControl(''),
-    email: new FormControl(''),
+  invoiceFC = new FormGroup({
+    inv_number: new FormControl(''),
+    items: new FormControl(''),
+    customer: new FormControl(''),
+    currency: new FormControl(''),
+    total_price: new FormControl(''),
+    balance: new FormControl(''),
+    due_date: new FormControl(''),
     status: new FormControl(''),
   });
 
   create(){
-    console.log(this.customerFC.value);
+    console.log(this.invoiceFC.value);
     
-    this.apiService.create(this.customerFC.value, 'csmr').subscribe(
+    this.apiService.create(this.invoiceFC.value, 'inv').subscribe(
       (result: any) => {
         if (result.error) {
           console.log(result.error);
@@ -182,11 +194,14 @@ export class EditDialog implements OnInit{
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
-  customerFC = new FormGroup({
-    label: new FormControl(''),
-    owner: new FormControl(''),
-    phone: new FormControl(''),
-    email: new FormControl(''),
+  invoiceFC = new FormGroup({
+    inv_number: new FormControl(''),
+    items: new FormControl(''),
+    customer: new FormControl(''),
+    currency: new FormControl(''),
+    total_price: new FormControl(''),
+    balance: new FormControl(''),
+    due_date: new FormControl(''),
     status: new FormControl(''),
   });
 
@@ -195,26 +210,28 @@ export class EditDialog implements OnInit{
     // Assign Dialog data to new variable.
     // Because it return error when trying to get data.
     this.editData = this.data;
-      
-    this.customerFC.setValue({
-      label: this.editData.label,
-      owner: this.editData.owner,
-      phone: this.editData.phone,
-      email: this.editData.email,
+    this.invoiceFC.setValue({
+      inv_number: this.editData.inv_number,
+      items: this.editData.items,
+      customer: this.editData.customer,
+      currency: this.editData.currency,
+      total_price: this.editData.total_price,
+      balance: this.editData.balance,
+      due_date: this.editData.due_date,
       status: this.editData.status,
     });
     
   }
   update(data) {
     
-    this.apiService.update(data.id, this.customerFC.value, 'csmr').subscribe(
+    this.apiService.update(data.id, this.invoiceFC.value, 'inv').subscribe(
       (result: any) => {
-        if (result.error) {
+        if (result.error){
           console.log(result.error);
         }
-        else {
+        else{
           this.dialogRef.close(result);
-        }
+        }        
       },
       error => {
         // this.dialogRef.close();

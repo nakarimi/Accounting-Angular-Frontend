@@ -150,10 +150,13 @@ export class AddDialog {
     console.log(this.accountFC.value);
     
     this.apiService.create(this.accountFC.value, 'acnt').subscribe(
-      result => {
-        this.dialogRef.close(result);
-        console.log(result);
-
+      (result: any) => {
+        if (result.error) {
+          console.log(result.error);
+        }
+        else {
+          this.dialogRef.close(result);
+        }
       },
       error => {
         // this.dialogRef.close();
@@ -203,10 +206,13 @@ export class EditDialog implements OnInit{
   }
   updateAcc(data) {
     this.apiService.update(data.id, this.accountFC.value, 'acnt').subscribe(
-      result => {
-        this.dialogRef.close(result);
-        console.log(result);
-        
+      (result: any) => {
+        if (result.error) {
+          console.log(result.error);
+        }
+        else {
+          this.dialogRef.close(result);
+        }
       },
       error => {
         // this.dialogRef.close();
