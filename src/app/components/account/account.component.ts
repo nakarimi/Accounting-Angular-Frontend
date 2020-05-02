@@ -131,6 +131,7 @@ export interface DialogData { }
 })
 export class AddDialog {
   isFormValid: boolean = true;
+  isNewFile: boolean = false;
 
   constructor(
     private apiService: ApiService,
@@ -153,20 +154,19 @@ export class AddDialog {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       if (file.type == 'image/jpeg' || file.type == 'image/png') {
-        this.isFormValid = true;
         this.accountFC.get('file').setValue(file);
+        this.isFormValid = true;
+        this.isNewFile = true;
       } else {
         this.isFormValid = false;
+        this.isNewFile = false;
       }
       
     }
   }
 
-  createAcc(){
-    const formData = new FormData();
-    this.fields.forEach(element => {
-      formData.append(element, this.accountFC.get(element).value);
-    });
+  createAcc() {
+    let formData = this.formFieldData();
     this.apiService.create(formData, 'acnt').subscribe(
       (res) => {
         console.log(res);
@@ -177,6 +177,21 @@ export class AddDialog {
       }
     );
   }
+  formFieldData() {
+    let formData = new FormData();
+    this.fields.forEach(element => {
+      if (element == "file") {
+        if (this.isNewFile) {
+          formData.append(element, this.accountFC.get(element).value);
+        }
+      }
+      else {
+        formData.append(element, this.accountFC.get(element).value);
+      }
+    });
+    return formData;
+  }
+
 }
 
 export interface DialogData { }
@@ -188,6 +203,7 @@ export class EditDialog implements OnInit{
   
   editData : any;
   isFormValid: boolean = true;
+  isNewFile: boolean = false;
 
   constructor(
     private apiService: ApiService,
@@ -230,9 +246,11 @@ export class EditDialog implements OnInit{
       
       if (file.type == 'image/jpeg' || file.type == 'image/png') {
         this.isFormValid = true;
+        this.isNewFile = true;
         this.accountFC.get('file').setValue(file);
       } else {
         this.isFormValid = false;
+        this.isNewFile = false;
       }
 
     }
@@ -256,13 +274,15 @@ export class EditDialog implements OnInit{
       }
     );
   }
-  
+  removeFile(data) {
+
+  }
   formFieldData() {
     let formData = new FormData();
     this.fields.forEach(element => {
-      console.log();
       if (element == "file") {
-        if (typeof this.accountFC.get(element).value != 'string') {
+        
+        if (this.isNewFile) {
           formData.append(element, this.accountFC.get(element).value);
         }
       }
