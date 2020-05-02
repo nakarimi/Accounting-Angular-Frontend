@@ -102,25 +102,29 @@ export class ApiService {
   // Delete item based on content type.
   update(id, data, type) {
     // this.sp.isSpinnerVisible = true;
-    const resp = this.httpClient.put(`${this.apiUrl + type}/${id}/`, data, {
-      headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + this.cookieService.get('auth-token'),
-      }),
-    });
-    return resp;
+    return this.httpClient.patch<any>(`${this.apiUrl + type}/${id}/`, data);
+
+    // const resp = this.httpClient.put(`${this.apiUrl + type}/${id}/`, data, {
+    //   headers: new HttpHeaders({
+    //     "Content-Type": "application/json",
+    //     "Authorization": "Bearer " + this.cookieService.get('auth-token'),
+    //   }),
+    // });
+    // return resp;
   }
 
   // Delete item based on content type.
-  create(data, type) {
-    const resp = this.httpClient.post(`${this.apiUrl + type}/`, data, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        "Authorization": "Bearer " + this.cookieService.get('auth-token'),
-      }),
-    });
-    return resp;
+  create(data, type) {    
+
+    return this.httpClient.post<any>(`${this.apiUrl}${type}/`, data);
+    // const resp = this.httpClient.post(`${this.apiUrl + type}/`, data, {
+    //   headers: new HttpHeaders({
+    //     'Content-Type': 'application/json',
+    //     'Accept': 'application/json',
+    //     "Authorization": "Bearer " + this.cookieService.get('auth-token'),
+    //   }),
+    // });
+    // return resp;
   }
 
   refreshToken() {

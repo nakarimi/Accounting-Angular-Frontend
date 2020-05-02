@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { UploadService } from '../../upload.service';
 
 
@@ -15,35 +15,40 @@ import { UploadService } from '../../upload.service';
 })
 export class DashboardComponent implements OnInit {
 	DJANGO_SERVER = 'http://127.0.0.1:8000'
-	form: FormGroup;
+	// form: FormGroup;
 	response;
-	imageURL;
+	fileUrl;
 
 	constructor(private formBuilder: FormBuilder, private uploadService: UploadService) { }
 
+	fields = ['label', 'file', 'owner', 'balance', 'currency', 'desc', 'status'];
+	form = new FormGroup({
+		label: new FormControl(''),
+		owner: new FormControl(''),
+		balance: new FormControl(''),
+		currency: new FormControl(''),
+		desc: new FormControl(''),
+		status: new FormControl(''),
+		file: new FormControl(''),
+	});
 	ngOnInit() {
-		this.form = this.formBuilder.group({
-			profile: ['']
-		});
 	}
 
-	onChange(event) {
+	onChangeFile(event) {
 		if (event.target.files.length > 0) {
-			const file = event.target.files[0];
-			this.form.get('profile').setValue(file);
+			const file = event.target.files[0];			
+			this.form.get('file').setValue(file);
 		}
 	}
 
 	onSubmit() {
 		const formData = new FormData();
-		formData.append('file', this.form.get('profile').value);
-
+		this.fields.forEach(element => {
+			formData.append(element, this.form.get(element).value);
+		});
 		this.uploadService.upload(formData).subscribe(
 			(res) => {
 				this.response = res;
-				this.imageURL = `${this.DJANGO_SERVER}${res.file}`;
-				console.log(res);
-				console.log(this.imageURL);
 			},
 			(err) => {
 				console.log(err);

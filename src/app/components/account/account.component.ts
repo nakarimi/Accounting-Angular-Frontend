@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, Output, Input, ViewChild } from '@angular/core';
 import { ApiService } from '../../api.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { find, findIndex } from 'rxjs/operators';
 
 @Component({
@@ -14,7 +14,7 @@ export class AccountComponent implements OnInit {
   @Output() accounts: any
 
   // Define all the variable
-  displayedColumns: string[] = ['label', 'owner', 'balance', 'status', 'desc', 'id'];
+  displayedColumns: string[] = ['label', 'owner', 'balance', 'status', 'desc', 'file', 'id'];
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -130,6 +130,7 @@ export interface DialogData { }
   templateUrl: 'add-dialog.html',
 })
 export class AddDialog {
+  isFormValid: boolean = true;
 
   constructor(
     private apiService: ApiService,
@@ -144,26 +145,37 @@ export class AddDialog {
     currency: new FormControl(''),
     desc: new FormControl(''),
     status: new FormControl(''),
+    file: new FormControl(Validators.required),
   });
+  fields = ['label', 'owner', 'balance', 'currency', 'desc', 'status', 'file'];
+
+  onChangeFile(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      if (file.type == 'image/jpeg' || file.type == 'image/png') {
+        this.isFormValid = true;
+        this.accountFC.get('file').setValue(file);
+      } else {
+        this.isFormValid = false;
+      }
+      
+    }
+  }
 
   createAcc(){
-    console.log(this.accountFC.value);
-    
-    this.apiService.create(this.accountFC.value, 'acnt').subscribe(
-      (result: any) => {
-        if (result.error) {
-          console.log(result.error);
-        }
-        else {
-          this.dialogRef.close(result);
-        }
+    const formData = new FormData();
+    this.fields.forEach(element => {
+      formData.append(element, this.accountFC.get(element).value);
+    });
+    this.apiService.create(formData, 'acnt').subscribe(
+      (res) => {
+        console.log(res);
+        
       },
-      error => {
-        // this.dialogRef.close();
-        // this.apiService.apiRespErrors(error)
+      (err) => {
+        console.log(err);
       }
     );
-    
   }
 }
 
@@ -174,7 +186,9 @@ export interface DialogData { }
 })
 export class EditDialog implements OnInit{
   
-  editData : any
+  editData : any;
+  isFormValid: boolean = true;
+
   constructor(
     private apiService: ApiService,
     public dialogRef: MatDialogRef<any>,
@@ -188,7 +202,10 @@ export class EditDialog implements OnInit{
     currency: new FormControl(''),
     desc: new FormControl(''),
     status: new FormControl(''),
+    file: new FormControl(Validators.required),
   });
+  fields = ['label', 'owner', 'balance', 'currency', 'desc', 'status', 'file'];
+
   ngOnInit(){
 
     // Assign Dialog data to new variable.
@@ -201,11 +218,30 @@ export class EditDialog implements OnInit{
       balance: this.editData.balance,
       desc: this.editData.desc,
       status: this.editData.status,
+      file: this.editData.file,
     });
     
   }
+
+  onUpdateFile(event) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      console.log(file);
+      
+      if (file.type == 'image/jpeg' || file.type == 'image/png') {
+        this.isFormValid = true;
+        this.accountFC.get('file').setValue(file);
+      } else {
+        this.isFormValid = false;
+      }
+
+    }
+  }
+
   updateAcc(data) {
-    this.apiService.update(data.id, this.accountFC.value, 'acnt').subscribe(
+    let formData = this.formFieldData();
+
+    this.apiService.update(data.id, formData, 'acnt').subscribe(
       (result: any) => {
         if (result.error) {
           console.log(result.error);
@@ -219,6 +255,21 @@ export class EditDialog implements OnInit{
         // this.apiService.apiRespErrors(error)
       }
     );
-
+  }
+  
+  formFieldData() {
+    let formData = new FormData();
+    this.fields.forEach(element => {
+      console.log();
+      if (element == "file") {
+        if (typeof this.accountFC.get(element).value != 'string') {
+          formData.append(element, this.accountFC.get(element).value);
+        }
+      }
+      else {
+        formData.append(element, this.accountFC.get(element).value);
+      }
+    });
+    return formData;
   }
 }

@@ -21,9 +21,17 @@
     <mat-form-field>
       <input matInput type="text" formControlName="desc" placeholder="Description" >
     </mat-form-field>
+    <label for="form-image">Upload Image</label>
+    <br>
+    <input id="form-image" type="file" (change)="onUpdateFile($event)" />
+    <br>
+    <span style="color: #e91e63;" *ngIf="!isFormValid">Choose a valid image file.</span>
+    <span *ngIf="isFormValid">
+      <img height="50px" src="http://localhost:8000{{data.file}}">
+    </span>
 
     <mat-dialog-actions align="end">
-      <button align="end" type="submit" mat-button color="primary">Update</button>
+      <button [disabled]="!isFormValid"  align="end" type="submit" mat-button color="primary">Update</button>
       <button mat-button mat-dialog-close>Cancel</button>
     </mat-dialog-actions>
   </form>
