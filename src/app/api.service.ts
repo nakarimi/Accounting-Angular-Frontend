@@ -4,7 +4,7 @@ import { CookieService } from "ngx-cookie-service";
 import { MatPaginator, MatSort } from '@angular/material';
 import { merge, throwError } from 'rxjs';
 import { startWith, switchMap, map, catchError, retry } from 'rxjs/operators';
-// import { SpinnerComponent } from './shared/spinner.component';
+import { environment } from '../environments/environment';
 
 
 
@@ -21,7 +21,7 @@ export class ApiService {
     // private sp: SpinnerComponent,
     ) {}
     
-  apiUrl = "http://localhost:8000/";  
+  apiUrl = environment.serverUrl;
 
   getToken(authData) {
     const body = JSON.stringify(authData);

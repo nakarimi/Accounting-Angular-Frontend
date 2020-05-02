@@ -1,18 +1,28 @@
 <h2 mat-dialog-title>Add Invoice</h2>
 <mat-dialog-content class="mat-typography">
-  <form class="example-container" [formGroup]="invoiceFC" enctype="multipart/form-data" (ngSubmit)="update(data)">
+  <form class="example-container" [formGroup]="invoiceFC" enctype="multipart/form-data" (ngSubmit)="update(editData)">
     <mat-form-field>
       <input matInput type="text" formControlName="inv_number" placeholder="Invoice Number">
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="text" formControlName="items" placeholder="Items" required>
+      <mat-label>Item</mat-label>
+      <mat-select name="items" formControlName="items" required>
+        <mat-option *ngFor="let i of items" [value]="i.id">
+          {{i.label}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
     <div>
       <label>Status: </label>
       <mat-checkbox formControlName="status">Active</mat-checkbox>
     </div>
     <mat-form-field>
-      <input matInput type="text" formControlName="customer" placeholder="Customer" required>
+      <mat-label>Customer</mat-label>
+      <mat-select name="customer" formControlName="customer" required>
+        <mat-option *ngFor="let c of customer" [value]="c.id">
+          {{c.label}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
     <mat-form-field>
       <input matInput type="text" formControlName="currency" placeholder="Currency" required>

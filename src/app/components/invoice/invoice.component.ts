@@ -29,7 +29,8 @@ export class InvoiceComponent implements AfterViewInit {
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
-  
+  customers: any;
+  items: any;
   // Build the table data source based on table data.
   tableData: any = [];
   dataSource = new MatTableDataSource(this.tableData);
@@ -46,6 +47,16 @@ export class InvoiceComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.loadInvoices();
+    this.apiService.loadAll('csmr').subscribe(
+      result => {
+        this.customers = result;        
+      }
+    );
+    this.apiService.loadAll('item').subscribe(
+      result => {
+        this.items = result;
+      }
+    );
   }
 
   // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
@@ -63,6 +74,10 @@ export class InvoiceComponent implements AfterViewInit {
 
   openAddDialog() {
     const dialogRef = this.dialog.open(AddDialog, {
+      data: {
+        customer: this.customers,
+        item: this.items
+      }
       // maxHeight: '80%',
       // maxWidth: '80%',
     });
@@ -79,7 +94,11 @@ export class InvoiceComponent implements AfterViewInit {
   openEditDialog(data) { 
     
     const dialogRef = this.dialog.open(EditDialog, {
-      data: data,
+      data: {
+        mainData: data, 
+        customer: this.customers,
+        item: this.items
+      },
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -145,7 +164,7 @@ export class AddDialog {
   constructor(
     private apiService: ApiService,
     public dialogRef: MatDialogRef<any>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
+    @Inject(MAT_DIALOG_DATA) public dData: DialogData
   ) { }
 
   invoiceFC = new FormGroup({
@@ -159,9 +178,12 @@ export class AddDialog {
     status: new FormControl(''),
   });
 
+  entity:any = this.dData;
+  customer: any = this.entity.customer;
+  items: any = this.entity.item;
+
   create(){
-    console.log(this.invoiceFC.value);
-    
+        
     this.apiService.create(this.invoiceFC.value, 'inv').subscribe(
       (result: any) => {
         if (result.error) {
@@ -191,7 +213,7 @@ export class EditDialog implements OnInit{
   constructor(
     private apiService: ApiService,
     public dialogRef: MatDialogRef<any>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData
+    @Inject(MAT_DIALOG_DATA) public dData: DialogData
   ) { }
 
   invoiceFC = new FormGroup({
@@ -204,12 +226,15 @@ export class EditDialog implements OnInit{
     due_date: new FormControl(''),
     status: new FormControl(''),
   });
+  entity: any = this.dData;
+  customer: any = this.entity.customer;
+  items: any = this.entity.item;
 
   ngOnInit(){
 
     // Assign Dialog data to new variable.
     // Because it return error when trying to get data.
-    this.editData = this.data;
+    this.editData = this.entity.mainData;
     this.invoiceFC.setValue({
       inv_number: this.editData.inv_number,
       items: this.editData.items,
@@ -223,6 +248,7 @@ export class EditDialog implements OnInit{
     
   }
   update(data) {
+    console.log(data);
     
     this.apiService.update(data.id, this.invoiceFC.value, 'inv').subscribe(
       (result: any) => {

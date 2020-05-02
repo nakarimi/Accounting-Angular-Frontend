@@ -26,8 +26,19 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           let errorMessage = '';
           
           if (error.status == 401) {            
-            this.apiService.refreshToken();
-            errorMessage = 'Try Again!';
+            this.apiService.refreshToken().subscribe(
+              result => {
+                return next.handle(request)
+
+                // Update the access token again.
+                // var date = new Date();
+                // date.setTime(date.getTime() + 600 * 1000);
+                // this.cookieService.set("auth-token", result["access"], date);
+              },
+              error => {
+                console.log(error);
+              }
+            );
           }
           else{
             if (error.error instanceof ErrorEvent) {
