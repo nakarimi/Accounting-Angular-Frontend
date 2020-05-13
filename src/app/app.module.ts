@@ -18,7 +18,6 @@ import { MaterialModule } from './material-module';
 import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { AuthModule } from './auth/auth.module';
-import { AlertModule } from 'ngx-bootstrap/alert';
 import { HttpErrorInterceptor } from './http-error.interceptor';
 
 const routes: Routes = [
@@ -40,10 +39,9 @@ const routes: Routes = [
     FlexLayoutModule,
     HttpClientModule,
     SharedModule,
-    AuthModule,
+    AuthModule, 
     RouterModule.forRoot(AppRoutes),
     RouterModule.forRoot(routes),
-    AlertModule.forRoot()
   ],
   exports: [
     RouterModule

@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { InvoiceComponent, AddDialog, EditDialog } from './invoice.component';
 import { MaterialModule } from '../../material-module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 
 export const InvoiceRoutes: Routes = [{
@@ -27,6 +28,12 @@ export const InvoiceRoutes: Routes = [{
   entryComponents: [
     AddDialog,
     EditDialog,
+  ],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { showError: true }
+    }
   ]
 })
 export class InvoiceModule { }

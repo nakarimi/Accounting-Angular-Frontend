@@ -1,55 +1,50 @@
-<div class="inv-table-actions table-actions">
+<div class="csmr-table-actions table-actions">
   <button mat-raised-button mat-button (click)="openAddDialog()">Add</button>
-  <mat-form-field>
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
-  </mat-form-field>
 </div>
-
-<table width="100%" mat-table 
-  [dataSource]="dataSource" 
+<table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" 
   matSort matSortActive="id"
   matSortDisableClear
   matSortDirection="desc">
-  <!-- Number Column -->
+  <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
+    <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+  </ng-container>
 
-  <ng-container matColumnDef="inv_number">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Invoice Number</th>
-    <td mat-cell *matCellDef="let row">{{row.inv_number}}</td>
-  </ng-container>
-  <ng-container matColumnDef="items">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Items</th>
-    <td mat-cell *matCellDef="let row">{{row.items}}</td>
-  </ng-container>
-  <ng-container matColumnDef="customer">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Customer</th>
-    <td mat-cell *matCellDef="let row">{{row.customer}}</td>
-  </ng-container>
-  <ng-container matColumnDef="total_price">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Price</th>
-    <td mat-cell *matCellDef="let row">{{row.total_price}}</td>
-  </ng-container>
-  <ng-container matColumnDef="status">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-    <td mat-cell *matCellDef="let row">{{row.status}}</td>
-  </ng-container>
-  <ng-container matColumnDef="balance">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Balance</th>
-    <td mat-cell *matCellDef="let row">{{row.balance}}</td>
-  </ng-container>
-  <ng-container matColumnDef="due_date">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</th>
-    <td mat-cell *matCellDef="let row">{{row.due_date}}</td>
-  </ng-container>
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef>Action</th>
-    <td mat-cell *matCellDef="let row">
-      <button mat-raised-button mat-button (click)="openEditDialog(row)" align="end" tabindex="-1">Edit</button>
-      <button mat-raised-button mat-button (click)="delete(row)" align="end" tabindex="-1">Delete</button>
+  <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+      <div class="element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+        <div class="element-description">
+          <div *ngIf="loading">Loading....</div>
+          
+          <div *ngIf="!loading">
+            <div *ngIf="invItems.length == 0">
+              <p style="color: sandybrown;">
+                <strong>Warning!</strong> Item not found.
+              </p>
+            </div>
+            <table *ngIf="invItems.length > 0" mat-table [dataSource]="invItems" multiTemplateDataRows class="mat-elevation-z8" matSort matSortActive="id"
+              matSortDisableClear matSortDirection="desc">
+              <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedItemColumns">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> {{column}} </th>
+                <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+              </ng-container>
+              
+              <tr mat-header-row *matHeaderRowDef="displayedItemColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedItemColumns;"></tr>
+              <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
+            </table>
+          </div>
+        </div>
+      </div>
     </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
+  <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="element-row"
+    [class.expanded-row]="expandedElement === element"
+    (click)="expandedElement = expandedElement === element ? null : loadItems(element)">
+  </tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+  <mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>
 </table>

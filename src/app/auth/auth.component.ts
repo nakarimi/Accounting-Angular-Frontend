@@ -3,6 +3,7 @@ import { ApiService } from '../api.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
 
 interface TokenObj {
   token: string;
@@ -26,9 +27,11 @@ export class AuthComponent implements OnInit {
     private apiService: ApiService,
     private cookieService: CookieService,
     private router: Router,
+    private _snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
+    
     // this.apiService.test().subscribe();
     // if (this.cookieService.check('auth-token')) {
     //   this.router.navigate(['/dashboard']);
@@ -59,11 +62,14 @@ export class AuthComponent implements OnInit {
           this.cookieService.set("auth-token", result["access"], date);
           date.setTime(date.getTime() + 6000 * 1000);
           this.cookieService.set("refresh-token", result["refresh"], date);  
+          this._snackBar.openFromComponent(SnakComponent, {
+            duration: 2000,
+          });
 
-          this.message = {text: 'Logged In Successfully!', type: 'accent'};
+          // this.message = {text: 'Logged In Successfully!', type: 'accent'};
           setTimeout(() => {
             this.router.navigate(['/dashboard']);
-          }, 1000);
+          }, 2000);
         }
       },
       error => {
@@ -82,3 +88,14 @@ export class AuthComponent implements OnInit {
   }
 
 }
+
+@Component({
+  selector: 'snack-bar-component-login',
+  template: '<span>Logged in successfully!</span>',
+  styles:[`
+    span{
+      style: white;
+    }`
+  ]
+})
+export class SnakComponent { }

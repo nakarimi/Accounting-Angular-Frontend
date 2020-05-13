@@ -1,46 +1,146 @@
+<mat-dialog-content *ngIf="!isPreview" class="mat-typography">
 <h2 mat-dialog-title>Add Invoice</h2>
-<mat-dialog-content class="mat-typography">
-  <form class="example-container" [formGroup]="invoiceFC" enctype="multipart/form-data"
-    (ngSubmit)="create()">
-    <mat-form-field>
-      <input matInput type="text" formControlName="inv_number" placeholder="Invoice Number">
-    </mat-form-field>
-    <mat-form-field>
-      <mat-label>Item</mat-label>
-      <mat-select name="items" formControlName="items" required>
-        <mat-option *ngFor="let i of items" [value]="i.id">
-          {{i.label}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div>
-      <label>Status: </label>
-      <mat-checkbox formControlName="status">Active</mat-checkbox>
-    </div>
-    <mat-form-field>
-      <mat-label>Customer</mat-label>
-      <mat-select name="customer" formControlName="customer" required>
-        <mat-option *ngFor="let c of customer" [value]="c.id">
-          {{c.label}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput type="text" formControlName="currency" placeholder="Currency" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput type="number" formControlName="total_price" placeholder="Total Price" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput type="number" formControlName="balance" placeholder="Balance" required>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput type="date" formControlName="due_date" placeholder="Due Date" required>
-    </mat-form-field>
+<mat-horizontal-stepper [linear]="false" #stepper>
+  <mat-step [stepControl]="invoiceFC">
+    <ng-template matStepLabel>Invoice</ng-template>
+      <form class="example-container" [formGroup]="invoiceFC" enctype="multipart/form-data"
+        (ngSubmit)="create()">
+        <mat-form-field>
+          <mat-label>Invoice Number</mat-label>
+          <input matInput type="text" formControlName="inv_number" [value]="invNumber">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Customer</mat-label>
+          <mat-select name="customer" formControlName="customer">
+            <mat-option *ngFor="let c of customer" [value]="c.id">
+              {{c.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Currency</mat-label>
+          <mat-select name="currency" formControlName="currency">
+            <mat-option *ngFor="let i of ['USD', 'AF']" [value]="i">
+              {{i}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Total Price</mat-label>
+          <input matInput type="number" formControlName="total_price">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Balance</mat-label>
+          <input matInput type="number" formControlName="balance">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" formControlName="due_date" >
+        </mat-form-field>
+        <h5 *ngIf="invoice">Invoice Created, add items.</h5>
+        <button *ngIf="!invoice" type="submit" mat-button color="primary">Create</button>
+      </form>
+        <div align="end">
+          <button mat-button matStepperNext>Next</button>
+        </div>
 
-    <mat-dialog-actions align="end">
-      <button align="end" type="submit" mat-button color="primary">Create</button>
-      <button mat-button mat-dialog-close>Cancel</button>
-    </mat-dialog-actions>
-  </form>
+      </mat-step>
+      <mat-step [stepControl]="itemsFC">
+        <ng-template matStepLabel>Items</ng-template>
+      <table >
+        <tr border="1px" *ngFor="let item of invoiceItems">
+          <td>{{item.label}}</td>
+          <td>{{item.total}}</td>
+          <td>{{item.price}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.desc}}</td>
+        </tr>
+      </table>
+      <h5 *ngIf="!invoice">The Invoice is required, create it first.</h5>
+      <form *ngIf="invoice" [formGroup]="itemsFC" (ngSubmit)="createItem()">
+      <mat-form-field>
+        <mat-label>Label</mat-label>
+        <input matInput type="text" formControlName="label">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Price</mat-label>
+        <input matInput type="number" formControlName="price" (change)="checkTotal()">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Quantity</mat-label>
+        <input matInput type="number" formControlName="quantity" (change)="checkTotal()">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Total</mat-label>
+        <input matInput type="number" formControlName="total" [value]="total">
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Descrtiption</mat-label>
+        <input matInput type="textarea" formControlName="desc">
+      </mat-form-field>
+        <button type="submit" mat-button color="primary">Add</button>
+    </form>
+    <div align="end">
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Preview</ng-template>
+    <div *ngIf="invoice">
+      <ng-template matStepLabel>Invoice</ng-template>
+      <form class="example-container" [formGroup]="invoiceFC" enctype="multipart/form-data" (ngSubmit)="update(invoice)">
+        <mat-form-field>
+          <mat-label>Invoice Number</mat-label>
+          <input matInput type="text" formControlName="inv_number" [value]="invNumber">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Customer</mat-label>
+          <mat-select name="customer" formControlName="customer">
+            <mat-option *ngFor="let c of customer" [value]="c.id">
+              {{c.label}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Currency</mat-label>
+          <mat-select name="currency" formControlName="currency">
+            <mat-option *ngFor="let i of ['USD', 'AF']" [value]="i">
+              {{i}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Total Price</mat-label>
+          <input matInput type="number" formControlName="total_price">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Balance</mat-label>
+          <input matInput type="number" formControlName="balance">
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" formControlName="due_date">
+        </mat-form-field>
+        <button type="submit" mat-button color="primary">Create</button>
+      </form>
+      <table>
+        <tr border="1px" *ngFor="let item of invoiceItems">
+          <td>{{item.label}}</td>
+          <td>{{item.total}}</td>
+          <td>{{item.price}}</td>
+          <td>{{item.quantity}}</td>
+          <td>{{item.desc}}</td>
+        </tr>
+      </table>
+
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
 </mat-dialog-content>

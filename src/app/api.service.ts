@@ -5,6 +5,7 @@ import { MatPaginator, MatSort } from '@angular/material';
 import { merge, throwError } from 'rxjs';
 import { startWith, switchMap, map, catchError, retry } from 'rxjs/operators';
 import { environment } from '../environments/environment';
+import { Router } from '@angular/router';
 
 
 
@@ -18,6 +19,7 @@ export class ApiService {
   constructor(
       private httpClient: HttpClient,
     private cookieService: CookieService,
+    private router: Router,
     // private sp: SpinnerComponent,
     ) {}
     
@@ -119,6 +121,14 @@ export class ApiService {
     });
   }
 
+  retrive(entity, id){
+    const href = 'http://localhost:8000';
+    const requestUrl = `${href}/${entity}?inv_id=${id}`;
+
+    return this.httpClient.get<any>(requestUrl);
+
+  }
+
   refreshToken() {
     var formdata = { "refresh": this.cookieService.get('refresh-token')};    
     const respData = this.httpClient.post(`${this.apiUrl}api/token/refresh/`, formdata, {
@@ -134,7 +144,7 @@ export class ApiService {
         this.cookieService.set("auth-token", result["access"], date);
       },
       error => {
-        console.log(error);
+        this.router.navigate(['/login']);
       }
     );
     return respData;

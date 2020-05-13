@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthComponent } from './auth.component';
+import { AuthComponent, SnakComponent } from './auth.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { FlexLayoutModule } from "@angular/flex-layout";
@@ -12,7 +12,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AuthComponent],
+  declarations: [AuthComponent, SnakComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -26,6 +26,9 @@ const routes: Routes = [
   ],
   providers: [
     CookieService
+  ], 
+  entryComponents:[
+    SnakComponent
   ]
 })
 export class AuthModule { }
