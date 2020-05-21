@@ -131,13 +131,11 @@ export class InvoiceComponent implements AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       // Do nothing on cancel and if it return value update table.
       if (result) {
-        this.addToTable(result);
-        // dialogRef.afterClosed().subscribe(result => {
-        //   if (result) {
-        //     this.updateTable(data, result);
-        //   }
-        // });
-
+        if (type == 'a') {
+          this.addToTable(result);
+        }else{
+          this.updateTable(data, result);
+        }
       }
     });
   }
@@ -172,10 +170,10 @@ export class InvoiceComponent implements AfterViewInit {
   updateTable(oldRow, newRow) {
     this.tableData = this.dataSource.data;
     // Remove the old data from table.
-    let index: number = this.tableData.findIndex(data => data === oldRow);
-    this.tableData.splice(index, 1);
+    this.tableData = this.tableData.filter(item => item.id != oldRow.id);
+        
     // Add update row.
-    this.dataSource.data = this.tableData.push(newRow);
+    this.tableData.push(newRow);    
     this.dataSource = new MatTableDataSource<any>(this.tableData);
     this.dataSource.sort = this.msort;
   }
@@ -192,6 +190,8 @@ export interface DialogData { }
 @Component({
   selector: 'cu-dialog',
   templateUrl: 'cu-dialog.html',
+  styleUrls: ['./invoice.component.css'],
+
 })
 export class CuDialog implements OnInit{
 
@@ -219,11 +219,12 @@ export class CuDialog implements OnInit{
   type = this.entity.type;
   isPreview = false;
   isLinear = true;
+  errors;
   itemsFC = this._formBuilder.group({
-    label: ['', Validators.required],
-    price: ['', Validators.required],
-    quantity: [1, Validators.required],
-    total: ['', Validators.required],
+    label: ['', ],
+    price: ['', ],
+    quantity: ['', ],
+    total: ['', ],
     desc: ['', ],
   });
   total: number;
@@ -232,6 +233,17 @@ export class CuDialog implements OnInit{
   invoiceItems: any = [];
   editData;
   message;
+  itemSource = new MatTableDataSource(this.invoiceItems);
+  invItmTC = ['label', 'price', 'quantity', 'total', 'desc', 'id'];
+  readableInvItmTC = {
+    label: 'Label',
+    price: 'Price',
+    quantity: 'Quantity',
+    total: 'Total',
+    desc: 'Description',
+  };
+
+  invTotalPrice = 0;
 
   ngOnInit() {
 
@@ -259,13 +271,14 @@ export class CuDialog implements OnInit{
   }
   
   checkTotal(){
-    this.itemsFC.value.total = this.total = this.itemsFC.value.price * this.itemsFC.value.quantity;    
+    this.itemsFC.value.total = this.total = Number(this.itemsFC.value.price * this.itemsFC.value.quantity);    
   }
 
   loading = true;
 
   assigning(data) {
     this.invoiceItems = data;
+    this.itemSource = new MatTableDataSource(this.invoiceItems);
   }
   loadItems(elm) {
     this.loading = true;
@@ -322,15 +335,17 @@ export class CuDialog implements OnInit{
   }
 
   createItem(){
+    this.errors = [];
     this.itemsFC.value.invoice = this.invoice.id;
 
     this.apiService.create(this.itemsFC.value, 'itm').subscribe(
       (result: any) => {
         if (result.error) {
-          console.log(result.error);
+          this.errors = result.error;          
         }
         else {
           this.invoiceItems.push(result);
+          this.itemSource = new MatTableDataSource(this.invoiceItems);          
           this.itemsFC.reset();
         }
       },
@@ -341,6 +356,7 @@ export class CuDialog implements OnInit{
       this.apiService.delete(data.id, 'itm').subscribe(
         result => {
           this.invoiceItems = this.invoiceItems.filter(item => item !== data);
+          this.itemSource = new MatTableDataSource(this.invoiceItems);
           this._snackBar.openFromComponent(SnakComponent, {
             duration: 2000,
           });
@@ -348,6 +364,15 @@ export class CuDialog implements OnInit{
         }
       );
     }
+  }
+
+  finishInvoice(inv){
+    let count = 0;
+    this.invoiceItems.forEach(element => {
+      count += element.total;
+    });
+    this.invTotalPrice = count;
+    this.invOperation(inv);
   }
 }
 
