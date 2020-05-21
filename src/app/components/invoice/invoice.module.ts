@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { InvoiceComponent, AddDialog, EditDialog } from './invoice.component';
+import { InvoiceComponent, CuDialog, SnakComponent } from './invoice.component';
 import { MaterialModule } from '../../material-module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
@@ -15,8 +15,8 @@ export const InvoiceRoutes: Routes = [{
 @NgModule({
   declarations: [
     InvoiceComponent,
-    AddDialog,
-    EditDialog
+    CuDialog,
+    SnakComponent
   ],
   imports: [
     CommonModule,
@@ -26,8 +26,8 @@ export const InvoiceRoutes: Routes = [{
     RouterModule.forChild(InvoiceRoutes)
   ],
   entryComponents: [
-    AddDialog,
-    EditDialog,
+    CuDialog,
+    SnakComponent
   ],
   providers: [
     {

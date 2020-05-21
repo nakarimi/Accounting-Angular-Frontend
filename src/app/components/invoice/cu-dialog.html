@@ -1,10 +1,10 @@
-<mat-dialog-content *ngIf="!isPreview" class="mat-typography">
+<mat-dialog-content  class="mat-typography">
 <h2 mat-dialog-title>Add Invoice</h2>
 <mat-horizontal-stepper [linear]="false" #stepper>
   <mat-step [stepControl]="invoiceFC">
     <ng-template matStepLabel>Invoice</ng-template>
       <form class="example-container" [formGroup]="invoiceFC" enctype="multipart/form-data"
-        (ngSubmit)="create()">
+        (ngSubmit)="invOperation(editData)">
         <mat-form-field>
           <mat-label>Invoice Number</mat-label>
           <input matInput type="text" formControlName="inv_number" [value]="invNumber">
@@ -37,8 +37,14 @@
           <mat-label>Due Date</mat-label>
           <input matInput type="date" formControlName="due_date" >
         </mat-form-field>
-        <h5 *ngIf="invoice">Invoice Created, add items.</h5>
-        <button *ngIf="!invoice" type="submit" mat-button color="primary">Create</button>
+        <span *ngIf="type == 'e'">
+          <button type="submit" mat-button color="primary">Update</button>
+        </span>
+
+        <span *ngIf="type == 'a'">
+          <h5 *ngIf="invoice">Invoice Created, add items.</h5>
+          <button *ngIf="!invoice" type="submit" mat-button color="primary">Create</button>
+        </span>
       </form>
         <div align="end">
           <button mat-button matStepperNext>Next</button>
@@ -54,6 +60,7 @@
           <td>{{item.price}}</td>
           <td>{{item.quantity}}</td>
           <td>{{item.desc}}</td>
+          <td><button mat-button (click)="removeItem(item)">X</button></td>
         </tr>
       </table>
       <h5 *ngIf="!invoice">The Invoice is required, create it first.</h5>
@@ -135,7 +142,7 @@
       </table>
 
       <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-button  mat-dialog-close>Finished</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>

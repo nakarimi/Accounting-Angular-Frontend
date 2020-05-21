@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, Output, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { ApiService } from '../../api.service';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSort, MatPaginator, MatTableDataSource, MatSnackBar } from '@angular/material';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -30,8 +30,19 @@ export class InvoiceComponent implements AfterViewInit {
     'balance',
     'due_date',
     'status',
+    'id'
   ];
 
+      // Define all the variable
+  readableColumns = {
+    inv_number: 'Invoice Number',
+    customer: 'Customer',
+    total_price: 'Total Price',
+    balance: 'Balance',
+    due_date: 'Due Date',
+    status: 'Status',
+    id: 'Action'
+  };
   displayedItemColumns: string[] = [
     'label',
     'price',
@@ -40,12 +51,20 @@ export class InvoiceComponent implements AfterViewInit {
     'created_at',
     'desc',
   ];
+  readableItemColumns ={
+    label: 'Label',
+    price: 'Price',
+    quantity: 'Quantity',
+    total: 'Total',
+    created_at: 'Created At',
+    desc: 'Description',
+  };
 
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
   customers: any;
-  items: any;
+  editData;
   // Build the table data source based on table data.
   tableData: any = [];
   dataSource = new MatTableDataSource(this.tableData);
@@ -67,18 +86,12 @@ export class InvoiceComponent implements AfterViewInit {
         this.customers = result;        
       }
     );
-    this.apiService.loadAll('item').subscribe(
-      result => {
-        this.items = result;
-      }
-    );
   }
   invItems = [];
   loading = true;
 
   assigning(data){
     this.invItems = data;
-    console.log(this.invItems);  
   }
   loadItems(elm){
     this.loading = true;
@@ -104,11 +117,12 @@ export class InvoiceComponent implements AfterViewInit {
     );
   }
 
-  openAddDialog() {
-    const dialogRef = this.dialog.open(AddDialog, {
+  openDialog(data, type = 'a') {
+    const dialogRef = this.dialog.open(CuDialog, {
       data: {
+        mainData: data, 
         customer: this.customers,
-        item: this.items
+        type: type
       },
       // maxHeight: '500px',
       // maxWidth: '500px',
@@ -118,28 +132,16 @@ export class InvoiceComponent implements AfterViewInit {
       // Do nothing on cancel and if it return value update table.
       if (result) {
         this.addToTable(result);
+        // dialogRef.afterClosed().subscribe(result => {
+        //   if (result) {
+        //     this.updateTable(data, result);
+        //   }
+        // });
+
       }
     });
   }
   
-  // Update handling Serverside and client side.
-  openEditDialog(data) { 
-    
-    const dialogRef = this.dialog.open(EditDialog, {
-      data: {
-        mainData: data, 
-        customer: this.customers,
-        item: this.items
-      },
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if(result){
-        this.updateTable(data, result);
-      }
-    });
-  }
-
   // Delete Item From Server.
   delete(row){
     if (confirm('Are sure to delete?')) {
@@ -188,16 +190,18 @@ export class InvoiceComponent implements AfterViewInit {
 export interface DialogData { }
 
 @Component({
-  selector: 'add-dialog',
-  templateUrl: 'add-dialog.html',
+  selector: 'cu-dialog',
+  templateUrl: 'cu-dialog.html',
 })
-export class AddDialog implements OnInit{
+export class CuDialog implements OnInit{
 
   constructor(
     private apiService: ApiService,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public dData: DialogData,
-    private _formBuilder: FormBuilder
+    private _formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
+
   ) { }
 
   invoiceFC = new FormGroup({
@@ -207,12 +211,12 @@ export class AddDialog implements OnInit{
     total_price: new FormControl(0, Validators.required),
     balance: new FormControl(0, Validators.required),
     due_date: new FormControl('', Validators.required),
-    // status: new FormControl(''),
+    status: new FormControl('', Validators.required),
   });
 
   entity:any = this.dData;
   customer: any = this.entity.customer;
-  items: any = this.entity.item;
+  type = this.entity.type;
   isPreview = false;
   isLinear = true;
   itemsFC = this._formBuilder.group({
@@ -223,33 +227,88 @@ export class AddDialog implements OnInit{
     desc: ['', ],
   });
   total: number;
-  invoice;
+  invoice = this.entity.mainData;
   invNumber = '';
   invoiceItems: any = [];
-  
-  ngOnInit(){
-    this.getLastInvNum();  
+  editData;
+  message;
+
+  ngOnInit() {
+
+    // Assign Dialog data to new variable.
+    // Because it return error when trying to get data.
+    if (this.entity.mainData) {
+      this.editData = this.entity.mainData;
+      this.loadItems(this.editData);
+      this.invNumber = this.editData.inv_number;
+      this.invoiceFC.setValue({
+        inv_number: this.editData.inv_number,
+        customer: this.editData.customer,
+        currency: this.editData.currency,
+        total_price: this.editData.total_price,
+        balance: this.editData.balance,
+        due_date: this.editData.due_date,
+        status: this.editData.status,
+      });
+      this.invoiceFC.controls['inv_number'].disable();
+    }
+    else{
+      this.getLastInvNum();  
+    }
+
   }
   
   checkTotal(){
     this.itemsFC.value.total = this.total = this.itemsFC.value.price * this.itemsFC.value.quantity;    
   }
-  create(){
-    this.invoiceFC.value.inv_number = this.invNumber;
 
-    this.apiService.create(this.invoiceFC.value, 'inv').subscribe(
-      (result: any) => {
-        if (result.error) {
-          console.log(result.error);
-        }
-        else {
-          this.invoice = result;
-        }
-      },
-      error => {
-        // this.dialogRef.close();
+  loading = true;
+
+  assigning(data) {
+    this.invoiceItems = data;
+  }
+  loadItems(elm) {
+    this.loading = true;
+    this.invoiceItems = [];
+    this.apiService.retrive('itm', elm.id).subscribe(
+      result => {
+        this.assigning(result);
+        this.loading = false;
       }
     );
+    return elm;
+  }
+
+
+  invOperation(data){
+    this.invoiceFC.value.inv_number = this.invNumber;
+
+    if (data) {
+    console.log('update');
+    
+      this.apiService.update(data.id, this.invoiceFC.value, 'inv').subscribe(
+        (result: any) => {
+          if (result.error) {
+            console.log(result.error);
+          }
+          else {
+            this.dialogRef.close(result);
+          }
+        },
+      );
+    }
+    else{
+      this.apiService.create(this.invoiceFC.value, 'inv').subscribe(
+        (result: any) => {
+          if (result.error) {
+            console.log(result.error);
+          }
+          else {
+            this.invoice = result;
+          }
+        },
+      );
+    }
     
   }
 
@@ -277,85 +336,28 @@ export class AddDialog implements OnInit{
       },
     );
   }
-  update(data) {
-    this.invoiceFC.value.inv_number = this.invNumber;
-    
-    this.apiService.update(data.id, this.invoiceFC.value, 'inv').subscribe(
-      (result: any) => {
-        if (result.error) {
-          console.log(result.error);
-        }
-        else {
-          this.dialogRef.close(result);
-        }
-      },
-    );
+  removeItem(data){
+    if (confirm('Are sure to delete?')) {
+      this.apiService.delete(data.id, 'itm').subscribe(
+        result => {
+          this.invoiceItems = this.invoiceItems.filter(item => item !== data);
+          this._snackBar.openFromComponent(SnakComponent, {
+            duration: 2000,
+          });
 
+        }
+      );
+    }
   }
 }
 
-export interface DialogData { }
 @Component({
-  selector: 'edit-dialog',
-  templateUrl: 'edit-dialog.html',
+  selector: 'snack-bar-component-login',
+  template: '<span>Item Deleted Successfully!</span>',
+  styles: [`
+    span{
+      style: green;
+    }`
+  ]
 })
-
-export class EditDialog implements OnInit{
-  
-  editData : any
-  constructor(
-    private apiService: ApiService,
-    public dialogRef: MatDialogRef<any>,
-    @Inject(MAT_DIALOG_DATA) public dData: DialogData
-  ) { }
-
-  invoiceFC = new FormGroup({
-    inv_number: new FormControl(''),
-    items: new FormControl(''),
-    customer: new FormControl(''),
-    currency: new FormControl(''),
-    total_price: new FormControl(''),
-    balance: new FormControl(''),
-    due_date: new FormControl(''),
-    status: new FormControl(''),
-  });
-  entity: any = this.dData;
-  customer: any = this.entity.customer;
-  newInv;
-
-  ngOnInit(){
-
-    // Assign Dialog data to new variable.
-    // Because it return error when trying to get data.
-    this.editData = this.entity.mainData;
-    this.invoiceFC.setValue({
-      inv_number: this.editData.inv_number,
-      items: this.editData.items,
-      customer: this.editData.customer,
-      currency: this.editData.currency,
-      total_price: this.editData.total_price,
-      balance: this.editData.balance,
-      due_date: this.editData.due_date,
-      status: this.editData.status,
-    });
-    
-  }
-  update(data) {
-    console.log(data);
-    
-    this.apiService.update(data.id, this.invoiceFC.value, 'inv').subscribe(
-      (result: any) => {
-        if (result.error){
-          console.log(result.error);
-        }
-        else{
-          this.dialogRef.close(result);
-        }        
-      },
-      error => {
-        // this.dialogRef.close();
-      }
-    );
-
-  }
-}
+export class SnakComponent { }
