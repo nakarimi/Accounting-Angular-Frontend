@@ -6,10 +6,6 @@
       <form class="example-container" [formGroup]="invoiceFC" enctype="multipart/form-data"
         (ngSubmit)="invOperation(editData)">
         <mat-form-field>
-          <mat-label>Invoice Number</mat-label>
-          <input matInput type="text" formControlName="inv_number" [value]="invNumber">
-        </mat-form-field>
-        <mat-form-field>
           <mat-label>Customer</mat-label>
           <mat-select name="customer" formControlName="customer">
             <mat-option *ngFor="let c of customer" [value]="c.id">
@@ -26,16 +22,20 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
+          <mat-label>Due Date</mat-label>
+          <input matInput type="date" formControlName="due_date" >
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Invoice Number</mat-label>
+          <input matInput type="text" formControlName="inv_number" [value]="invNumber">
+        </mat-form-field>
+        <mat-form-field>
           <mat-label>Total Price</mat-label>
-          <input matInput type="number" formControlName="total_price" [value]="invTotalPrice">
+          <input matInput type="number" disabled formControlName="total_price" [value]="invTotalPrice">
         </mat-form-field>
         <mat-form-field>
           <mat-label>Balance</mat-label>
-          <input matInput type="number" formControlName="balance">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Due Date</mat-label>
-          <input matInput type="date" formControlName="due_date" >
+          <input matInput type="number" disabled formControlName="balance">
         </mat-form-field>
         <span *ngIf="type == 'e'">
           <button type="submit" mat-button color="primary">Update</button>
@@ -90,7 +90,7 @@
           <div>
             <table *ngIf="invoiceItems.length > 0" mat-table [dataSource]="itemSource" class="mat-elevation-z1 items">
               <ng-container matColumnDef="{{column}}" *ngFor="let column of invItmTC">
-                <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+                <th mat-header-cell *matHeaderCellDef> {{readableInvItmTC[column]}} </th>
                 <td mat-cell *matCellDef="let element">
                   <span *ngIf="column != 'id'" >{{ element[column] }}</span>
                   <span *ngIf="column == 'id'" ><button (click)="removeItem(element)">X</button></span>
@@ -143,7 +143,7 @@
         <div>
           <table *ngIf="invoiceItems.length > 0" mat-table [dataSource]="invoiceItems" class="mat-elevation-z1 items">
             <ng-container matColumnDef="{{column}}" *ngFor="let column of invItmTC">
-              <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+              <th mat-header-cell *matHeaderCellDef> {{readableInvItmTC[column]}} </th>
               <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="invItmTC"></tr>

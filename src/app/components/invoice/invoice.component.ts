@@ -50,6 +50,7 @@ export class InvoiceComponent implements AfterViewInit {
     'total',
     'created_at',
     'desc',
+    'id'
   ];
   readableItemColumns ={
     label: 'Label',
@@ -208,10 +209,10 @@ export class CuDialog implements OnInit{
     inv_number: new FormControl('', Validators.required),
     customer: new FormControl('', Validators.required),
     currency: new FormControl('', Validators.required),
-    total_price: new FormControl(0, Validators.required),
-    balance: new FormControl(0, Validators.required),
+    total_price: new FormControl(0),
+    balance: new FormControl(0),
     due_date: new FormControl('', Validators.required),
-    status: new FormControl('', Validators.required),
+    status: new FormControl(1, Validators.required),
   });
 
   entity:any = this.dData;
@@ -262,7 +263,10 @@ export class CuDialog implements OnInit{
         due_date: this.editData.due_date,
         status: this.editData.status,
       });
+
       this.invoiceFC.controls['inv_number'].disable();
+      // this.invoiceFC.controls['total_price'].disable();
+      // this.invoiceFC.controls['balance'].disable();
     }
     else{
       this.getLastInvNum();  
@@ -278,8 +282,19 @@ export class CuDialog implements OnInit{
 
   assigning(data) {
     this.invoiceItems = data;
+    this.calTotal();
+    
     this.itemSource = new MatTableDataSource(this.invoiceItems);
   }
+
+  calTotal(){
+    let count = 0;
+    this.invoiceItems.forEach(element => {
+      count += element.total;
+    });
+    this.invTotalPrice = count;
+  }
+
   loadItems(elm) {
     this.loading = true;
     this.invoiceItems = [];
@@ -330,6 +345,8 @@ export class CuDialog implements OnInit{
       result => {
         this.invNumber = 'Invoice-' + result.invoice;
         this.invoiceFC.controls['inv_number'].disable();
+        // this.invoiceFC.controls['total_price'].disable();
+        // this.invoiceFC.controls['balance'].disable();
       }
     );
   }
@@ -345,6 +362,7 @@ export class CuDialog implements OnInit{
         }
         else {
           this.invoiceItems.push(result);
+          this.calTotal();
           this.itemSource = new MatTableDataSource(this.invoiceItems);          
           this.itemsFC.reset();
         }
@@ -367,11 +385,10 @@ export class CuDialog implements OnInit{
   }
 
   finishInvoice(inv){
-    let count = 0;
-    this.invoiceItems.forEach(element => {
-      count += element.total;
-    });
-    this.invTotalPrice = count;
+    this.calTotal();
+    this.invoiceFC.value.total_price = this.invTotalPrice;
+    this.invoiceFC.value.balance = this.invTotalPrice;
+    this.invoiceFC.value.status = 1;    
     this.invOperation(inv);
   }
 }
