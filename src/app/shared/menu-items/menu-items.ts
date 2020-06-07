@@ -13,6 +13,7 @@ const MENUITEMS = [
   { state: 'customer', name: 'Customer', type: 'link', icon: '' },
   { state: 'vendor', name: 'Vendor', type: 'link', icon: '' },
   { state: 'invoice', name: 'Invoice', type: 'link', icon: '' },
+  { state: 'bill', name: 'Bill', type: 'link', icon: '' },
 ];
 
 @Injectable()

@@ -123,7 +123,7 @@ export class ApiService {
 
   retrive(entity, id){
     const href = 'http://localhost:8000';
-    const requestUrl = `${href}/${entity}?inv_id=${id}`;
+    const requestUrl = `${href}/${entity}?entity_id=${id}`;
 
     return this.httpClient.get<any>(requestUrl);
 

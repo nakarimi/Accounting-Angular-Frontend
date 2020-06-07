@@ -19,6 +19,8 @@ import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { AuthModule } from './auth/auth.module';
 import { HttpErrorInterceptor } from './http-error.interceptor';
+import { TransactionComponent } from './components/transaction/transaction.component';
+import { PaymentComponent } from './components/payment/payment.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'dashboard'}
@@ -30,6 +32,8 @@ const routes: Routes = [
     AppHeaderComponent,
     SpinnerComponent,
     AppSidebarComponent,
+    TransactionComponent,
+    PaymentComponent,
   ],
   imports: [
     BrowserModule,
