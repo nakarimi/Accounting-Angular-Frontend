@@ -475,3 +475,93 @@
 [0607/090714.244:ERROR:crash_report_database_win.cc(469)] failed to stat report
 [0607/090714.244:ERROR:crash_report_database_win.cc(469)] failed to stat report
 [0607/090714.244:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/092214.246:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/092214.246:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/092214.246:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/093711.779:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/093711.780:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/093711.780:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/113521.424:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/113521.424:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/113521.424:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/115021.425:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/115021.425:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/115021.425:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/130456.014:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/130456.015:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0607/130456.015:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/111944.139:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/111944.140:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/111944.140:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/112944.139:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/112944.139:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/112944.139:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/112944.140:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/112944.140:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/112944.140:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/113444.142:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/113444.142:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/113444.142:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/114944.143:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/114944.143:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/114944.143:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/120444.145:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/120444.145:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/120444.145:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/133516.935:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/133516.936:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/133516.936:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/135016.938:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/135016.938:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/135016.938:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/140515.384:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/140515.384:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/140515.384:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/141458.413:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.414:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.414:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0609/141458.417:ERROR:exception_snapshot_win.cc(98)] thread ID 20108 not found in process
+[0609/141458.428:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.429:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0609/141458.429:ERROR:exception_snapshot_win.cc(98)] thread ID 18068 not found in process
+[0609/141458.446:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.446:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.446:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.446:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.446:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.446:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.446:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.446:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.447:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.447:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.447:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.447:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.447:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0609/141458.447:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0609/141458.447:ERROR:exception_snapshot_win.cc(98)] thread ID 1196 not found in process
+[0609/203036.521:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/203036.522:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/203036.522:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/204036.521:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/204036.522:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/204036.522:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/204036.522:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/204036.522:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/204036.523:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/204536.524:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/204536.524:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0609/204536.524:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0610/085806.429:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0610/085806.430:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0610/085806.430:ERROR:crash_report_database_win.cc(469)] failed to stat report

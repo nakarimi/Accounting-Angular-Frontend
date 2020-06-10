@@ -42,6 +42,16 @@ export const AppRoutes: Routes = [
         loadChildren: () => import('./components/bill/bill.module')
           .then(m => m.BillModule)
       },
+      {
+        path: 'payment',
+        loadChildren: () => import('./components/payment/payment.module')
+          .then(m => m.PaymentModule)
+      },
+      {
+        path: 'trans',
+        loadChildren: () => import('./components/transaction/transaction.module')
+          .then(m => m.TransactionModule)
+      },
     ]
   }
 ];

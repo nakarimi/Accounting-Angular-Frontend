@@ -32,8 +32,8 @@ const routes: Routes = [
     AppHeaderComponent,
     SpinnerComponent,
     AppSidebarComponent,
-    TransactionComponent,
-    PaymentComponent,
+    // TransactionComponent,
+    // PaymentComponent,
   ],
   imports: [
     BrowserModule,

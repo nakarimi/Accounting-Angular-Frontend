@@ -226,7 +226,7 @@ export class EditDialog implements OnInit{
 
     // Assign Dialog data to new variable.
     // Because it return error when trying to get data.
-    this.editData = this.data;    
+    this.editData = this.data;
     this.accountFC.setValue({
       label: this.editData.label,
       owner: this.editData.owner,

@@ -1,12 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Routes, RouterModule } from '@angular/router';
+import { TransactionComponent } from './transaction.component';
+import { MaterialModule } from '../../material-module';
 
 
+export const routes: Routes = [{
+  path: '',
+  component: TransactionComponent
+}];
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    TransactionComponent
+  ],
   imports: [
-    CommonModule
+    CommonModule,
+    MaterialModule,
+    RouterModule.forChild(routes)
   ]
 })
 export class TransactionModule { }

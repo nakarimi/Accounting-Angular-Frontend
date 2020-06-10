@@ -11,6 +11,8 @@ export class UploadService {
   constructor(private http: HttpClient) { }
 
   public upload(formData) {
+    console.log('file sent');
+    
     return this.http.post<any>(`${this.DJANGO_SERVER}/upload/`, formData);
   }
 }
