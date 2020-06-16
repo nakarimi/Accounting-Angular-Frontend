@@ -7,6 +7,7 @@ import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutes } from './dashboard.routing';
 import { ChartistModule } from 'ng-chartist';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   imports: [
@@ -16,7 +17,9 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     ChartistModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild(DashboardRoutes)
+    RouterModule.forChild(DashboardRoutes),
+    ChartsModule,
+    
   ],
   declarations: [
     DashboardComponent,

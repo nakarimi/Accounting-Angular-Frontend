@@ -167,6 +167,7 @@ export class AddDialog {
 
   createAcc() {
     let formData = this.formFieldData();
+    
     this.apiService.create(formData, 'acnt').subscribe(
       (res) => {
         console.log(res);
@@ -258,7 +259,8 @@ export class EditDialog implements OnInit{
 
   updateAcc(data) {
     let formData = this.formFieldData();
-
+    console.log(formData);
+    
     this.apiService.update(data.id, formData, 'acnt').subscribe(
       (result: any) => {
         if (result.error) {

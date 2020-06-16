@@ -21,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
 import { HttpErrorInterceptor } from './http-error.interceptor';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { PaymentComponent } from './components/payment/payment.component';
+import { UserComponent } from './components/user/user.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'dashboard'}
@@ -32,8 +33,6 @@ const routes: Routes = [
     AppHeaderComponent,
     SpinnerComponent,
     AppSidebarComponent,
-    // TransactionComponent,
-    // PaymentComponent,
   ],
   imports: [
     BrowserModule,

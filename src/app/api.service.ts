@@ -47,48 +47,15 @@ export class ApiService {
 
   // Get all companies from backend.
   loadAll(entity, sort = '', order= '', page = '') {
-      const href = 'http://localhost:8000';
+      const href = 'http://localhost:8000/api';
       const requestUrl = `${href}/${entity}`;
 
-      return this.httpClient.get<any>(requestUrl);
-
-    // If the user changes the sort order, reset back to the first page.
-    // this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-
-    // return merge()
-    //   .pipe(
-    //     startWith({}),
-    //     switchMap( data => {
-    //       // this.isLoadingResults = true;
-    //       return this.httpClient.get<any>(requestUrl);
-    //     }),
-    //     map(data => {
-    //       // Flip flag to show that loading has finished.
-    //       // this.isLoadingResults = false;
-    //       // this.isRateLimitReached = false;
-    //       // this.resultsLength = data.total_count;
-
-    //       // return data.items;
-    //       return data;
-    //     }),
-    //     catchError(data => {
-    //       // this.isLoadingResults = false;
-    //       // // Catch if the GitHub API has reached its rate limit. Return empty data.
-    //       // this.isRateLimitReached = true;
-    //       console.log(data);
-          
-    //       return data;
-    //     })
-    //   );
-
-
-    // const data = this.httpClient.get(`${this.apiUrl + entity}/`, {
-    //   headers: new HttpHeaders({
-    //     "Content-Type": "application/json",
-    //     "Authorization": "Bearer " + this.cookieService.get('auth-token'),
-    //   })
-    // });
-    // return data;
+    return this.httpClient.get(requestUrl, {
+      // headers: new HttpHeaders({
+      //   "Content-Type": "application/json",
+      //   "Authorization": "Bearer " + this.cookieService.get('auth-token'),
+      // }),
+    });
   }
   // Delete item based on content type.
   delete(id, type) {
@@ -111,6 +78,15 @@ export class ApiService {
     });
   }
 
+  parUpdate(id, data, type) {
+
+    return this.httpClient.patch(`${this.apiUrl + type}/${id}/`, data, {
+      headers: new HttpHeaders({
+        "Authorization": "Bearer " + this.cookieService.get('auth-token'),
+      }),
+    });
+  }
+
   // Delete item based on content type.
   create(data, type) {    
 
@@ -122,7 +98,7 @@ export class ApiService {
   }
 
   retrive(entity, id){
-    const href = 'http://localhost:8000';
+    const href = 'http://localhost:8000/api';
     const requestUrl = `${href}/${entity}?entity_id=${id}`;
 
     return this.httpClient.get<any>(requestUrl);

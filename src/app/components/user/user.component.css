@@ -1,0 +1,19 @@
+.superuser{
+  float: left;
+  width: 50px;
+}
+.superuser.super > .mat-icon {
+  color: chartreuse;
+}
+.superuser.nosuper > .mat-icon {
+  color:crimson;
+}
+
+.superusersync{
+  cursor: pointer;
+  display: none;
+  float: right;
+} 
+.superuser:hover > .superusersync{
+  display: block;
+}

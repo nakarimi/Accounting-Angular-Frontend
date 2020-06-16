@@ -52,6 +52,12 @@ export const AppRoutes: Routes = [
         loadChildren: () => import('./components/transaction/transaction.module')
           .then(m => m.TransactionModule)
       },
+      {
+        path: 'user',
+        loadChildren: () => import('./components/user/user.module')
+          .then(m => m.UserModule)
+      },
+
     ]
   }
 ];
