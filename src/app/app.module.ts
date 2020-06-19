@@ -22,6 +22,7 @@ import { HttpErrorInterceptor } from './http-error.interceptor';
 import { TransactionComponent } from './components/transaction/transaction.component';
 import { PaymentComponent } from './components/payment/payment.component';
 import { UserComponent } from './components/user/user.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'dashboard'}
@@ -45,6 +46,7 @@ const routes: Routes = [
     AuthModule, 
     RouterModule.forRoot(AppRoutes),
     RouterModule.forRoot(routes),
+    NgbModule
   ],
   exports: [
     RouterModule

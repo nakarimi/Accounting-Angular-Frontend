@@ -1,6 +1,6 @@
-<button (click)="changeChartRange('m')">Last Month</button>
-<button (click)="changeChartRange('w')">Last Week</button>
-<button (click)="changeChartRange('y')">Last Year</button>
+<button class="btn btn-warning btn-sm m-1" (click)="changeChartRange('m')">Last Month</button>
+<button class="btn btn-warning btn-sm m-1" (click)="changeChartRange('w')">Last Week</button>
+<button class="btn btn-warning btn-sm m-1" (click)="changeChartRange('y')">Last Year</button>
 <div style="display: block;">
   <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
     [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
