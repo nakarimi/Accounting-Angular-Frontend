@@ -27,7 +27,7 @@ export class ApiService {
 
   getToken(authData) {
     const body = JSON.stringify(authData);
-    const token = this.httpClient.post(`${this.apiUrl}api/token/`, body, {
+    const token = this.httpClient.post(`${this.apiUrl}token/`, body, {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
       })
@@ -37,7 +37,7 @@ export class ApiService {
 
   registerUser(authData) {
     const body = JSON.stringify(authData);
-    const user = this.httpClient.post(`${this.apiUrl}api/users/`, body, {
+    const user = this.httpClient.post(`${this.apiUrl}users/`, body, {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
       })
@@ -47,15 +47,23 @@ export class ApiService {
 
   // Get all companies from backend.
   loadAll(entity, sort = '', order= '', page = '') {
-      const href = 'http://localhost:8000/api';
-      const requestUrl = `${href}/${entity}`;
-
-    return this.httpClient.get(requestUrl, {
-      // headers: new HttpHeaders({
-      //   "Content-Type": "application/json",
-      //   "Authorization": "Bearer " + this.cookieService.get('auth-token'),
-      // }),
-    });
+    const href = 'http://localhost:8000/api';
+    const requestUrl = `${href}/${entity}/`;
+    let h;
+    
+    if (entity == 'cuser') {
+      console.log(entity);
+      h = {
+        headers: new HttpHeaders({
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + this.cookieService.get('auth-token'),
+        })
+      }
+      return this.httpClient.get<any>(requestUrl, h);
+    }
+    else{
+      return this.httpClient.get<any>(requestUrl);
+    }
   }
   // Delete item based on content type.
   delete(id, type) {
@@ -99,7 +107,7 @@ export class ApiService {
 
   retrive(entity, id){
     const href = 'http://localhost:8000/api';
-    const requestUrl = `${href}/${entity}?entity_id=${id}`;
+    const requestUrl = `${href}/${entity}?entity_id=${id}/`;
 
     return this.httpClient.get<any>(requestUrl);
 

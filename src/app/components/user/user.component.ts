@@ -33,7 +33,7 @@ export class UserComponent implements OnInit {
   }
 
   loadUsers() {
-    this.apiService.loadAll('users/').subscribe(
+    this.apiService.loadAll('users').subscribe(
       result => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
