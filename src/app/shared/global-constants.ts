@@ -1,6 +1,6 @@
-export class GlobalConstants {
+export var GlobalVariable = {
 
-  public static apiURL: string = "http://localhost:8000/";
-  public static siteTitle: string = "This is example of ItSolutionStuff.com";
+  apiURL: "http://localhost:8000/",
+  siteTitle: "This is example of ItSolutionStuff.com",
 
 }

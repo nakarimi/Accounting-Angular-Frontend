@@ -4,6 +4,7 @@ import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { DatePipe } from '@angular/common';
 import { ApiService } from '../../api.service';
+import { ToastService } from '../../shared/toast/toast-service';
 
 /**
  * @title Table with expandable rows
@@ -45,12 +46,16 @@ export class DashboardComponent {
 	months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	
 	constructor(
-		private apiService: ApiService
+		private apiService: ApiService,
+		public toast: ToastService
 	) { 
 		this.pipe = new DatePipe('en');
 	}
 
-	ngOnInit() {		
+	ngOnInit() {
+		// this.toast.show('Payment request failed, try again!',
+		// 	{ classname: 'bg-danger text-light', delay: 2500000 }
+		// );
 	}
 
 	changeChartRange(type){
@@ -134,6 +139,9 @@ export class DashboardComponent {
 				this.diffAmounts(result);
 			},
 			error => {
+				this.toast.show('Payment request failed, try again!',
+					{ classname: 'bg-danger text-light', delay: 5000 }	
+				);
 				console.log(error);
 			}
 		);

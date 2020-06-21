@@ -23,6 +23,9 @@ import { TransactionComponent } from './components/transaction/transaction.compo
 import { PaymentComponent } from './components/payment/payment.component';
 import { UserComponent } from './components/user/user.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ToastsContainer } from './shared/toast/toasts-container.component';
+import { NgbdToastGlobalModule } from './shared/toast/toast-global.module';
+import { NgbdToastGlobal } from './shared/toast/toast-global.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'dashboard'}
@@ -34,6 +37,8 @@ const routes: Routes = [
     AppHeaderComponent,
     SpinnerComponent,
     AppSidebarComponent,
+    NgbdToastGlobal,
+    ToastsContainer
   ],
   imports: [
     BrowserModule,
@@ -46,7 +51,8 @@ const routes: Routes = [
     AuthModule, 
     RouterModule.forRoot(AppRoutes),
     RouterModule.forRoot(routes),
-    NgbModule
+    NgbModule,
+    NgbdToastGlobalModule
   ],
   exports: [
     RouterModule

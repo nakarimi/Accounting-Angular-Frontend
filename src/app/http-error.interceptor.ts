@@ -11,20 +11,24 @@ import { Observable, throwError } from 'rxjs';
 import { retry, catchError, switchMap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Injectable } from '@angular/core';
+import { ToastService } from './shared/toast/toast-service';
+import { MatDialogRef } from '@angular/material';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
   constructor(
     private apiService: ApiService,
+    private toast: ToastService,
   ) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
     return next.handle(request)
-      .pipe(
-        catchError((error: HttpErrorResponse) => {
-          let errorMessage = '';
-          
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = '';
+        let hRMsg = '';
+        // this.dialogRef.close()
+        
           if (error.status == 401) {            
             this.apiService.refreshToken().subscribe(
               result => {
@@ -42,7 +46,6 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           }
           else{
             if (error.error instanceof ErrorEvent) {
-              // client-side error
               errorMessage = `Error: ${error.error.message}`;
             } else {
               // server-side error
@@ -50,6 +53,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             }
             // window.alert(errorMessage);
           }
+          for (var key in error.error) {
+            hRMsg = error.error[key];
+          }
+          
+          this.toast.show('Something wrong, please try again!', { classname: 'bg-danger text-light', delay: 5000});
           return throwError(errorMessage);
         }
       ),

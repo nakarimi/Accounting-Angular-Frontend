@@ -3,6 +3,7 @@ import { ApiService } from '../../api.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { find, findIndex } from 'rxjs/operators';
+import { ToastService } from '../../shared/toast/toast-service';
 
 @Component({
   selector: 'app-account',
@@ -29,6 +30,7 @@ export class AccountComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     public dialog: MatDialog,
+    private toast: ToastService,
 
   ) { }
 
@@ -84,6 +86,9 @@ export class AccountComponent implements OnInit {
       this.apiService.delete(row.id, 'acnt').subscribe(
         result => {
           this.deleteUI(row);
+          this.toast.show('Account deleted successfully!',
+            { classname: 'bg-warning text-light', delay: 5000 }	
+          );
         }
       );
     }
@@ -135,6 +140,7 @@ export class AddDialog {
 
   constructor(
     private apiService: ApiService,
+    private toast: ToastService,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
@@ -169,12 +175,28 @@ export class AddDialog {
     let formData = this.formFieldData();
     
     this.apiService.create(formData, 'acnt').subscribe(
-      (res) => {
-        console.log(res);
+      (result: any) => {
+        if (result.error) {
+          console.log(result.error);
+          
+          this.toast.show('An error occurred, try again!',
+            { classname: 'bg-danger text-light', delay: 5000 }
+          );
+        }
+        else {
+          this.toast.show('New account created successfully!',
+            { classname: 'bg-success text-light', delay: 5000 }
+          );
+          this.dialogRef.close(result);
+        }
         
       },
       (err) => {
         console.log(err);
+        
+        this.toast.show('An error occurred, try again!',
+          { classname: 'bg-danger text-light', delay: 5000 }
+        );
       }
     );
   }
