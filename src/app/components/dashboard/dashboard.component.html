@@ -1,7 +1,12 @@
 <button class="btn btn-warning btn-sm m-1 text-white" (click)="changeChartRange('m')">Last 30Days</button>
 <button class="btn btn-warning btn-sm m-1 text-white" (click)="changeChartRange('w')">Last 7Days</button>
 <div style="display: block;">
-  <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
-    [plugins]="barChartPlugins" [legend]="barChartLegend" [chartType]="barChartType">
+  <canvas baseChart 
+    [datasets]="barChartData" 
+    [labels]="barChartLabels" 
+    [options]="barChartOptions"
+    [plugins]="barChartPlugins" 
+    [legend]="barChartLegend" 
+    [chartType]="barChartType">
   </canvas>
 </div>

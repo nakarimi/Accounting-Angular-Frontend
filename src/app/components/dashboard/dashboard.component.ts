@@ -56,6 +56,18 @@ export class DashboardComponent {
 		// this.toast.show('Payment request failed, try again!',
 		// 	{ classname: 'bg-danger text-light', delay: 2500000 }
 		// );
+		// this.toast.show('Payment request failed, try again!',
+		// 	{ classname: 'bg-danger text-light', delay: 2500000 }
+		// );
+		// this.toast.show('Payment request failed, try again!',
+		// 	{ classname: 'bg-danger text-light', delay: 2500000 }
+		// );
+		// this.toast.show('Payment request failed, try again!',
+		// 	{ classname: 'bg-danger text-light', delay: 2500000 }
+		// );
+		// this.toast.show('Payment request failed, try again!',
+		// 	{ classname: 'bg-danger text-light', delay: 2500000 }
+		// );
 	}
 
 	changeChartRange(type){
@@ -138,12 +150,6 @@ export class DashboardComponent {
 			result => {
 				this.diffAmounts(result);
 			},
-			error => {
-				this.toast.show('Payment request failed, try again!',
-					{ classname: 'bg-danger text-light', delay: 5000 }	
-				);
-				console.log(error);
-			}
 		);
 	}
 

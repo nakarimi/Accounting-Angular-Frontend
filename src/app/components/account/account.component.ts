@@ -137,7 +137,7 @@ export interface DialogData { }
 export class AddDialog {
   isFormValid: boolean = true;
   isNewFile: boolean = false;
-
+  apiErr;
   constructor(
     private apiService: ApiService,
     private toast: ToastService,
@@ -177,11 +177,6 @@ export class AddDialog {
     this.apiService.create(formData, 'acnt').subscribe(
       (result: any) => {
         if (result.error) {
-          console.log(result.error);
-          
-          this.toast.show('An error occurred, try again!',
-            { classname: 'bg-danger text-light', delay: 5000 }
-          );
         }
         else {
           this.toast.show('New account created successfully!',
@@ -192,11 +187,7 @@ export class AddDialog {
         
       },
       (err) => {
-        console.log(err);
-        
-        this.toast.show('An error occurred, try again!',
-          { classname: 'bg-danger text-light', delay: 5000 }
-        );
+        this.apiErr = err.error;
       }
     );
   }
@@ -227,6 +218,8 @@ export class EditDialog implements OnInit{
   editData : any;
   isFormValid: boolean = true;
   isNewFile: boolean = false;
+
+  apiErr;
 
   constructor(
     private apiService: ApiService,
@@ -286,15 +279,21 @@ export class EditDialog implements OnInit{
     this.apiService.update(data.id, formData, 'acnt').subscribe(
       (result: any) => {
         if (result.error) {
-          console.log(result.error);
+          console.log(result);
+          
+          this.apiErr = result.error;
         }
         else {
           this.dialogRef.close(result);
         }
       },
       error => {
-        // this.dialogRef.close();
-        // this.apiService.apiRespErrors(error)
+        if(error.status == 400){
+          this.apiErr = error.error;
+        }
+        if (error.status == 401) {
+          this.dialogRef.close();
+        }
       }
     );
   }
@@ -317,3 +316,4 @@ export class EditDialog implements OnInit{
     return formData;
   }
 }
+

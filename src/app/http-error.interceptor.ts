@@ -25,40 +25,39 @@ export class HttpErrorInterceptor implements HttpInterceptor {
     return next.handle(request)
     .pipe(
       catchError((error: HttpErrorResponse) => {
-        let errorMessage = '';
-        let hRMsg = '';
-        // this.dialogRef.close()
+        console.log(error);
         
-          if (error.status == 401) {            
-            this.apiService.refreshToken().subscribe(
-              result => {
-                return next.handle(request)
+        let errorMessage = '';
+        let hRMsg = '';        
+        if (error.status == 401) {         
+          this.apiService.refreshToken().subscribe(
+            result => {
+              return next.handle(request)
 
-                // Update the access token again.
-                // var date = new Date();
-                // date.setTime(date.getTime() + 600 * 1000);
-                // this.cookieService.set("auth-token", result["access"], date);
+              // Update the access token again.
+              // var date = new Date();
+              // date.setTime(date.getTime() + 600 * 1000);
+              // this.cookieService.set("auth-token", result["access"], date);
               },
               error => {
                 console.log(error);
               }
             );
+          } 
+          else if (error.status == 0) {            
+            hRMsg = 'Server down, try later!';
           }
-          else{
+          else {
             if (error.error instanceof ErrorEvent) {
               errorMessage = `Error: ${error.error.message}`;
             } else {
               // server-side error
               errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
             }
-            // window.alert(errorMessage);
+            hRMsg = 'Something wrong, please try again!';
           }
-          for (var key in error.error) {
-            hRMsg = error.error[key];
-          }
-          
-          this.toast.show('Something wrong, please try again!', { classname: 'bg-danger text-light', delay: 5000});
-          return throwError(errorMessage);
+          this.toast.show(hRMsg, { classname: 'bg-danger text-light', delay: 5000 });
+          return throwError(error);
         }
       ),
     )

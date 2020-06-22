@@ -4,3 +4,7 @@
     left: 0;
     top: unset;
 }
+
+.toast:not(:last-child) {
+  display: none !important;
+}

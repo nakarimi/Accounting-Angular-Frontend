@@ -32,4 +32,13 @@
     </mat-dialog-actions>
 
   </form>
+    <br>
+    <p>
+      <ngb-alert *ngIf="apiErr" [dismissible]="false">
+        <span *ngFor="let item of apiErr | keyvalue">
+          <li><strong>{{item.key}}: </strong>{{item.value}}</li>
+        </span>
+      </ngb-alert>
+    </p>
+
 </mat-dialog-content>

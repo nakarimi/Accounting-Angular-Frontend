@@ -1,90 +1,77 @@
-<form action="/action_page.php">
-  <div class="form-group">
-    <label for="email">Email address:</label>
-    <input type="email" class="form-control" placeholder="Enter email" id="email">
-  </div>
-  <div class="form-group">
-    <label for="pwd">Password:</label>
-    <input type="password" class="form-control" placeholder="Enter password" id="pwd">
-  </div>
-  <div class="form-group form-check">
-    <label class="form-check-label">
-      <input class="form-check-input" type="checkbox"> Remember me
-    </label>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-<div>
-  <form class="example-container" [formGroup]="paymentFC" enctype="multipart/form-data"
-  (ngSubmit)="paymentOperation(editData)">
-  <mat-form-field>
-    <mat-label>Type</mat-label>
-    <mat-select name="type" formControlName="type" (selectionChange)="onSelectType($event)">
-      <mat-option *ngFor="let c of ['Income', 'Expense']" [value]="c">
-        {{c}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Label</mat-label>
-    <input matInput type="text" formControlName="label">
-  </mat-form-field>
-  <mat-form-field>
-    <mat-label>Account</mat-label>
-    <mat-select name="account" formControlName="account" (selectionChange)="onSelectAccount($event)">
-      <mat-option *ngFor="let i of accounts" [value]="i.id">
-        {{i.label}} - {{i.balance}} {{i.currency}}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-    <mat-form-field *ngIf="paymentFC.value.type == 'Expense'">
-      <mat-label>Bill Reference</mat-label>
-      <mat-select name="ref_bill" formControlName="ref_bill" (selectionChange)="onSelectBill($event)">
-        <mat-option *ngFor="let c of bills" [value]="c.id">
-          {{c.bill_number}} - {{ vendors[c.vendor].label }} - {{ c.balance }} {{ c.currency }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field *ngIf="paymentFC.value.type == 'Income'">
-      <mat-label>Invoice Reference</mat-label>
-      <mat-select name="ref_inv" formControlName="ref_inv">
-        <mat-option *ngFor="let c of invoices" [value]="c.id">
-          {{c.inv_number}} - {{ customers[c.customer].label }} - {{ c.balance }} {{ c.currency }}
+<div class="d-flex payment-container">
+  <div class="col-4 mat-typography">
+    <form [formGroup]="paymentFC" enctype="multipart/form-data"
+    (ngSubmit)="paymentOperation(editData)">
+    <mat-form-field>
+      <mat-label>Type</mat-label>
+      <mat-select name="type" formControlName="type" (selectionChange)="onSelectType($event)">
+        <mat-option *ngFor="let c of ['Income', 'Expense']" [value]="c">
+          {{c}}
         </mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field>
-      <mat-label>Amount</mat-label>
-      <input matInput type="number" formControlName="amount" [value]="maxAmount" (change)="onSetAmount($event)">
+      <mat-label>Label</mat-label>
+      <input matInput type="text" formControlName="label">
     </mat-form-field>
-
-
-
-    <span *ngIf="editData">
-      <button type="submit" mat-button color="primary">Update</button>
-      <button mat-button color="accent" (click)="onResetForm()">Cancel</button>
-    </span>
-    <span *ngIf="!editData">
-      <!-- <button mat-button color="accent" (click)="onResetForm()">Cancel</button> -->
-      <button *ngIf="formStatus" type="submit" mat-button color="primary">Create</button>
-    </span>
-  </form>
-</div>
-
-<table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort matSortActive="id"
-  matSortDisableClear matSortDirection="desc">
-  <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ column }} </th>
-    <td mat-cell *matCellDef="let element">
-      <span *ngIf="column != 'id'">
-        {{element[column]}}
+    <mat-form-field>
+      <mat-label>Account</mat-label>
+      <mat-select name="account" formControlName="account" (selectionChange)="onSelectAccount($event)">
+        <mat-option *ngFor="let i of accounts" [value]="i.id">
+          {{i.label}} - {{i.balance}} {{i.currency}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+      <mat-form-field *ngIf="paymentFC.value.type == 'Expense'">
+        <mat-label>Bill Reference</mat-label>
+        <mat-select name="ref_bill" formControlName="ref_bill" (selectionChange)="onSelectBill($event)">
+          <mat-option *ngFor="let c of bills" [value]="c.id">
+            {{c.bill_number}} - {{ vendors[c.vendor].label }} - {{ c.balance }} {{ c.currency }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field *ngIf="paymentFC.value.type == 'Income'">
+        <mat-label>Invoice Reference</mat-label>
+        <mat-select name="ref_inv" formControlName="ref_inv">
+          <mat-option *ngFor="let c of invoices" [value]="c.id">
+            {{c.inv_number}} - {{ customers[c.customer].label }} - {{ c.balance }} {{ c.currency }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Amount</mat-label>
+        <input matInput type="number" formControlName="amount" [value]="maxAmount" (change)="onSetAmount($event)">
+      </mat-form-field>
+  
+  
+  
+      <span *ngIf="editData">
+        <button type="submit" mat-button color="primary">Update</button>
+        <button mat-button color="accent" (click)="onResetForm()">Cancel</button>
       </span>
-      <button *ngIf="column == 'id'" mat-raised-button mat-button (click)="activeEdit(element)" align="end"
-        tabindex="-1">Edit</button>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
-</table>
+      <span *ngIf="!editData">
+        <!-- <button mat-button color="accent" (click)="onResetForm()">Cancel</button> -->
+        <button *ngIf="formStatus" type="submit" mat-button color="primary">Create</button>
+      </span>
+    </form>
+  </div>
+  <div class="col-8 ">
+    <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort matSortActive="id"
+      matSortDisableClear matSortDirection="desc">
+      <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ column }} </th>
+        <td mat-cell *matCellDef="let element">
+          <span *ngIf="column != 'id'">
+            {{element[column]}}
+          </span>
+          <button *ngIf="column == 'id'" mat-raised-button mat-button (click)="activeEdit(element)" align="end"
+            tabindex="-1">Edit</button>
+        </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
+    </table>
+  </div>
+</div>

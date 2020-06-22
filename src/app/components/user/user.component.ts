@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../../api.service';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { ToastService } from '../../shared/toast/toast-service';
 
 @Component({
   selector: 'app-user',
@@ -26,6 +27,7 @@ export class UserComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
+    public toast: ToastService
   ) { }
 
   ngOnInit() {
@@ -56,7 +58,9 @@ export class UserComponent implements OnInit {
     if (confirm(msg)) {
       this.apiService.parUpdate(data.id, { 'is_superuser': !data.is_superuser}, 'users').subscribe(
         result => {
-          console.log(result);
+          this.toast.show('User updated successfully!',
+            { classname: 'bg-info text-light', delay: 2500 }
+          );
           this.updateTable(data, result);
         },
         error => {
