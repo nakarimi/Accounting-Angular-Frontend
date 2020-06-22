@@ -10,9 +10,9 @@ import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 export class TransactionComponent implements OnInit {
 
   @Output() accounts: any
-
+  payments;
   // Define all the variable
-  displayedColumns: string[] = ['label', 'account', 'amount', 'payment'];
+  displayedColumns: string[] = ['type', 'account', 'amount', 'payment', 'created_at'];
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -30,10 +30,10 @@ export class TransactionComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.loadInvoices();
+    this.loadAccounts();
   }
 
-  loadInvoices() {
+  loadTransactions() {
     this.apiService.loadAll('trs').subscribe(
       result => {
         this.dataSource.data = result;
@@ -45,4 +45,29 @@ export class TransactionComponent implements OnInit {
     );
   }
 
+  loadAccounts() {
+    this.apiService.loadAll('acnt').subscribe(
+      result => {
+        this.accounts = result;
+        this.loadPayments();
+      },
+    );
+  }
+
+  loadPayments() {
+    this.apiService.loadAll('pay').subscribe(
+      result => {
+        this.payments = result;
+        this.loadTransactions();
+      },
+    );
+  }
+
+  findAccount(acid){
+    return this.accounts.filter(x => x.id == acid)[0];
+  }
+
+  findPay(payid){
+    return this.payments.filter(x => x.id == payid)[0].label;
+  }
 }

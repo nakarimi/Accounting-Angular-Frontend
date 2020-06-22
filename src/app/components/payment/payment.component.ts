@@ -2,6 +2,7 @@ import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { ApiService } from '../../api.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ToastService } from '../../shared/toast/toast-service';
 
 @Component({
   selector: 'app-payment',
@@ -10,6 +11,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 })
 export class PaymentComponent implements OnInit {
   bills;
+  selectedCurr;
   vendors = [];
   invoices;
   customers = [];
@@ -29,12 +31,12 @@ export class PaymentComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) msort: MatSort;
-
+  
   paymentFC = new FormGroup({
     account: new FormControl('', Validators.required),
     label: new FormControl('', Validators.required),
     type: new FormControl('', Validators.required),
-    amount: new FormControl('', Validators.required),
+    amount: new FormControl('', [Validators.min(0), Validators.required]),
     ref_bill: new FormControl(''),
     ref_inv: new FormControl(''),
   });
@@ -42,7 +44,7 @@ export class PaymentComponent implements OnInit {
   editData;
   constructor(
     private apiService: ApiService,
-
+    private toast: ToastService,
   ) { }
 
   ngOnInit() {
@@ -68,6 +70,8 @@ export class PaymentComponent implements OnInit {
     this.apiService.loadAll('acnt').subscribe(
       result => {
         this.accounts = result;
+        console.log(this.accounts);
+        
       },
       error => {
         console.log(error);
@@ -96,22 +100,24 @@ export class PaymentComponent implements OnInit {
   }
 
   onSelectAccount(data){
-    this.availableAmount = 2000;
+    let acc = this.accounts.filter(x => x.id == data.value)[0];
+    this.selectedCurr = acc.currency;    
+    this.availableAmount = +2000;
   }
   onSelectBill(data){
-    this.maxAmount = 1000;
+    this.maxAmount = +1000;
     if (this.maxAmount > this.availableAmount) {
       alert('Choose valueable account!');
     }    
   }
   onSetAmount(data){
     const AMOUNT = data.target.value;
-    if (AMOUNT > this.maxAmount) {
-      alert('Set Valid Amount!');
-      this.formStatus = false;
-    }else{
-      this.formStatus = true;
-    }
+    // if (AMOUNT > this.maxAmount) {
+    //   alert('Set Valid Amount!');
+    //   this.formStatus = false;
+    // }else{
+    //   this.formStatus = true;
+    // }
   }
 
   onResetForm(){
@@ -165,6 +171,8 @@ export class PaymentComponent implements OnInit {
     });
   }
   paymentOperation(data) {
+    this.paymentFC.value.currency = this.selectedCurr;
+
     if (data && data.id) {
 
       this.apiService.update(data.id, this.paymentFC.value, 'pay').subscribe(
@@ -173,8 +181,10 @@ export class PaymentComponent implements OnInit {
             console.log(result.error);
           }
           else {
-            console.log(result);
-            
+            this.updateTable(data, result);
+            this.toast.show('Payment updated successfully!',
+              { classname: 'bg-success text-light', delay: 5000 }
+            );            
           }
         },
       );
@@ -186,11 +196,39 @@ export class PaymentComponent implements OnInit {
             console.log(result.error);
           }
           else {
-            console.log(result);
+            this.addToTable(result);
+            this.toast.show('New payment created successfully!',
+              { classname: 'bg-success text-light', delay: 5000 }
+            );
           }
         },
       );
     }
+  }
+  // Delete Item From UI
+  deleteUI(row) {
+    this.tableData = this.dataSource.data;
+    let index: number = this.tableData.findIndex(data => data === row);
+    this.tableData.splice(index, 1);
+    this.dataSource = new MatTableDataSource<any>(this.tableData);
+    this.dataSource.sort = this.msort;
+  }
 
+  addToTable(data) {
+    this.tableData = this.dataSource.data;
+    this.dataSource.data = this.tableData.push(data);
+    this.dataSource = new MatTableDataSource<any>(this.tableData);
+    this.dataSource.sort = this.msort;
+  }
+
+  updateTable(oldRow, newRow) {
+    this.tableData = this.dataSource.data;
+    // Remove the old data from table.
+    let index: number = this.tableData.findIndex(data => data === oldRow);
+    this.tableData.splice(index, 1);
+    // Add update row.
+    this.dataSource.data = this.tableData.push(newRow);
+    this.dataSource = new MatTableDataSource<any>(this.tableData);
+    this.dataSource.sort = this.msort;
   }
 }
