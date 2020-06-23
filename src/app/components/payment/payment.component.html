@@ -12,7 +12,7 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Label</mat-label>
-      <input matInput type="text" formControlName="label">
+      <input matInput autocomplete="off" type="text" formControlName="label">
     </mat-form-field>
     <mat-form-field>
       <mat-label>Account</mat-label>
@@ -40,7 +40,7 @@
       </mat-form-field>
       <mat-form-field>
         <mat-label>Amount</mat-label>
-        <input matInput type="number" formControlName="amount" (change)="onSetAmount($event)">
+        <input matInput autocomplete="off" type="number" formControlName="amount" (change)="onSetAmount($event)">
       </mat-form-field>
   
   
@@ -59,7 +59,7 @@
     <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort matSortActive="id"
       matSortDisableClear matSortDirection="desc">
       <ng-container matColumnDef="{{column}}" *ngFor="let column of displayedColumns">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ column }} </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> {{ column.replace('_', ' ') }} </th>
         <td mat-cell *matCellDef="let element">
           <button *ngIf="column == 'id'" mat-raised-button mat-button (click)="activeEdit(element)" align="end"
           tabindex="-1">Edit</button>

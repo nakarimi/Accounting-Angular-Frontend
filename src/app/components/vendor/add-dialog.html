@@ -3,23 +3,23 @@
   <form class="example-container" [formGroup]="vendorFC" enctype="multipart/form-data"
     (ngSubmit)="create()">
     <mat-form-field>
-      <input matInput type="text" formControlName="label" placeholder="Label">
+      <input matInput autocomplete="off" type="text" formControlName="label" placeholder="Label">
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="textarea" formControlName="owner" placeholder="Owner" required>
+      <input matInput autocomplete="off" type="textarea" formControlName="owner" placeholder="Owner" required>
     </mat-form-field>
     <div>
       <label>Status: </label>
       <mat-checkbox formControlName="status">Active</mat-checkbox>
     </div>
     <mat-form-field>
-      <input matInput type="number" formControlName="phone" placeholder="Phone" required>
+      <input matInput autocomplete="off" type="number" formControlName="phone" placeholder="Phone" required>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="email" formControlName="email" placeholder="Email" required>
+      <input matInput autocomplete="off" type="email" formControlName="email" placeholder="Email" required>
     </mat-form-field>
     <mat-form-field>
-      <input matInput type="textarea" formControlName="desc" placeholder="Description" required>
+      <input matInput autocomplete="off" type="textarea" formControlName="desc" placeholder="Description" required>
     </mat-form-field>
 
     <mat-dialog-actions align="end">

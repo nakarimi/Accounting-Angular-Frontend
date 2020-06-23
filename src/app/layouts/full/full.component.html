@@ -13,6 +13,19 @@
         <button mat-icon-button (click)="snav.toggle()" value="sidebarclosed">
             <mat-icon>menu</mat-icon>
         </button>
+
+        <button [matMenuTriggerFor]="quickAdd" mat-icon-button class="m-r-5">
+            <mat-icon title="Add New Entity">add</mat-icon>            
+        </button>
+        <mat-menu #quickAdd="matMenu" class="quick-add-ment">
+            <button mat-menu-item>Add Account</button>
+            <button mat-menu-item>Add Customer</button>
+            <button mat-menu-item>Add Invoice</button>
+            <button mat-menu-item>Add Bill</button>
+            <button mat-menu-item>Add Payment</button>
+        </mat-menu>
+
+
         <span fxFlex></span>
         <!-- ============================================================== -->
         <!-- app header component - style you can find in header.scss / header.component.ts-->

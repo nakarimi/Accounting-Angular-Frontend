@@ -38,7 +38,7 @@ const routes: Routes = [
     SpinnerComponent,
     AppSidebarComponent,
     NgbdToastGlobal,
-    ToastsContainer
+    ToastsContainer,
   ],
   imports: [
     BrowserModule,

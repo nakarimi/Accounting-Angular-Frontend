@@ -1094,3 +1094,119 @@
 [0622/134729.955:ERROR:crash_report_database_win.cc(469)] failed to stat report
 [0622/134729.955:ERROR:crash_report_database_win.cc(469)] failed to stat report
 [0622/134729.956:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/140229.957:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/140229.957:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/140229.957:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/141729.962:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/141729.963:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/141729.963:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/143229.963:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/143229.963:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/143229.963:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/144729.965:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/144729.965:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/144729.965:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/150229.967:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/150229.967:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/150229.967:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/151729.969:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/151729.969:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/151729.969:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/200200.712:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/200200.712:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/200200.712:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/201700.713:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/201700.714:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/201700.714:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/205031.236:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/205031.236:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/205031.236:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/210531.236:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/210531.236:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/210531.236:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/212031.239:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/212031.240:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/212031.240:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/213531.241:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/213531.242:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/213531.242:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0622/214012.140:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0622/214012.140:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0622/214012.156:ERROR:exception_snapshot_win.cc(98)] thread ID 13664 not found in process
+[0622/214012.156:ERROR:exception_snapshot_win.cc(98)] thread ID 4008 not found in process
+[0623/105500.760:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/105500.762:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/105500.762:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/110500.760:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/110500.760:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/110500.760:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/110500.760:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/110500.760:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/110500.761:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/111000.763:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/111000.763:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/111000.763:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/112500.764:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/112500.764:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/112500.764:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/114000.765:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/114000.765:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/114000.765:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/115500.766:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/115500.767:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/115500.767:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/121000.768:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/121000.768:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/121000.768:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/122500.769:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/122500.769:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/122500.769:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/124000.770:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/124000.770:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/124000.770:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/131340.458:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/131340.458:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/131340.458:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/132840.459:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/132840.460:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/132840.460:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/134340.461:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/134340.462:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/134340.462:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/162358.629:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/162358.629:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/162358.629:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/163858.631:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/163858.631:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/163858.632:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/165358.634:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/165358.635:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/165358.635:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/170858.635:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/170858.636:ERROR:crash_report_database_win.cc(469)] failed to stat report
+[0623/170858.636:ERROR:crash_report_database_win.cc(469)] failed to stat report
