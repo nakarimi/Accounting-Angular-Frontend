@@ -1,0 +1,41 @@
+<mat-dialog-content class="mat-typography">
+  <h2 mat-dialog-title>Profile</h2>
+  <form [formGroup]="profileFC" enctype="multipart/form-data" (ngSubmit)="profileOperation()">
+    <mat-form-field>
+      <mat-label>Username</mat-label>
+      <input matInput autocomplete="off" type="text" formControlName="username">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput autocomplete="off" type="email" formControlName="email">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>First Name</mat-label>
+      <input matInput autocomplete="off" type="text" formControlName="first_name">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Last Name</mat-label>
+      <input matInput autocomplete="off" type="text" formControlName="last_name">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Old Password</mat-label>
+      <input matInput autocomplete="off" type="password" formControlName="oldpassword">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>New Password</mat-label>
+      <input matInput autocomplete="off" type="password" formControlName="password">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Confirm Password</mat-label>
+      <input matInput autocomplete="off" type="password" formControlName="confirmPassword"
+        [errorStateMatcher]="matcher">
+      <mat-error>
+        Passwords do not match, please check passwords and try again.
+      </mat-error>
+    </mat-form-field>
+    <div class="m-1">
+      <button type="submit" mat-button class="bg-danger m-r-10 text-white">Update</button>
+      <button mat-button mat-dialog-close class="bg-warning text-white">Cancel</button>
+    </div>
+  </form>
+</mat-dialog-content>

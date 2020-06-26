@@ -2,7 +2,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS , HttpClient } from '@angular/common/http';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { AppRoutes } from './app.routing';
@@ -10,7 +10,7 @@ import { AppComponent } from './app.component';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FullComponent } from './layouts/full/full.component';
-import { AppHeaderComponent } from './layouts/full/header/header.component';
+import { AppHeaderComponent, ProfileDialog } from './layouts/full/header/header.component';
 import { AppSidebarComponent } from './layouts/full/sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material-module';
@@ -26,6 +26,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsContainer } from './shared/toast/toasts-container.component';
 import { NgbdToastGlobalModule } from './shared/toast/toast-global.module';
 import { NgbdToastGlobal } from './shared/toast/toast-global.component';
+import { AccountModule } from './components/account/account.module';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'dashboard'}
@@ -39,6 +40,7 @@ const routes: Routes = [
     AppSidebarComponent,
     NgbdToastGlobal,
     ToastsContainer,
+    ProfileDialog,
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,8 @@ const routes: Routes = [
     RouterModule.forRoot(AppRoutes),
     RouterModule.forRoot(routes),
     NgbModule,
-    NgbdToastGlobalModule
+    NgbdToastGlobalModule,
+    ReactiveFormsModule
   ],
   exports: [
     RouterModule
@@ -68,6 +71,9 @@ const routes: Routes = [
       multi: true
     }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    ProfileDialog,
+  ]
 })
 export class AppModule {}

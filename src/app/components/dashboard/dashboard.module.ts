@@ -15,10 +15,10 @@ import { ChartsModule } from 'ng2-charts';
     MaterialModule,
     FlexLayoutModule,
     ChartistModule,
+    ChartsModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(DashboardRoutes),
-    ChartsModule,
     
   ],
   declarations: [

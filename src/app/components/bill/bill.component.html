@@ -1,5 +1,5 @@
 <div class="csmr-table-actions table-actions">
-  <button mat-raised-button mat-button (click)="openDialog(null)">Add</button>
+  <button class="m-1 text-white bg-success" mat-raised-button mat-button (click)="openDialog(null)">Add</button>
 </div>
 <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" 
   matSort matSortActive="id"
@@ -11,8 +11,10 @@
       <span *ngIf="column != 'due_date'">{{element[column]}}</span>
       <span *ngIf="column == 'due_date'">{{element[column] | date: 'MMM d, y'}}</span>
     </span>
-      <button *ngIf="column == 'id'" mat-raised-button mat-button (click)="openDialog(element, 'e')" align="end" tabindex="-1">Edit</button>
-      <button *ngIf="column == 'id'" mat-raised-button mat-button (click)="delete(element)" align="end" tabindex="-1">Delete</button>
+    <button class="m-1 text-white bg-info" *ngIf="column == 'id'" mat-raised-button mat-button (click)="openDialog(element, 'e')" align="end" tabindex="-1">Edit</button>
+    <button class="m-1 text-white bg-primary" *ngIf="column == 'id'" mat-raised-button mat-button (click)="expandedElement = expandedElement === element ? null : loadItems(element)" align="end" tabindex="-1">Items</button>
+    <button class="m-1 text-white bg-danger" *ngIf="column == 'id'" mat-raised-button mat-button (click)="delete(element)" align="end" tabindex="-1">Delete</button>
+      
     </td>
   </ng-container>
 
@@ -37,8 +39,6 @@
                     <span *ngIf="column != 'created_at'">{{element[column]}}</span>
                     <span *ngIf="column == 'created_at'">{{element[column] | date: 'MMM d, y'}}</span>
                   </span>
-                  <button *ngIf="column == 'id'" mat-raised-button mat-button (click)="openDialog(element, 'e')" align="end"
-                  tabindex="-1">Edit</button>
                 </td>
               </ng-container>
               
@@ -54,8 +54,7 @@
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let element; columns: displayedColumns;" class="element-row"
-    [class.expanded-row]="expandedElement === element"
-    (click)="expandedElement = expandedElement === element ? null : loadItems(element)">
+    [class.expanded-row]="expandedElement === element">
   </tr>
   <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
   <mat-paginator [length]="resultsLength" [pageSize]="10"></mat-paginator>

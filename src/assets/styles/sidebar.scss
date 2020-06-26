@@ -20,7 +20,9 @@ mat-sidenav {
         &:hover{
             background: none;
         }
-        
+        .sidebar-sub-menu-text{
+            padding-left: 10px;
+        }
         .mat-list-item-content{
             display: block;
             padding: 0px 15px;

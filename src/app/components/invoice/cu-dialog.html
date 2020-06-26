@@ -35,7 +35,7 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Balance</mat-label>
-          <input matInput autocomplete="off" type="number" disabled formControlName="balance">
+          <input matInput autocomplete="off" type="number" disabled formControlName="balance" [value]="invBalance">
         </mat-form-field>
         <span *ngIf="type == 'e'">
           <button type="submit" mat-button color="primary">Update</button>
@@ -72,7 +72,7 @@
             </mat-form-field>
             <mat-form-field>
               <mat-label>Total</mat-label>
-              <input matInput autocomplete="off" type="number" formControlName="total" [value]="total">
+              <input matInput autocomplete="off" type="number" formControlName="total" [value]="+total">
             </mat-form-field>
             <mat-form-field>
               <mat-label>Descrtiption</mat-label>
@@ -92,8 +92,8 @@
               <ng-container matColumnDef="{{column}}" *ngFor="let column of invItmTC">
                 <th mat-header-cell *matHeaderCellDef> {{readableInvItmTC[column]}} </th>
                 <td mat-cell *matCellDef="let element">
-                  <span *ngIf="column != 'id'" >{{ element[column] }}</span>
-                  <span *ngIf="column == 'id'" ><button (click)="removeItem(element)">X</button></span>
+                  <span class="cus-cursor-pointer" *ngIf="column != 'id'" >{{ element[column] }}</span>
+                    <a class="text-danger" (click)="removeItem(element)">X</a>
                 </td>
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="invItmTC"></tr>
@@ -133,7 +133,7 @@
           </div>
           <div>
             <strong>Balance</strong>
-            <p>{{invoice.balance}}</p>
+            <p>{{invBalance}}</p>
           </div>
           <div>
             <strong>Due Date</strong>

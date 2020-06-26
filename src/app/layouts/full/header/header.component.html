@@ -2,14 +2,17 @@
 <!-- ============================================================== -->
 <!-- Profile - style you can find in header.scss -->
 <!-- ============================================================== -->
-<button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5"> <img src="assets/images/users/1.jpg" alt="user" class="profile-pic"> </button>
+<button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-5">
+    <mat-icon>account_circle</mat-icon>
+</button>
 <mat-menu #profile="matMenu" class="mymegamenu">
     <!-- <button mat-menu-item>
         <mat-icon>settings</mat-icon> Settings </button> -->
     <button mat-menu-item (click)="goToUserProfile()">
         <mat-icon>account_box</mat-icon> Profile </button>
-    <!-- <button mat-menu-item>
-        <mat-icon>notifications_off</mat-icon> Disable notifications </button> -->
+    <a mat-menu-item href="/user">
+        <mat-icon>people_alt</mat-icon> users
+    </a>
     <button mat-menu-item (click)="logOutUser()">
         <mat-icon>exit_to_app</mat-icon> Sign Out </button>
 </mat-menu>

@@ -50,7 +50,7 @@ export class BillComponent implements AfterViewInit {
     'total',
     'created_at',
     'desc',
-    'id'
+    // 'id'
   ];
   readableItemColumns ={
     label: 'Label',
@@ -265,8 +265,8 @@ export class CuDialog implements OnInit{
       });
 
       this.billFC.controls['bill_number'].disable();
-      // this.billFC.controls['total_price'].disable();
-      // this.billFC.controls['balance'].disable();
+      this.billFC.controls['total_price'].disable();
+      this.billFC.controls['balance'].disable();
     }
     else{
       this.getLastInvNum();  
@@ -345,14 +345,14 @@ export class CuDialog implements OnInit{
       result => {
         this.bilNumber = 'Bill-' + result.bill;
         this.billFC.controls['bill_number'].disable();
-        // this.billFC.controls['total_price'].disable();
-        // this.billFC.controls['balance'].disable();
+        this.billFC.controls['total_price'].disable();
+        this.billFC.controls['balance'].disable();
       }
     );
   }
 
   createItem(){
-    this.errors = [];
+    this.errors = null;
     this.itemsFC.value.bill = this.bill.id;
 
     this.apiService.create(this.itemsFC.value, 'bitm').subscribe(
@@ -362,6 +362,8 @@ export class CuDialog implements OnInit{
         }
         else {
           this.billItems.push(result);
+          console.log(this.billItems);
+          
           this.calTotal();
           this.itemSource = new MatTableDataSource(this.billItems);          
           this.itemsFC.reset();
@@ -378,7 +380,7 @@ export class CuDialog implements OnInit{
           this._snackBar.openFromComponent(SnakComponent, {
             duration: 2000,
           });
-
+          this.calTotal();
         }
       );
     }

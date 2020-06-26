@@ -50,7 +50,7 @@ export class InvoiceComponent implements AfterViewInit {
     'total',
     'created_at',
     'desc',
-    'id'
+    // 'id'
   ];
   readableItemColumns ={
     label: 'Label',
@@ -245,7 +245,7 @@ export class CuDialog implements OnInit{
   };
 
   invTotalPrice = 0;
-
+  invBalance = 0;
   ngOnInit() {
 
     // Assign Dialog data to new variable.
@@ -265,8 +265,8 @@ export class CuDialog implements OnInit{
       });
 
       this.invoiceFC.controls['inv_number'].disable();
-      // this.invoiceFC.controls['total_price'].disable();
-      // this.invoiceFC.controls['balance'].disable();
+      this.invoiceFC.controls['total_price'].disable();
+      this.invoiceFC.controls['balance'].disable();
     }
     else{
       this.getLastInvNum();  
@@ -275,7 +275,7 @@ export class CuDialog implements OnInit{
   }
   
   checkTotal(){
-    this.itemsFC.value.total = this.total = Number(this.itemsFC.value.price * this.itemsFC.value.quantity);    
+    this.itemsFC.value.total = this.total = +Number(this.itemsFC.value.price * this.itemsFC.value.quantity);    
   }
 
   loading = true;
@@ -293,6 +293,7 @@ export class CuDialog implements OnInit{
       count += element.total;
     });
     this.invTotalPrice = count;
+    this.invBalance = count;
   }
 
   loadItems(elm) {
@@ -345,8 +346,8 @@ export class CuDialog implements OnInit{
       result => {
         this.invNumber = 'Invoice-' + result.invoice;
         this.invoiceFC.controls['inv_number'].disable();
-        // this.invoiceFC.controls['total_price'].disable();
-        // this.invoiceFC.controls['balance'].disable();
+        this.invoiceFC.controls['total_price'].disable();
+        this.invoiceFC.controls['balance'].disable();
       }
     );
   }

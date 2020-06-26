@@ -35,7 +35,7 @@
         </mat-form-field>
         <mat-form-field>
           <mat-label>Balance</mat-label>
-          <input matInput autocomplete="off" type="number" disabled formControlName="balance">
+          <input matInput autocomplete="off" type="number" disabled formControlName="balance" [value]="bilTotalPrice">
         </mat-form-field>
         <span *ngIf="type == 'e'">
           <button type="submit" mat-button color="primary">Update</button>
@@ -80,7 +80,7 @@
             </mat-form-field>
               <button type="submit" mat-button color="primary">Add</button>
             </form>
-            <div *ngIf="errors">
+            <div *ngIf="errors != null">
               Errors:
               <ul>
                 <li *ngFor="let err of errors | keyvalue">{{readableInvItmTC[err.key]}}: {{ err.value }}</li>
@@ -93,7 +93,9 @@
                 <th mat-header-cell *matHeaderCellDef> {{readableInvItmTC[column]}} </th>
                 <td mat-cell *matCellDef="let element">
                   <span *ngIf="column != 'id'" >{{ element[column] }}</span>
-                  <span *ngIf="column == 'id'" ><button (click)="removeItem(element)">X</button></span>
+                  <span *ngIf="column == 'id'" >
+                    <a class="text-danger cus-cursor-pointer" (click)="removeItem(element)">X</a>
+                  </span>
                 </td>
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="bilItmTC"></tr>
@@ -133,7 +135,7 @@
           </div>
           <div>
             <strong>Balance</strong>
-            <p>{{bill.balance}}</p>
+            <p>{{bilTotalPrice}}</p>
           </div>
           <div>
             <strong>Due Date</strong>
@@ -141,7 +143,7 @@
           </div>
         </div>
         <div>
-          <table *ngIf="billItems.length > 0" mat-table [dataSource]="billItems" class="mat-elevation-z1 items">
+          <table *ngIf="billItems.length > 0" mat-table [dataSource]="itemSource" class="mat-elevation-z1 items">
             <ng-container matColumnDef="{{column}}" *ngFor="let column of bilItmTC">
               <th mat-header-cell *matHeaderCellDef> {{readableInvItmTC[column]}} </th>
               <td mat-cell *matCellDef="let element"> {{element[column]}} </td>

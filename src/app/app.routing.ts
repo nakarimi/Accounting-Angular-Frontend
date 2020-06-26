@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 
 import { FullComponent } from './layouts/full/full.component';
+import { AccountComponent } from './components/account/account.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 export const AppRoutes: Routes = [
   {
@@ -14,9 +16,10 @@ export const AppRoutes: Routes = [
       },
       {
         path: 'dashboard',
+        // component: DashboardComponent,
         loadChildren: () => import('./components/dashboard/dashboard.module')
           .then(m => m.DashboardModule)
-      },
+        },
       {
         path: 'account',
         loadChildren: () => import('./components/account/account.module')

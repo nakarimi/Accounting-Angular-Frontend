@@ -2,8 +2,6 @@ import { Injectable, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CookieService } from "ngx-cookie-service";
 import { MatPaginator, MatSort } from '@angular/material';
-import { merge, throwError } from 'rxjs';
-import { startWith, switchMap, map, catchError, retry } from 'rxjs/operators';
 import { environment } from '../environments/environment';
 import { Router } from '@angular/router';
 
@@ -107,10 +105,8 @@ export class ApiService {
 
   retrive(entity, id){
     const href = 'http://localhost:8000/api';
-    const requestUrl = `${href}/${entity}?entity_id=${id}/`;
-
+    const requestUrl = `${href}/${entity}?entity_id=${id}`;
     return this.httpClient.get<any>(requestUrl);
-
   }
 
   refreshToken() {

@@ -23,7 +23,7 @@ export class FullComponent implements OnDestroy, AfterViewInit {
   constructor(
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
-    public menuItems: MenuItems
+    public menuItems: MenuItems,
   ) {
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -34,4 +34,5 @@ export class FullComponent implements OnDestroy, AfterViewInit {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
   ngAfterViewInit() {}
+
 }
