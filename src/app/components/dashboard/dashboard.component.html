@@ -1,5 +1,29 @@
-<button class="btn btn-warning btn-sm m-1 text-white" (click)="changeChartRange('m')">Last 30Days</button>
-<button class="btn btn-warning btn-sm m-1 text-white" (click)="changeChartRange('w')">Last 7Days</button>
+<div class="row">
+  <div class="col-auto">
+    <mat-form-field>
+      <mat-label>Start</mat-label>
+      <input matInput [max]="(endDate)? endDate.value : ''" [matDatepicker]="pickerStart"
+        [formControl]="startDate">
+      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+      <mat-datepicker #pickerStart></mat-datepicker>
+    </mat-form-field>  
+  </div>
+  <div class="col-auto">
+    <mat-form-field>
+      <mat-label>End</mat-label>
+      <input matInput [min]="(startDate)? startDate.value : ''" [matDatepicker]="pickerEnd"
+        [formControl]="endDate" (change)="alert('dfd')">
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+      <mat-datepicker #pickerEnd></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div class="col-auto float-right">
+    <button class="btn btn-warning btn-sm m-1 text-white" (click)="changeChartRange('m')">This Month</button>
+    <button class="btn btn-warning btn-sm m-1 text-white" (click)="changeChartRange('w')">Last 7Days</button>
+    <button class="btn btn-info btn-sm m-1 text-white" (click)="changeChartCurr()">{{chartCurr}}</button>
+  </div>
+</div>
+
 <div style="display: block;">
   <canvas baseChart 
     [datasets]="barChartData" 

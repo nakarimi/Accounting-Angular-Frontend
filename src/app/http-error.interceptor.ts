@@ -47,12 +47,21 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           else if (error.status == 0) {            
             hRMsg = 'Server down, try later!';
           }
-          else {
+          
+        if (error){
             if (error.error instanceof ErrorEvent) {
               errorMessage = `Error: ${error.error.message}`;
-            } else {
+              console.log(errorMessage);
+              
+            } 
+          if (error.error) {
               // server-side error
-              errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+              error.error.forEach(element => {
+                console.log(element);
+                
+              });
+              errorMessage = `Error Code: ${error.status}\nMessage: ${error.error}`;
+              console.log(errorMessage);
             }
             hRMsg = 'Something wrong, please try again!';
           }

@@ -5,38 +5,46 @@
     <ng-template matStepLabel>Invoice</ng-template>
       <form class="example-container" [formGroup]="invoiceFC" enctype="multipart/form-data"
         (ngSubmit)="invOperation(editData)">
-        <mat-form-field>
-          <mat-label>Customer</mat-label>
-          <mat-select name="customer" formControlName="customer">
-            <mat-option *ngFor="let c of customer" [value]="c.id">
-              {{c.label}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Currency</mat-label>
-          <mat-select name="currency" formControlName="currency">
-            <mat-option *ngFor="let i of ['USD', 'AF']" [value]="i">
-              {{i}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Due Date</mat-label>
-          <input matInput autocomplete="off" type="date" formControlName="due_date" >
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Invoice Number</mat-label>
-          <input matInput autocomplete="off" type="text" formControlName="inv_number" [value]="invNumber">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Total Price</mat-label>
-          <input matInput autocomplete="off" type="number" disabled formControlName="total_price" [value]="invTotalPrice">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Balance</mat-label>
-          <input matInput autocomplete="off" type="number" disabled formControlName="balance" [value]="invBalance">
-        </mat-form-field>
+        <div class="row">
+          <div class="col-6">
+            <mat-form-field>
+              <mat-label>Customer</mat-label>
+              <mat-select name="customer" formControlName="customer">
+                <span *ngFor="let c of customer">
+                  <mat-option [value]="c.id" *ngIf="c.status">
+                    {{c.label}}
+                  </mat-option>
+                </span>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Currency</mat-label>
+              <mat-select name="currency" formControlName="currency">
+                <mat-option *ngFor="let i of ['USD', 'AF']" [value]="i">
+                  {{i}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Due Date</mat-label>
+              <input matInput autocomplete="off" type="date" formControlName="due_date" >
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field>
+              <mat-label>Invoice Number</mat-label>
+              <input matInput autocomplete="off" type="text" formControlName="inv_number" [value]="invNumber">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Total Price</mat-label>
+              <input matInput autocomplete="off" type="number" disabled formControlName="total_price" [value]="invTotalPrice">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Balance</mat-label>
+              <input matInput autocomplete="off" type="number" disabled formControlName="balance" [value]="invBalance">
+            </mat-form-field>
+          </div>
+        </div>
         <span *ngIf="type == 'e'">
           <button type="submit" mat-button color="primary">Update</button>
         </span>
@@ -80,7 +88,7 @@
             </mat-form-field>
               <button type="submit" mat-button color="primary">Add</button>
             </form>
-            <div *ngIf="errors">
+            <div *ngIf="errors != null">
               Errors:
               <ul>
                 <li *ngFor="let err of errors | keyvalue">{{readableInvItmTC[err.key]}}: {{ err.value }}</li>
@@ -93,7 +101,7 @@
                 <th mat-header-cell *matHeaderCellDef> {{readableInvItmTC[column]}} </th>
                 <td mat-cell *matCellDef="let element">
                   <span class="cus-cursor-pointer" *ngIf="column != 'id'" >{{ element[column] }}</span>
-                    <a class="text-danger" (click)="removeItem(element)">X</a>
+                    <a *ngIf="column == 'id'" class="text-danger" (click)="removeItem(element)">X</a>
                 </td>
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="invItmTC"></tr>
@@ -155,7 +163,7 @@
       <br>
       <div class="steps-action" align="end">
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="finishInvoice(invoice)">Finished</button>
+        <button *ngIf="invoiceItems.length > 0" mat-button (click)="finishInvoice(invoice)">Complete</button>
       </div>
     </div>
   </mat-step>

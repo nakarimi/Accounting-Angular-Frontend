@@ -45,8 +45,7 @@ export class ApiService {
 
   // Get all companies from backend.
   loadAll(entity, sort = '', order= '', page = '') {
-    const href = 'http://localhost:8000/api';
-    const requestUrl = `${href}/${entity}/`;
+    const requestUrl = `${this.apiUrl}${entity}/`;
     let h;
     
     if (entity == 'cuser') {
@@ -104,14 +103,13 @@ export class ApiService {
   }
 
   retrive(entity, id){
-    const href = 'http://localhost:8000/api';
-    const requestUrl = `${href}/${entity}?entity_id=${id}`;
+    const requestUrl = `${this.apiUrl}${entity}?entity_id=${id}`;
     return this.httpClient.get<any>(requestUrl);
   }
 
   refreshToken() {
     var formdata = { "refresh": this.cookieService.get('refresh-token')};    
-    const respData = this.httpClient.post(`${this.apiUrl}api/token/refresh/`, formdata, {
+    const respData = this.httpClient.post(`${this.apiUrl}token/refresh/`, formdata, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),

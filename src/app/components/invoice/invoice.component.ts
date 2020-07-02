@@ -212,7 +212,7 @@ export class CuDialog implements OnInit{
     total_price: new FormControl(0),
     balance: new FormControl(0),
     due_date: new FormControl('', Validators.required),
-    status: new FormControl(1, Validators.required),
+    status: new FormControl(0, Validators.required),
   });
 
   entity:any = this.dData;

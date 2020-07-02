@@ -17,7 +17,7 @@
     <mat-form-field>
       <mat-label>Account</mat-label>
       <mat-select name="account" formControlName="account" (selectionChange)="onSelectAccount($event)">
-        <mat-option *ngFor="let i of accounts" [value]="i.id" *ngIf="accCurrType == i.currency">
+        <mat-option *ngFor="let i of accounts" [value]="i.id" >
           {{i.label}} - {{i.balance}} {{i.currency}}
         </mat-option>
       </mat-select>
@@ -25,17 +25,21 @@
       <mat-form-field *ngIf="paymentFC.value.type == 'Expense'">
         <mat-label>Bill Reference</mat-label>
         <mat-select name="ref_bill" formControlName="ref_bill" (selectionChange)="onSelectBill($event)">
-          <mat-option *ngFor="let c of bills" [value]="c.id">
-            {{c.bill_number}} - {{ vendors[c.vendor].label }} - {{ c.balance }} {{ c.currency }}
-          </mat-option>
+          <span *ngFor="let c of bills">
+            <mat-option [value]="c.id" *ngIf="c.currency == selectedCurr">
+              {{c.bill_number}} - {{ vendors[c.vendor].label }} - {{ c.balance }} {{ c.currency }}
+            </mat-option>
+          </span>
         </mat-select>
       </mat-form-field>
       <mat-form-field *ngIf="paymentFC.value.type == 'Income'">
         <mat-label>Invoice Reference</mat-label>
         <mat-select name="ref_inv" formControlName="ref_inv">
-          <mat-option *ngFor="let c of invoices" [value]="c.id">
-            {{c.inv_number}} - {{ customers[c.customer].label }} - {{ c.balance }} {{ c.currency }}
-          </mat-option>
+          <span *ngFor="let c of invoices">
+            <mat-option [value]="c.id" *ngIf="c.currency == selectedCurr">
+              {{c.inv_number}} - {{ customers[c.customer].label }} - {{ c.balance }} {{ c.currency }}
+            </mat-option>
+          </span>
         </mat-select>
       </mat-form-field>
       <mat-form-field>

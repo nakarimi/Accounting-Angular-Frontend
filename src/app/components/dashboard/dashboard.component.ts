@@ -5,6 +5,7 @@ import { Label } from 'ng2-charts';
 import { DatePipe } from '@angular/common';
 import { ApiService } from '../../api.service';
 import { ToastService } from '../../shared/toast/toast-service';
+import { FormControl } from '@angular/forms';
 
 /**
  * @title Table with expandable rows
@@ -36,7 +37,11 @@ export class DashboardComponent {
 	dyIncome = [];
 	dyExpense = [];
 	dyProfit = [];
-	range;
+	range = 'w';
+	chartCurr = 'USD';
+	startDate = new FormControl();
+	endDate = new FormControl();
+
 	public barChartData: ChartDataSets[] = [
 		{ data: this.dyIncome, label: 'Income' },
 		{ data: this.dyExpense, label: 'Expense' },
@@ -47,40 +52,57 @@ export class DashboardComponent {
 	
 	constructor(
 		private apiService: ApiService,
-		public toast: ToastService
+		public toast: ToastService,
+		
 	) { 
 		this.pipe = new DatePipe('en');
 	}
 
 	ngOnInit() {
-		// this.toast.show('Payment request failed, try again!',
-		// 	{ classname: 'bg-danger text-light', delay: 2500000 }
-		// );
-		// this.toast.show('Payment request failed, try again!',
-		// 	{ classname: 'bg-danger text-light', delay: 2500000 }
-		// );
-		// this.toast.show('Payment request failed, try again!',
-		// 	{ classname: 'bg-danger text-light', delay: 2500000 }
-		// );
-		// this.toast.show('Payment request failed, try again!',
-		// 	{ classname: 'bg-danger text-light', delay: 2500000 }
-		// );
-		// this.toast.show('Payment request failed, try again!',
-		// 	{ classname: 'bg-danger text-light', delay: 2500000 }
-		// );
+		this.loadChart();
 	}
 
-	changeChartRange(type){
-		if(type == 'm'){
-			this.genLast30Days();
+	changeChartCurr() {
+		this.chartCurr = (this.chartCurr == 'USD') ? 'AF' : 'USD';
+		// console.log(this.pipe.transform(this.startDate.value, 'yyyy-MM-dd'));		
+		this.loadChart();
+	}
+
+	changeChartRange(type){		
+		if (type == 'm') {
+			this.range = 'm';
 		} else if (type == 'w') {
-			this.genLast7Days();
-		} else if(type == 'y') {
-			this.barChartLabels = this.months;
+			this.range = 'w';
+		} else if (type == 'y') {
+			this.range = 'y';
 		}
-		
+		this.loadChart();
 	}
 
+	loadChart(){
+		if (this.range == 'm') {
+			this.genLast30Days();
+		} else if (this.range == 'w') {
+			this.genLast7Days();
+		// } else {
+		// 	this.customDate();
+		}
+	}
+
+	customDate(){
+		var date = new Date(this.startDate.value);
+		var end = new Date(this.endDate.value);
+		var dates: any = [this.pipe.transform(this.startDate.value, 'MMMM d')];
+		let x;
+		while (date < end) {
+			x = date.setDate(date.getDate() + 1);
+			dates.push(this.pipe.transform(x, 'MMMM d'));
+		}
+		this.barChartLabels = dates;
+		this.compliteChart(
+			this.pipe.transform(this.startDate.value, 'yyyy-MM-dd'),
+			this.pipe.transform(this.endDate.value, 'yyyy-MM-dd'));
+	}
 	compliteChart(start = null, end = null){
 		this.getPayments(start, end);
 		
@@ -145,7 +167,7 @@ export class DashboardComponent {
 	}
 
 	getPayments(start, end){
-		let query = 'pay?start=' + start + '&end=' + end + '&';
+		let query = 'pay?start=' + start + '&end=' + end + '&curr=' + this.chartCurr+'&';
 		this.apiService.loadAll(query).subscribe(
 			result => {
 				this.diffAmounts(result);

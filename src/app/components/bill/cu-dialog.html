@@ -5,38 +5,47 @@
     <ng-template matStepLabel>Bill</ng-template>
       <form class="example-container" [formGroup]="billFC" enctype="multipart/form-data"
         (ngSubmit)="bilOperation(editData)">
-        <mat-form-field>
-          <mat-label>Vendor</mat-label>
-          <mat-select name="vendor" formControlName="vendor">
-            <mat-option *ngFor="let c of vendor" [value]="c.id">
-              {{c.label}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Currency</mat-label>
-          <mat-select name="currency" formControlName="currency">
-            <mat-option *ngFor="let i of ['USD', 'AF']" [value]="i">
-              {{i}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Due Date</mat-label>
-          <input matInput autocomplete="off" type="date" formControlName="due_date" >
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Bill Number</mat-label>
-          <input matInput autocomplete="off" type="text" formControlName="bill_number" [value]="bilNumber">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Total Price</mat-label>
-          <input matInput autocomplete="off" type="number" disabled formControlName="total_price" [value]="bilTotalPrice">
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label>Balance</mat-label>
-          <input matInput autocomplete="off" type="number" disabled formControlName="balance" [value]="bilTotalPrice">
-        </mat-form-field>
+        <div class="row">
+
+          <div class="col-6">
+            <mat-form-field>
+              <mat-label>Vendor</mat-label>
+              <mat-select name="vendor" formControlName="vendor">
+                <span *ngFor="let c of vendor">
+                  <mat-option [value]="c.id" *ngIf="c.status">
+                    {{c.label}}
+                  </mat-option>
+                </span>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Currency</mat-label>
+              <mat-select name="currency" formControlName="currency">
+                <mat-option *ngFor="let i of ['USD', 'AF']" [value]="i">
+                  {{i}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Due Date</mat-label>
+              <input matInput autocomplete="off" type="date" formControlName="due_date" >
+            </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field>
+              <mat-label>Bill Number</mat-label>
+              <input matInput autocomplete="off" type="text" formControlName="bill_number" [value]="bilNumber">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Total Price</mat-label>
+              <input matInput autocomplete="off" type="number" disabled formControlName="total_price" [value]="bilTotalPrice">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Balance</mat-label>
+              <input matInput autocomplete="off" type="number" disabled formControlName="balance" [value]="bilTotalPrice">
+            </mat-form-field>
+          </div>
+        </div>
         <span *ngIf="type == 'e'">
           <button type="submit" mat-button color="primary">Update</button>
         </span>
@@ -146,7 +155,7 @@
           <table *ngIf="billItems.length > 0" mat-table [dataSource]="itemSource" class="mat-elevation-z1 items">
             <ng-container matColumnDef="{{column}}" *ngFor="let column of bilItmTC">
               <th mat-header-cell *matHeaderCellDef> {{readableInvItmTC[column]}} </th>
-              <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+              <td mat-cell *matCellDef="let element" > {{element[column]}} </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="bilItmTC"></tr>
             <tr mat-row *matRowDef="let element; columns: bilItmTC;" class="example-element-row">
@@ -157,7 +166,7 @@
       <br>
       <div class="steps-action" align="end">
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="finishBill(bill)">Finished</button>
+        <button *ngIf="billItems.length > 0" mat-button (click)="finishBill(bill)">Complete</button>
       </div>
     </div>
   </mat-step>

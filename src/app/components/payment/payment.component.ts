@@ -102,10 +102,10 @@ export class PaymentComponent implements OnInit {
   onSelectAccount(data){
     let acc = this.accounts.filter(x => x.id == data.value)[0];
     this.selectedCurr = acc.currency;    
-    this.availableAmount = +2000;
+    // this.availableAmount = +2000;
   }
   onSelectBill(data){
-    this.maxAmount = +1000;
+    // this.maxAmount = +1000;
     if (this.maxAmount > this.availableAmount) {
       alert('Choose valueable account!');
     }    
