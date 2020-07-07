@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { disableDebugTools } from '@angular/platform-browser';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ToastService } from '../../shared/toast/toast-service';
 
 @Component({
   selector: 'app-bill',
@@ -78,6 +79,7 @@ export class BillComponent implements AfterViewInit {
   constructor(
     private apiService: ApiService,
     public dialog: MatDialog,
+    private toast: ToastService,
   ) { }
 
   ngAfterViewInit() {
@@ -125,9 +127,17 @@ export class BillComponent implements AfterViewInit {
         vendor: this.vendors,
         type: type
       },
-      // maxHeight: '500px',
-      // maxWidth: '500px',
     });
+    if (data) {
+      this.apiService.loadAll('pay').subscribe(
+        result => {                    
+          if (result.filter(x => x.ref_bill == data.id).length > 0) {
+            dialogRef.close();
+            this.toast.show("Edit not allowed for this item!\nThis Item has assigned Payment.", { classname: 'bg-danger text-light', delay: 5000 });
+          }
+        },
+      );
+    }
 
     dialogRef.afterClosed().subscribe(result => {
       // Do nothing on cancel and if it return value update table.
@@ -143,13 +153,24 @@ export class BillComponent implements AfterViewInit {
   
   // Delete Item From Server.
   delete(row){
-    if (confirm('Are sure to delete?')) {
-      this.apiService.delete(row.id, 'bil').subscribe(
-        result => {
-          this.deleteUI(row);
+    this.apiService.loadAll('pay').subscribe(
+      result => {
+        if (result.filter(x => x.ref_bill == row.id).length > 0) {
+          this.toast.show("Delete not allowed for this item!\nThis Item has assigned Payment.", { classname: 'bg-danger text-light', delay: 5000 });
+        } else {
+          if (confirm('Are sure to delete?')) {
+            this.apiService.delete(row.id, 'bil').subscribe(
+              result => {
+                this.deleteUI(row);
+              }
+            );
+          }
         }
-      );      
-    }
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
   // Delete Item From UI
@@ -159,6 +180,8 @@ export class BillComponent implements AfterViewInit {
     this.tableData.splice(index, 1);
     this.dataSource = new MatTableDataSource<any>(this.tableData);
     this.dataSource.sort = this.msort;
+    this.toast.show("Bill deleted successfully!\nID: " + row.bill_number, { classname: 'bg-success text-light', delay: 5000 });
+
   }
 
   addToTable(data){

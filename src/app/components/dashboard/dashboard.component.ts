@@ -5,7 +5,7 @@ import { Label } from 'ng2-charts';
 import { DatePipe } from '@angular/common';
 import { ApiService } from '../../api.service';
 import { ToastService } from '../../shared/toast/toast-service';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 /**
  * @title Table with expandable rows
@@ -38,9 +38,12 @@ export class DashboardComponent {
 	dyExpense = [];
 	dyProfit = [];
 	range = 'w';
+	dates;
 	chartCurr = 'USD';
-	startDate = new FormControl();
-	endDate = new FormControl();
+	endDate = new FormControl(new Date, Validators.required);
+	d = new Date;
+	dd = this.d.setDate(this.d.getDate() - 6);
+	startDate = new FormControl(new Date(this.dd), Validators.required);
 
 	public barChartData: ChartDataSets[] = [
 		{ data: this.dyIncome, label: 'Income' },
@@ -59,34 +62,29 @@ export class DashboardComponent {
 	}
 
 	ngOnInit() {
-		this.loadChart();
+		this.genLast7Days();
 	}
 
 	changeChartCurr() {
 		this.chartCurr = (this.chartCurr == 'USD') ? 'AF' : 'USD';
-		// console.log(this.pipe.transform(this.startDate.value, 'yyyy-MM-dd'));		
-		this.loadChart();
+		this.customDate();
 	}
 
-	changeChartRange(type){		
-		if (type == 'm') {
-			this.range = 'm';
-		} else if (type == 'w') {
-			this.range = 'w';
-		} else if (type == 'y') {
-			this.range = 'y';
-		}
-		this.loadChart();
-	}
+	// changeChartRange(type){		
+	// 	if (type == 'm') {
+	// 		this.range = 'm';
+	// 	} else if (type == 'w') {
+	// 		this.range = 'w';
+	// 	}
+	// 	this.loadChart();
+	// }
 
 	loadChart(){
-		if (this.range == 'm') {
-			this.genLast30Days();
-		} else if (this.range == 'w') {
-			this.genLast7Days();
-		// } else {
-		// 	this.customDate();
-		}
+		// if (this.range == 'm') {
+		// 	this.genLast30Days();
+		// } else if (this.range == 'w') {
+			// this.genLast7Days();
+		// }
 	}
 
 	customDate(){
@@ -102,10 +100,11 @@ export class DashboardComponent {
 		this.compliteChart(
 			this.pipe.transform(this.startDate.value, 'yyyy-MM-dd'),
 			this.pipe.transform(this.endDate.value, 'yyyy-MM-dd'));
+		// this.loadChart();
+
 	}
 	compliteChart(start = null, end = null){
 		this.getPayments(start, end);
-		
 
 		this.barChartData = [
 			{ data: this.dyIncome, label: 'Income' },
@@ -133,38 +132,38 @@ export class DashboardComponent {
 		);
 	}
 
-	genLast30Days() {
-		this.dyExpense = [];
-		this.dyIncome = [];
-		this.dyProfit = [];
-		this.range = 'm';
+	// genLast30Days() {
+	// 	this.dyExpense = [];
+	// 	this.dyIncome = [];
+	// 	this.dyProfit = [];
+	// 	this.range = 'm';
 
-		var date = new Date();
-		var dates = this.getDaysInMonth(date.getMonth(), date.getFullYear());
-		this.barChartLabels = dates[0]
-		this.compliteChart(
-			this.pipe.transform(dates[1][0], 'yyyy-MM-dd'),
-			this.pipe.transform(dates[1][dates[1].length-1], 'yyyy-MM-dd')
-		);
-	}
+	// 	var date = new Date();
+	// 	var dates = this.getDaysInMonth(date.getMonth(), date.getFullYear());
+	// 	this.barChartLabels = dates[0]
+	// 	this.compliteChart(
+	// 		this.pipe.transform(dates[1][0], 'yyyy-MM-dd'),
+	// 		this.pipe.transform(dates[1][dates[1].length-1], 'yyyy-MM-dd')
+	// 	);
+	// }
 
 /**
  * @param {int} The month number, 0 based
  * @param {int} The year, not zero based, required to account for leap years
  * @return {Date[]} List with date objects for each day of the month
  */
-	getDaysInMonth(month, year) {
-		var date = new Date(year, month, 1);
-		var days = [];
-		var daysRead = [];
-		while (date.getMonth() === month) {
-			days.push(new Date(date));
-			daysRead.push(this.pipe.transform(date, 'MMMM d'));
-			date.setDate(date.getDate() + 1);
-		}
+	// getDaysInMonth(month, year) {
+	// 	var date = new Date(year, month, 1);
+	// 	var days = [];
+	// 	var daysRead = [];
+	// 	while (date.getMonth() === month) {
+	// 		days.push(new Date(date));
+	// 		daysRead.push(this.pipe.transform(date, 'MMMM d'));
+	// 		date.setDate(date.getDate() + 1);
+	// 	}
 		
-		return [daysRead, days];
-	}
+	// 	return [daysRead, days];
+	// }
 
 	getPayments(start, end){
 		let query = 'pay?start=' + start + '&end=' + end + '&curr=' + this.chartCurr+'&';

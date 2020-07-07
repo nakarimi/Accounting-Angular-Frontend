@@ -58,9 +58,9 @@ export class AuthComponent implements OnInit {
         if (result["access"] != 'undefined') {
           var date = new Date();
           // Set expiration time for the cookie.
-          date.setTime(date.getTime() + 600 * 1000);
-          this.cookieService.set("auth-token", result["access"], date);
           date.setTime(date.getTime() + 6000 * 1000);
+          this.cookieService.set("auth-token", result["access"], date);
+          date.setTime(date.getTime() + 60000 * 1000);
           this.cookieService.set("refresh-token", result["refresh"], date);  
           this._snackBar.openFromComponent(SnakComponent, {
             duration: 2000,

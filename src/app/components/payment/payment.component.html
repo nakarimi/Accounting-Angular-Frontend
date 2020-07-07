@@ -1,11 +1,11 @@
-<div class="d-flex payment-container">
+<div class="d-flex payment-container" >
   <div class="col-4 mat-typography">
     <form [formGroup]="paymentFC" enctype="multipart/form-data"
     (ngSubmit)="paymentOperation(editData)">
     <mat-form-field>
       <mat-label>Type</mat-label>
       <mat-select name="type" formControlName="type" (selectionChange)="onSelectType($event)">
-        <mat-option *ngFor="let c of ['Income', 'Expense']" [value]="c">
+        <mat-option *ngFor="let c of payType" [value]="c">
           {{c}}
         </mat-option>
       </mat-select>

@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { disableDebugTools } from '@angular/platform-browser';
 import { animate, state, style, transition, trigger } from '@angular/animations';
+import { ToastService } from '../../shared/toast/toast-service';
 
 @Component({
   selector: 'app-invoice',
@@ -66,6 +67,8 @@ export class InvoiceComponent implements AfterViewInit {
   isRateLimitReached = false;
   customers: any;
   editData;
+  deleteNotAllow: Boolean;
+  payments = [];
   // Build the table data source based on table data.
   tableData: any = [];
   dataSource = new MatTableDataSource(this.tableData);
@@ -78,6 +81,8 @@ export class InvoiceComponent implements AfterViewInit {
   constructor(
     private apiService: ApiService,
     public dialog: MatDialog,
+    private toast: ToastService,
+
   ) { }
 
   ngAfterViewInit() {
@@ -125,9 +130,18 @@ export class InvoiceComponent implements AfterViewInit {
         customer: this.customers,
         type: type
       },
-      // maxHeight: '500px',
-      // maxWidth: '500px',
     });
+    if (data) {
+      this.apiService.loadAll('pay').subscribe(
+        result => {
+          this.payments = result;
+          if (result.filter(x => x.ref_inv == data.id).length > 0) {
+            dialogRef.close();
+            this.toast.show("Edit not allowed for this item!\nThis Item has assigned Payment.", { classname: 'bg-danger text-light', delay: 5000 });
+          }
+        },
+      );
+    }
 
     dialogRef.afterClosed().subscribe(result => {
       // Do nothing on cancel and if it return value update table.
@@ -143,13 +157,27 @@ export class InvoiceComponent implements AfterViewInit {
   
   // Delete Item From Server.
   delete(row){
-    if (confirm('Are sure to delete?')) {
-      this.apiService.delete(row.id, 'inv').subscribe(
-        result => {
-          this.deleteUI(row);
+    this.apiService.loadAll('pay').subscribe(
+      result => {
+        this.payments = result;
+        console.log(result.filter(x => x.ref_inv == row.id));
+        
+        if (result.filter(x => x.ref_inv == row.id).length > 0) {
+          this.toast.show("Delete not allowed for this item!\nThis Item has assigned Payment.", { classname: 'bg-danger text-light', delay: 5000 });
+        }else{
+          if (confirm('Are sure to delete?')) {
+            this.apiService.delete(row.id, 'inv').subscribe(
+              result => {
+                this.deleteUI(row);
+              }
+            );      
+          }
         }
-      );      
-    }
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
   // Delete Item From UI
@@ -159,6 +187,8 @@ export class InvoiceComponent implements AfterViewInit {
     this.tableData.splice(index, 1);
     this.dataSource = new MatTableDataSource<any>(this.tableData);
     this.dataSource.sort = this.msort;
+    this.toast.show("Invoice deleted successfully!\nID: " + row.inv_number, { classname: 'bg-success text-light', delay: 5000 });
+
   }
 
   addToTable(data){

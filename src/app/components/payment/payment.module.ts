@@ -5,6 +5,7 @@ import { PaymentComponent } from './payment.component';
 import { MaterialModule } from '../../material-module';
 import { AddComponent } from './add/add.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgxPermissionsModule } from 'ngx-permissions';
 
 
 export const routes: Routes = [
@@ -29,7 +30,9 @@ export const routes: Routes = [
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    NgxPermissionsModule.forRoot(),
+
   ]
 })
 export class PaymentModule { }

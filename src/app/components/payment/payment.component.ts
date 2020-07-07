@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { ApiService } from '../../api.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { ToastService } from '../../shared/toast/toast-service';
 
 @Component({
@@ -19,6 +19,7 @@ export class PaymentComponent implements OnInit {
   formStatus = true;
   availableAmount = 0;
   maxAmount = 0;
+  payType = ['Income', 'Expense'];
   // Define all the variable
   displayedColumns: string[] = ['label', 'account', 'amount', 'type', 'ref_bill', 'ref_inv', 'id'];
 
@@ -32,6 +33,16 @@ export class PaymentComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) msort: MatSort;
   
+
+  // paymentFC = this._formBuilder.group({
+  //   account: new FormControl('', Validators.required),
+  //   label: new FormControl('', Validators.required),
+  //   type: new FormControl('', Validators.required),
+  //   amount: new FormControl('', [Validators.min(0), Validators.required]),
+  //   ref_bill: new FormControl(''),
+  //   ref_inv: new FormControl(''),
+  // }, { validator: this.checkAmount })
+
   paymentFC = new FormGroup({
     account: new FormControl('', Validators.required),
     label: new FormControl('', Validators.required),
@@ -40,11 +51,12 @@ export class PaymentComponent implements OnInit {
     ref_bill: new FormControl(''),
     ref_inv: new FormControl(''),
   });
-
+  billInvAmpunt = 0;
   editData;
   constructor(
     private apiService: ApiService,
     private toast: ToastService,
+    private _formBuilder: FormBuilder,
   ) { }
 
   ngOnInit() {
@@ -106,9 +118,9 @@ export class PaymentComponent implements OnInit {
   }
   onSelectBill(data){
     // this.maxAmount = +1000;
-    if (this.maxAmount > this.availableAmount) {
-      alert('Choose valueable account!');
-    }    
+    // if (this.maxAmount > this.availableAmount) {
+    //   alert('Choose valueable account!');
+    // }    
   }
   onSetAmount(data){
     const AMOUNT = data.target.value;
@@ -122,6 +134,7 @@ export class PaymentComponent implements OnInit {
 
   onResetForm(){
     this.editData = null;
+    this.payType = ['Income', 'Expense'];
     this.paymentFC.reset();
   }
 
@@ -148,6 +161,7 @@ export class PaymentComponent implements OnInit {
   refrence = 'Bill Refrence'
   activeEdit(data){
     this.editData = data;
+    this.payType = [data.type]
     this.paymentFC.setValue({
       label: data.label,
       account: data.account,
@@ -156,7 +170,8 @@ export class PaymentComponent implements OnInit {
       ref_bill: data.ref_bill,
       ref_inv: data.ref_inv,
     });
-
+    let acc = this.accounts.filter(x => x.id == data.account)[0];
+    this.selectedCurr = acc.currency;
   }
 
   onSelectType(data){

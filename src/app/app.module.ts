@@ -19,14 +19,12 @@ import { SharedModule } from './shared/shared.module';
 import { SpinnerComponent } from './shared/spinner.component';
 import { AuthModule } from './auth/auth.module';
 import { HttpErrorInterceptor } from './http-error.interceptor';
-import { TransactionComponent } from './components/transaction/transaction.component';
-import { PaymentComponent } from './components/payment/payment.component';
-import { UserComponent } from './components/user/user.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsContainer } from './shared/toast/toasts-container.component';
 import { NgbdToastGlobalModule } from './shared/toast/toast-global.module';
 import { NgbdToastGlobal } from './shared/toast/toast-global.component';
-import { AccountModule } from './components/account/account.module';
+import { NgxPermissionsModule } from 'ngx-permissions';
+import { TestComponent } from './test/test.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'dashboard'}
@@ -41,6 +39,7 @@ const routes: Routes = [
     NgbdToastGlobal,
     ToastsContainer,
     ProfileDialog,
+    TestComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,6 +52,7 @@ const routes: Routes = [
     AuthModule, 
     RouterModule.forRoot(AppRoutes),
     RouterModule.forRoot(routes),
+    NgxPermissionsModule.forRoot(),
     NgbModule,
     NgbdToastGlobalModule,
     ReactiveFormsModule
