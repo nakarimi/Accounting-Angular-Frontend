@@ -1,3 +1,26 @@
+<div class="row">
+  <div class="col-6">
+    <h4>USD Accounts</h4>
+    <div style="display: block;">
+      <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
+        [options]="pieChartOptions" [plugins]="pieChartPlugins" [legend]="pieChartLegend"
+            [colors]="pieChartColors"
+            >
+      </canvas>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <h4>Afghani Accounts</h4>
+    <div style="display: block;">
+      <canvas baseChart [data]="pieChartAfData" [labels]="pieChartAfLabels" [chartType]="pieChartAfType"
+        [options]="pieChartAfOptions" [plugins]="pieChartAfPlugins" [legend]="pieChartAfLegend" [colors]="pieChartAfColors">
+      </canvas>
+    </div>
+  </div>
+</div>
+
+
 <div class="csmr-table-actions table-actions">
   <button class="m-1 text-white bg-success" mat-raised-button mat-button (click)="openAddDialog()">Add</button>
   <mat-form-field>

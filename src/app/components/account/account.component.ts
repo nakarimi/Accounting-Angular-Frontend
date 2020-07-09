@@ -4,6 +4,9 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatPaginator, MatSort, MatTab
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { find, findIndex } from 'rxjs/operators';
 import { ToastService } from '../../shared/toast/toast-service';
+import { ChartOptions } from 'ng-chartist';
+import { Label, SingleDataSet, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
+import { ChartType } from 'chart.js';
 
 @Component({
   selector: 'app-account',
@@ -27,12 +30,44 @@ export class AccountComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) msort: MatSort;
 
+  // Pie
+  singleDataSet = [];
+  labels = [];
+  singleDataSetAf = [];
+  labelsAf = [];
+  public pieChartOptions: ChartOptions = {
+    // responsive: true,
+  };
+  public pieChartColors: Array<any> = [{
+    backgroundColor: ["#FFCC99", "#FFCC66", "#CC9999", "#CC99CC", "#CCFF00", "#FF66FF", "#FF66CC", "#CC3300", "#CC3333", "#CCFFCC", "#CCFFFF", "#FF9999", "#FF9966", "#CC6633", "#CC6666", "#FFFF66", "#FFFF33", "#FFFF00", "#CCCC99", "#CCCCCC", "#FF33FF", "#FF33CC", "#FF3300", "#CC0000", "#CC00CC", "#CC00FF", "#FF0033" ],
+  }];
+  public pieChartLabels: Label[] = this.labels;
+  public pieChartData: SingleDataSet = this.singleDataSet;
+  public pieChartType: ChartType = 'pie';
+  public pieChartLegend = true;
+  public pieChartPlugins = [];
+
+
+  public pieChartAfOptions: ChartOptions = {
+    // responsive: true,
+  };
+  public pieChartAfColors: Array<any> = [{
+    backgroundColor: ["#009999", "#339900", "#339999", "#330000", "#009966", "#CCCCCC", "#33CC66", "#FF33CC", "#FF3300", "#CC0000", "#CC00CC", "#CC00FF", "#FF0033"],
+  }];
+  public pieChartAfLabels: Label[] = this.labelsAf;
+  public pieChartAfData: SingleDataSet = this.singleDataSetAf;
+  public pieChartAfType: ChartType = 'pie';
+  public pieChartAfLegend = true;
+  public pieChartAfPlugins = [];
   constructor(
     private apiService: ApiService,
     public dialog: MatDialog,
     private toast: ToastService,
 
-  ) { }
+  ) { 
+    monkeyPatchChartJsTooltip();
+    monkeyPatchChartJsLegend();
+  }
 
   ngOnInit() {
     this.loadAccounts();
@@ -45,6 +80,17 @@ export class AccountComponent implements OnInit {
       result => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
+        result.forEach(e => {
+          if (e.currency == "USD") {
+            this.labels.push(e.label);
+            this.singleDataSet.push(e.balance);
+          }
+          else{
+            this.labelsAf.push(e.label);
+            this.singleDataSetAf.push(e.balance);
+
+          }
+        });
       },
       error => {
         console.log(error);

@@ -1,11 +1,12 @@
-import { Component, Pipe } from '@angular/core';
+import { Component, Pipe, OnInit } from '@angular/core';
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import { ChartOptions, ChartType, ChartDataSets} from 'chart.js';
 import { Label } from 'ng2-charts';
 import { DatePipe } from '@angular/common';
 import { ApiService } from '../../api.service';
 import { ToastService } from '../../shared/toast/toast-service';
 import { FormControl, Validators } from '@angular/forms';
+import { CalendarOptions } from '@fullcalendar/angular'; // useful for typechecking
 
 /**
  * @title Table with expandable rows
@@ -22,8 +23,10 @@ import { FormControl, Validators } from '@angular/forms';
 		]),
 	],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
 	pipe: DatePipe;
+	callendarData = [];
+	
 
 	today: number = Date.now();
 	public barChartOptions: ChartOptions = {
@@ -38,8 +41,14 @@ export class DashboardComponent {
 	dyExpense = [];
 	dyProfit = [];
 	range = 'w';
+	invoices;
 	dates;
 	chartCurr = 'USD';
+	firstday;
+	lastday;
+	todayC;
+	vendors=[];
+	customers=[];
 	endDate = new FormControl(new Date, Validators.required);
 	d = new Date;
 	dd = this.d.setDate(this.d.getDate() - 6);
@@ -53,6 +62,7 @@ export class DashboardComponent {
 	days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	
+	
 	constructor(
 		private apiService: ApiService,
 		public toast: ToastService,
@@ -62,7 +72,101 @@ export class DashboardComponent {
 	}
 
 	ngOnInit() {
+		this.loadCustomers();
+		this.loadVendors();
 		this.genLast7Days();
+		this.loadInvBill();
+
+
+		this.todayC = new Date; // get this.todayCent date
+		var first = this.todayC.getDate() - this.todayC.getDay(); // First day is the day of the month - the day of the week
+		var last = first + 6; // last day is the first day + 6
+		this.lastday = new Date(this.todayC.setDate(last));
+	}
+
+	calendarOptions: CalendarOptions;
+
+	handleDateClick(arg) {
+		alert('date click! ' + arg.dateStr)
+	}
+
+	loadCustomers() {
+		this.apiService.loadAll('csmr').subscribe(
+			result => {
+				this.customers = result;
+			},
+		);
+	}
+	loadVendors() {
+		this.apiService.loadAll('vdr').subscribe(
+			result => {
+				this.vendors = result;
+			},
+		);
+	}
+	loadInvBill() {
+		
+		this.apiService.loadAll('inv').subscribe(
+			result => {
+
+				result.forEach(e => {
+					let d = new Date(e.due_date);
+					this.callendarData.push({ 
+						data: e,
+						customer: this.customers,
+						vendor: this.vendors,
+						title: e.inv_number,
+						date: e.due_date,
+						color: (e.balance == 0) ? "#28a745" : (d >= new Date) ? (d > this.lastday) ? '#1e88e5' : "#ffb22b" : "#fc4b6c", 
+					});					
+				});
+				this.apiService.loadAll('bil').subscribe(
+					result => {
+						result.forEach(e => {
+							let d = new Date(e.due_date);
+							this.callendarData.push({
+								data: e,
+								customer: this.customers,
+								vendor: this.vendors,
+								title: e.bill_number,
+								date: e.due_date,
+								color: (e.balance == 0) ? "#28a745" : (d >= new Date) ? (d > this.lastday) ? '#1e88e5' : "#ffb22b" : "#fc4b6c", 
+							});
+						});
+					this.calendarOptions = {
+						// initialView: 'listWeek',
+						height: 700,
+						// dateClick: this.handleDateClick.bind(this), // bind is important!
+						eventClick: function (info) {
+							console.log(info.event.extendedProps);
+							
+							let d = info.event.extendedProps.data;
+							let v = info.event.extendedProps.vendor;
+							let c = info.event.extendedProps.customer;
+							
+							if (d.inv_number) {
+								
+								let sc = c.filter(x => x.id == d.customer)[0];
+								console.log(sc);
+
+								alert(`Inv Numver: ` + d.inv_number + `\nBalance: ` + d.balance 
+								+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nCustomer: ` + sc.label);
+							}
+							else{
+								
+								let sv = v.filter(x => x.id == d.vendor)[0];
+								console.log(sv);
+								alert(`Bill Numver: ` + d.bill_number + `\nBalance: ` + d.balance
+									+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nVendor: ` + sv.label);
+
+							}
+						},
+						events: this.callendarData,
+					};
+				}
+				)
+			}
+		);
 	}
 
 	changeChartCurr() {

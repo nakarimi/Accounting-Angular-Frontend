@@ -1,3 +1,6 @@
+.body{
+  background-color: rgba(0, 0, 0, 0.14);
+}
 .align-items-center {
   max-width: 400px;
 }
@@ -32,7 +35,9 @@ mat-card-content {
   color: white;
   background-color: red;
 }
-
+.loginActionToggle{
+  font-size: 12px;
+}
 .button {
   display: flex;
   justify-content: flex-end;
