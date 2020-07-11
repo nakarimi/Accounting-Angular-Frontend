@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { ApiService } from '../../api.service';
 import { ToastService } from '../../shared/toast/toast-service';
 import { FormControl, Validators } from '@angular/forms';
-import { CalendarOptions } from '@fullcalendar/angular'; // useful for typechecking
+// import { CalendarOptions } from '@fullcalendar/angular'; // useful for typechecking
 
 /**
  * @title Table with expandable rows
@@ -84,7 +84,7 @@ export class DashboardComponent implements OnInit{
 		this.lastday = new Date(this.todayC.setDate(last));
 	}
 
-	calendarOptions: CalendarOptions;
+	// calendarOptions: CalendarOptions;
 
 	handleDateClick(arg) {
 		alert('date click! ' + arg.dateStr)
@@ -133,36 +133,36 @@ export class DashboardComponent implements OnInit{
 								color: (e.balance == 0) ? "#28a745" : (d >= new Date) ? (d > this.lastday) ? '#1e88e5' : "#ffb22b" : "#fc4b6c", 
 							});
 						});
-					this.calendarOptions = {
-						// initialView: 'listWeek',
-						height: 700,
-						// dateClick: this.handleDateClick.bind(this), // bind is important!
-						eventClick: function (info) {
-							console.log(info.event.extendedProps);
+					// this.calendarOptions = {
+					// 	// initialView: 'listWeek',
+					// 	height: 700,
+					// 	// dateClick: this.handleDateClick.bind(this), // bind is important!
+					// 	eventClick: function (info) {
+					// 		console.log(info.event.extendedProps);
 							
-							let d = info.event.extendedProps.data;
-							let v = info.event.extendedProps.vendor;
-							let c = info.event.extendedProps.customer;
+					// 		let d = info.event.extendedProps.data;
+					// 		let v = info.event.extendedProps.vendor;
+					// 		let c = info.event.extendedProps.customer;
 							
-							if (d.inv_number) {
+					// 		if (d.inv_number) {
 								
-								let sc = c.filter(x => x.id == d.customer)[0];
-								console.log(sc);
+					// 			let sc = c.filter(x => x.id == d.customer)[0];
+					// 			console.log(sc);
 
-								alert(`Inv Numver: ` + d.inv_number + `\nBalance: ` + d.balance 
-								+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nCustomer: ` + sc.label);
-							}
-							else{
+					// 			alert(`Inv Numver: ` + d.inv_number + `\nBalance: ` + d.balance 
+					// 			+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nCustomer: ` + sc.label);
+					// 		}
+					// 		else{
 								
-								let sv = v.filter(x => x.id == d.vendor)[0];
-								console.log(sv);
-								alert(`Bill Numver: ` + d.bill_number + `\nBalance: ` + d.balance
-									+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nVendor: ` + sv.label);
+					// 			let sv = v.filter(x => x.id == d.vendor)[0];
+					// 			console.log(sv);
+					// 			alert(`Bill Numver: ` + d.bill_number + `\nBalance: ` + d.balance
+					// 				+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nVendor: ` + sv.label);
 
-							}
-						},
-						events: this.callendarData,
-					};
+					// 		}
+					// 	},
+					// 	events: this.callendarData,
+					// };
 				}
 				)
 			}
