@@ -17,8 +17,10 @@ export class PaymentComponent implements OnInit {
   customers = [];
   accounts = [];
   formStatus = true;
-  availableAmount = 0;
-  maxAmount = 0;
+  allowBalance = 0;
+  thisAmount = 0;
+  billAmount = 0;
+  invalid = false;
   payType = ['Income', 'Expense'];
   // Define all the variable
   displayedColumns: string[] = ['label', 'account', 'amount', 'type', 'ref_bill', 'ref_inv', 'id'];
@@ -112,24 +114,24 @@ export class PaymentComponent implements OnInit {
   }
 
   onSelectAccount(data){
+    this.allowBalance = 0;
     let acc = this.accounts.filter(x => x.id == data.value)[0];
     this.selectedCurr = acc.currency;    
-    // this.availableAmount = +2000;
+    this.allowBalance = acc.balance;
   }
-  onSelectBill(data){
-    // this.maxAmount = +1000;
-    // if (this.maxAmount > this.availableAmount) {
-    //   alert('Choose valueable account!');
-    // }    
+  onSelectItem(data, items){
+    this.billAmount = 0;
+    let b = items.filter(x => x.id == data.value)[0];  
+    this.billAmount = b.balance;
   }
   onSetAmount(data){
-    const AMOUNT = data.target.value;
-    // if (AMOUNT > this.maxAmount) {
-    //   alert('Set Valid Amount!');
-    //   this.formStatus = false;
-    // }else{
-    //   this.formStatus = true;
-    // }
+    if (this.paymentFC.value.amount > this.billAmount) {
+      this.invalid = false;
+      alert("Please add valid amount less than " + this.billAmount + " " + this.selectedCurr);
+    }
+    else{
+      this.invalid = true;
+    }
   }
 
   onResetForm(){
@@ -186,6 +188,8 @@ export class PaymentComponent implements OnInit {
     });
   }
   paymentOperation(data) {
+    
+
     this.paymentFC.value.currency = this.selectedCurr;
 
     if (data && data.id) {
@@ -197,6 +201,7 @@ export class PaymentComponent implements OnInit {
           }
           else {
             this.updateTable(data, result);
+            this.onResetForm();
             this.toast.show('Payment updated successfully!',
               { classname: 'bg-success text-light', delay: 5000 }
             );            
@@ -212,6 +217,7 @@ export class PaymentComponent implements OnInit {
           }
           else {
             this.addToTable(result);
+            this.onResetForm();
             this.toast.show('New payment created successfully!',
               { classname: 'bg-success text-light', delay: 5000 }
             );

@@ -18,10 +18,15 @@
             clear
           </span>
         </span>
+        
         <span *ngIf="column != 'status'">
-          {{element[column]}}</span>
-
+          <span *ngIf="column == 'customer'">{{ findCsutomer(element[column]).label }}</span>
+          <span *ngIf="column != 'customer'">
+            {{element[column]}}
+          </span>
         </span>
+
+      </span>
       <span *ngIf="column == 'due_date'">{{element[column] | date: 'MMM d, y'}}</span>
     </span>
       <button class="m-1 text-white bg-info" *ngIf="column == 'id'" mat-raised-button mat-button (click)="openDialog(element, 'e')" align="end" tabindex="-1">Edit</button>

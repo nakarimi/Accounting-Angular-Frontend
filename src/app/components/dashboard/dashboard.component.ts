@@ -189,7 +189,7 @@ export class DashboardComponent implements OnInit{
 		var end = new Date(this.endDate.value);
 		var dates: any = [this.pipe.transform(this.startDate.value, 'MMMM d')];
 		let x;
-		this.chartFullDate = [];
+		this.chartFullDate = [this.pipe.transform(this.startDate.value)];
 		while (date < end) {
 			x = date.setDate(date.getDate() + 1);
 			dates.push(this.pipe.transform(x, 'MMMM d'));
@@ -280,11 +280,10 @@ export class DashboardComponent implements OnInit{
 	}
 
 	diffAmounts(data){
-		let index = 1;
+		let index = 0;
 		this.chartFullDate.forEach(e => {
 
-			let d = this.pipe.transform(e);
-			
+			let d = this.pipe.transform(e);			
 			let matchPay = data.filter(x => this.pipe.transform(x.created_at) == d);			
 			matchPay.forEach(pay => {
 				if (pay.type == 'Expense') {
@@ -318,6 +317,10 @@ export class DashboardComponent implements OnInit{
 			});
 			index++;
 		});		
+		console.log(this.dyExpense);
+		console.log(this.dyIncome);
+		console.log(this.dyProfit);
+		
 	}
 }
 

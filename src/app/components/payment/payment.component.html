@@ -24,9 +24,9 @@
     </mat-form-field>
       <mat-form-field *ngIf="paymentFC.value.type == 'Expense'">
         <mat-label>Bill Reference</mat-label>
-        <mat-select name="ref_bill" formControlName="ref_bill" (selectionChange)="onSelectBill($event)">
+        <mat-select name="ref_bill" formControlName="ref_bill" (selectionChange)="onSelectItem($event, bills)">
           <span *ngFor="let c of bills">
-            <mat-option [value]="c.id" *ngIf="c.currency == selectedCurr">
+            <mat-option [value]="c.id" *ngIf="c.currency == selectedCurr && c.balance <= allowBalance">
               {{c.bill_number}} - {{ vendors[c.vendor].label }} - {{ c.balance }} {{ c.currency }}
             </mat-option>
           </span>
@@ -34,7 +34,7 @@
       </mat-form-field>
       <mat-form-field *ngIf="paymentFC.value.type == 'Income'">
         <mat-label>Invoice Reference</mat-label>
-        <mat-select name="ref_inv" formControlName="ref_inv">
+        <mat-select name="ref_inv" formControlName="ref_inv" (selectionChange)="onSelectItem($event, invoices)">
           <span *ngFor="let c of invoices">
             <mat-option [value]="c.id" *ngIf="c.currency == selectedCurr">
               {{c.inv_number}} - {{ customers[c.customer].label }} - {{ c.balance }} {{ c.currency }}
@@ -50,12 +50,14 @@
   
   
       <span *ngIf="editData">
-        <button type="submit" mat-button color="primary">Update</button>
+        <button type="submit" mat-button color="primary" *ngIf="invalid">Update</button>
+        <button mat-button disabled color="primary" *ngIf="!invalid">Update</button>
         <button mat-button color="accent" (click)="onResetForm()">Cancel</button>
       </span>
       <span *ngIf="!editData">
         <!-- <button mat-button color="accent" (click)="onResetForm()">Cancel</button> -->
-        <button *ngIf="formStatus" type="submit" mat-button color="primary">Create</button>
+        <button type="submit" mat-button color="primary" *ngIf="invalid">Create</button>
+        <button mat-button disabled color="primary" *ngIf="!invalid">Create</button>
       </span>
     </form>
   </div>

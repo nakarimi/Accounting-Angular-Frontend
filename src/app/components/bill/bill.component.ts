@@ -65,7 +65,7 @@ export class BillComponent implements AfterViewInit {
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
-  vendors: any;
+  vendors:any = [];
   editData;
   // Build the table data source based on table data.
   tableData: any = [];
@@ -206,6 +206,10 @@ export class BillComponent implements AfterViewInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+  findVendor(id) {
+    return this.vendors.filter(x => x.id == id)[0];
+  }
+
 }
 
 

@@ -70,4 +70,12 @@ export class TransactionComponent implements OnInit {
   findPay(payid){
     return this.payments.filter(x => x.id == payid)[0].label;
   }
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    console.log(filterValue);
+    
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    console.log(this.dataSource.filter);
+    
+  }
 }

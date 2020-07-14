@@ -18,7 +18,11 @@
           </span>
         </span>
         <span *ngIf="column != 'status'">
-          {{element[column]}}
+          <span *ngIf="column == 'vendor'">{{ findVendor(element[column]).label }}</span>
+          <span *ngIf="column != 'vendor'">
+            {{element[column]}}
+          </span>
+
         </span>
         
       </span>

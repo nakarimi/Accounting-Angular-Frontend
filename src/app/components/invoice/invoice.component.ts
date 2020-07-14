@@ -65,7 +65,7 @@ export class InvoiceComponent implements AfterViewInit {
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
-  customers: any;
+  customers:any = [];
   editData;
   deleteNotAllow: Boolean;
   payments = [];
@@ -212,6 +212,9 @@ export class InvoiceComponent implements AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+  findCsutomer(id) {
+    return this.customers.filter(x => x.id == id)[0];
   }
 }
 
