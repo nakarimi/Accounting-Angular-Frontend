@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { ApiService } from '../../api.service';
 import { ToastService } from '../../shared/toast/toast-service';
 import { FormControl, Validators } from '@angular/forms';
-// import { CalendarOptions } from '@fullcalendar/angular'; // useful for typechecking
+import { CalendarOptions } from '@fullcalendar/angular'; // useful for typechecking
 
 /**
  * @title Table with expandable rows
@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit{
 	public barChartType: ChartType = 'bar';
 	public barChartLegend = true;
 	public barChartPlugins = [];
-
+	chartFullDate = [];
 	dyIncome = [];
 	dyExpense = [];
 	dyProfit = [];
@@ -84,7 +84,7 @@ export class DashboardComponent implements OnInit{
 		this.lastday = new Date(this.todayC.setDate(last));
 	}
 
-	// calendarOptions: CalendarOptions;
+	calendarOptions: CalendarOptions;
 
 	handleDateClick(arg) {
 		alert('date click! ' + arg.dateStr)
@@ -133,36 +133,36 @@ export class DashboardComponent implements OnInit{
 								color: (e.balance == 0) ? "#28a745" : (d >= new Date) ? (d > this.lastday) ? '#1e88e5' : "#ffb22b" : "#fc4b6c", 
 							});
 						});
-					// this.calendarOptions = {
-					// 	// initialView: 'listWeek',
-					// 	height: 700,
-					// 	// dateClick: this.handleDateClick.bind(this), // bind is important!
-					// 	eventClick: function (info) {
-					// 		console.log(info.event.extendedProps);
+					this.calendarOptions = {
+						// initialView: 'listWeek',
+						height: 700,
+						// dateClick: this.handleDateClick.bind(this), // bind is important!
+						eventClick: function (info) {
+							console.log(info.event.extendedProps);
 							
-					// 		let d = info.event.extendedProps.data;
-					// 		let v = info.event.extendedProps.vendor;
-					// 		let c = info.event.extendedProps.customer;
+							let d = info.event.extendedProps.data;
+							let v = info.event.extendedProps.vendor;
+							let c = info.event.extendedProps.customer;
 							
-					// 		if (d.inv_number) {
+							if (d.inv_number) {
 								
-					// 			let sc = c.filter(x => x.id == d.customer)[0];
-					// 			console.log(sc);
+								let sc = c.filter(x => x.id == d.customer)[0];
+								console.log(sc);
 
-					// 			alert(`Inv Numver: ` + d.inv_number + `\nBalance: ` + d.balance 
-					// 			+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nCustomer: ` + sc.label);
-					// 		}
-					// 		else{
+								alert(`Inv Numver: ` + d.inv_number + `\nBalance: ` + d.balance 
+								+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nCustomer: ` + sc.label);
+							}
+							else{
 								
-					// 			let sv = v.filter(x => x.id == d.vendor)[0];
-					// 			console.log(sv);
-					// 			alert(`Bill Numver: ` + d.bill_number + `\nBalance: ` + d.balance
-					// 				+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nVendor: ` + sv.label);
+								let sv = v.filter(x => x.id == d.vendor)[0];
+								console.log(sv);
+								alert(`Bill Numver: ` + d.bill_number + `\nBalance: ` + d.balance
+									+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nVendor: ` + sv.label);
 
-					// 		}
-					// 	},
-					// 	events: this.callendarData,
-					// };
+							}
+						},
+						events: this.callendarData,
+					};
 				}
 				)
 			}
@@ -196,9 +196,11 @@ export class DashboardComponent implements OnInit{
 		var end = new Date(this.endDate.value);
 		var dates: any = [this.pipe.transform(this.startDate.value, 'MMMM d')];
 		let x;
+		this.chartFullDate = [];
 		while (date < end) {
 			x = date.setDate(date.getDate() + 1);
 			dates.push(this.pipe.transform(x, 'MMMM d'));
+			this.chartFullDate.push(x);
 		}
 		this.barChartLabels = dates;
 		this.compliteChart(
@@ -270,6 +272,10 @@ export class DashboardComponent implements OnInit{
 	// }
 
 	getPayments(start, end){
+		this.dyIncome = [];
+		this.dyExpense = [];
+		this.dyProfit = [];
+
 		let query = 'pay?start=' + start + '&end=' + end + '&curr=' + this.chartCurr+'&';
 		this.apiService.loadAll(query).subscribe(
 			result => {
@@ -279,42 +285,44 @@ export class DashboardComponent implements OnInit{
 	}
 
 	diffAmounts(data){
-		data.forEach(pay => {
-			let index;
-			if(this.range == 'w'){
-				index = new Date(pay.created_at).getDay();
-			}else{
-				index = new Date(pay.created_at).getDate()-1;
-			}
-			if (pay.type == 'Expense') {
-				if (this.dyExpense[index]) {
-					this.dyExpense[index] += pay.amount;
+		let index = 1;
+		this.chartFullDate.forEach(e => {
+
+			let d = this.pipe.transform(e);
+			
+			let matchPay = data.filter(x => this.pipe.transform(x.created_at) == d);			
+			matchPay.forEach(pay => {
+				if (pay.type == 'Expense') {
+					if (this.dyExpense[index]) {
+						this.dyExpense[index] += pay.amount;
+					}
+					else {
+						this.dyExpense[index] = pay.amount;
+					}
+					if (this.dyProfit[index]) {
+						this.dyProfit[index] -= pay.amount;
+					}
+					else {
+						this.dyProfit[index] = -pay.amount;
+					}
+
+				} else {
+					if (this.dyIncome[index]) {
+						this.dyIncome[index] += pay.amount;
+					}
+					else {
+						this.dyIncome[index] = pay.amount;
+					}
+					if (this.dyProfit[index]) {
+						this.dyProfit[index] += pay.amount;
+					}
+					else {
+						this.dyProfit[index] = pay.amount;
+					}
 				}
-				else {
-					this.dyExpense[index] = pay.amount;
-				}
-				if (this.dyProfit[index]) {
-					this.dyProfit[index] -= pay.amount;
-				}
-				else {
-					this.dyProfit[index] = -pay.amount;
-				}
-				
-			} else {
-				if (this.dyIncome[index]) {
-					this.dyIncome[index] += pay.amount;
-				}
-				else {
-					this.dyIncome[index] = pay.amount;
-				}
-				if (this.dyProfit[index]) {
-					this.dyProfit[index] += pay.amount;
-				}
-				else {
-					this.dyProfit[index] = pay.amount;
-				}
-			}
-		});
+			});
+			index++;
+		});		
 	}
 }
 
