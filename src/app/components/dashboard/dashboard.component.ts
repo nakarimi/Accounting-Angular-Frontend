@@ -183,13 +183,6 @@ export class DashboardComponent implements OnInit{
 	// 	this.loadChart();
 	// }
 
-	loadChart(){
-		// if (this.range == 'm') {
-		// 	this.genLast30Days();
-		// } else if (this.range == 'w') {
-			// this.genLast7Days();
-		// }
-	}
 
 	customDate(){
 		var date = new Date(this.startDate.value);
@@ -236,6 +229,8 @@ export class DashboardComponent implements OnInit{
 			this.pipe.transform(date, 'yyyy-MM-dd'),
 			this.pipe.transform(new Date(), 'yyyy-MM-dd')
 		);
+		this.customDate();
+
 	}
 
 	// genLast30Days() {
