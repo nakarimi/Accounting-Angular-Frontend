@@ -1,0 +1,20 @@
+<!-- ============================================================== -->
+<!-- sidebar -->
+<!-- ============================================================== -->
+<mat-nav-list appAccordion>
+    <mat-list-item appAccordionLink *ngFor="let menuitem of menuItems.getMenuitem()" routerLinkActive="selected" group="{{menuitem.state}}">
+        <a [ngClass]="'sidebar-menu'" appAccordionToggle [routerLink]="['/', menuitem.state]" *ngIf="menuitem.type === 'link'">
+            <mat-icon>{{ menuitem.icon }}</mat-icon> 
+            <span [ngClass]="'sidebar-menu-text'">{{ menuitem.name }}</span> 
+        </a>
+        <!-- <span class="sub-item">
+            <mat-list-item appAccordionLink *ngFor="let subitem of menuitem.submenu" routerLinkActive="selected"
+                group="{{subitem.state}}">
+                <a [ngClass]="'sidebar-menu'" appAccordionToggle [routerLink]="['/', subitem.state]"
+                    *ngIf="subitem.type === 'link'">
+                    <span [ngClass]="'sidebar-sub-menu-text'">{{ subitem.name }}</span>
+                </a>
+            </mat-list-item>
+        </span> -->
+    </mat-list-item>
+</mat-nav-list>

@@ -1,0 +1,71 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center center">
+    <mat-card >
+        <form *ngIf="loginAction" [formGroup]="authForm" (ngSubmit)="authentication()">
+            <mat-card-header>
+                <div mat-card-avatar class="example-header-image" style="width: 100%; text-align: center;height: 100px;">
+                    <img src="../../assets/images/background/user-info.jpg" alt="">
+                </div>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-form-field>
+                    <input type="text" formControlName="username" required placeholder="Username" matInput />
+                </mat-form-field>
+                <mat-form-field>
+                    <input type="password" formControlName="password" required placeholder="Password" matInput />
+                </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions>
+                <button class="m-1" type="submit" mat-button>Login</button>
+                <button class="m-1" mat-button>Forgot password?</button>
+            </mat-card-actions>
+            <div class="animated fadeIn" *ngIf="message">
+                <div class="alert alert-{{ message.type }}" role="alert">
+                    {{ message.text }}
+                </div>
+            </div>
+        </form>
+        <form *ngIf="!loginAction" [formGroup]="authForm" (ngSubmit)="authentication()">
+            <mat-card-header>
+                <div mat-card-avatar class="example-header-image" style="width: 100%; text-align: center;height: 100px;">
+                    <img src="../../assets/images/background/user-info.jpg">
+                </div>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-form-field>
+                    <mat-label>Username</mat-label>
+                    <input type="text" autocomplete="off" formControlName="username" [value]="" required matInput />
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Email</mat-label>
+                    <input type="email" autocomplete="off" formControlName="Email" [value]="" required matInput />
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Password</mat-label>
+                    <input type="password" autocomplete="off" formControlName="password" [value]="" autocomplete="new-password"
+                        required matInput />
+                </mat-form-field>
+               <mat-form-field>
+                   <mat-label>Repeat Password</mat-label>
+                    <input type="password" autocomplete="off" [value]="" autocomplete="new-password" required
+                        matInput />
+                </mat-form-field>
+
+            </mat-card-content>
+            <mat-card-actions>
+                <button type="submit" mat-button>Create</button>
+            </mat-card-actions>
+            <div class="animated fadeIn" *ngIf="message">
+                <div class="alert alert-{{ message.type }}" role="alert">
+                    {{ message.text }}
+                </div>
+            </div>
+        </form>
+        <span class="float-right loginActionToggle" (click)="loginActionToggle()">
+            <a class="cus-cursor-pointer m-2" *ngIf="!loginAction">Login</a>
+            <a class="cus-cursor-pointer m-2" *ngIf="loginAction">Register</a>
+        </span>
+    </mat-card>
+</div>
+<ng-template #snackBarTemplate>
+    Hi
+</ng-template>

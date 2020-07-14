@@ -1,0 +1,10 @@
+.ngb-toasts {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    top: unset;
+}
+
+.toast:not(:last-child) {
+  display: none !important;
+}

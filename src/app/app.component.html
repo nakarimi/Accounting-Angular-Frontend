@@ -1,3 +1,7 @@
-<app-header></app-header>
-<app-content></app-content>
-<app-footer></app-footer>
+<!-- ============================================================== -->
+<!-- Main wrapper - style you can find in pages.scss -->
+<!-- ============================================================== -->
+<router-outlet>
+  <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+  <app-spinner></app-spinner>
+</router-outlet>

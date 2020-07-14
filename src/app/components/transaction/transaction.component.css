@@ -1,0 +1,13 @@
+
+td .expense{
+  transform: rotate(180deg);
+  color: red;
+}
+
+td span:not(.expense){
+  color: green;
+}
+
+table{
+  width: 100%;
+}

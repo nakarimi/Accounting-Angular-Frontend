@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col-6">
+    <h4>USD Accounts</h4>
+    <div style="display: block;">
+      <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"
+        [options]="pieChartOptions" [plugins]="pieChartPlugins" [legend]="pieChartLegend"
+            [colors]="pieChartColors"
+            >
+      </canvas>
+    </div>
+  </div>
+
+  <div class="col-6">
+    <h4>Afghani Accounts</h4>
+    <div style="display: block;">
+      <canvas baseChart [data]="pieChartAfData" [labels]="pieChartAfLabels" [chartType]="pieChartAfType"
+        [options]="pieChartAfOptions" [plugins]="pieChartAfPlugins" [legend]="pieChartAfLegend" [colors]="pieChartAfColors">
+      </canvas>
+    </div>
+  </div>
+</div>
+
+
+<div class="csmr-table-actions table-actions">
+  <button class="m-1 text-white bg-success" mat-raised-button mat-button (click)="openAddDialog()">Add</button>
+  <mat-form-field>
+    <mat-label>Filter</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
+  </mat-form-field>
+</div>
+
+<table width="100%" mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear
+  matSortDirection="desc">
+
+  <!-- Number Column -->
+  <ng-container matColumnDef="label">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Label</th>
+    <td mat-cell *matCellDef="let row">{{row.label}}</td>
+  </ng-container>
+  <ng-container matColumnDef="owner">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Owner</th>
+    <td mat-cell *matCellDef="let row">{{row.owner}}</td>
+  </ng-container>
+  <ng-container matColumnDef="balance">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Balance</th>
+    <td mat-cell *matCellDef="let row">{{row.balance}} {{row.currency}}</td>
+  </ng-container>
+  <ng-container matColumnDef="desc">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+    <td mat-cell *matCellDef="let row">{{row.desc}}</td>
+  </ng-container>
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+    <td mat-cell *matCellDef="let row">
+      <span *ngIf="row.status">Active</span>
+      <span *ngIf="!row.status">Inactive</span>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="file">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>File</th>
+    <td mat-cell *matCellDef="let row">
+      <img height="50px" src="http://localhost:8000{{row.file}}">
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+    <td mat-cell *matCellDef="let row">
+      <button class="m-1 text-white bg-info" mat-raised-button mat-button (click)="openEditDialog(row)" align="end" tabindex="-1">Edit</button>
+      <button class="m-1 text-white bg-danger" mat-raised-button mat-button (click)="delete(row)" align="end" tabindex="-1">Delete</button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
+</table>

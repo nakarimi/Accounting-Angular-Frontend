@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>Add Account</h2>
+<mat-dialog-content class="mat-typography">
+  <form class="example-container" [formGroup]="accountFC" enctype="multipart/form-data"
+    (ngSubmit)="createAcc()">
+    <mat-form-field>
+      <input matInput autocomplete="off" type="text" formControlName="label" placeholder="Label">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput autocomplete="off" type="textarea" formControlName="owner" placeholder="Owner" required>
+    </mat-form-field>
+    <div>
+      <label>Status: </label>
+      <mat-checkbox formControlName="status">Active</mat-checkbox>
+    </div>
+    <mat-form-field>
+      <mat-label>Currency</mat-label>
+      <mat-select name="currency" formControlName="currency">
+        <mat-option *ngFor="let i of ['USD', 'AF']" [value]="i">
+          {{i}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput autocomplete="off" step="50" type="number" formControlName="balance" placeholder="Balance" required>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput autocomplete="off" type="text" formControlName="desc" placeholder="Description">
+    </mat-form-field>
+    <label for="form-image">Upload Image</label>
+    <br>
+    <input id="form-image" type="file" (change)="onChangeFile($event)" />
+    <br>
+    <span style="color: #e91e63;" *ngIf="!isFormValid">Choose a valid image file.</span>
+    <mat-dialog-actions align="end">
+      <button [disabled]="!isFormValid" align="end" type="submit" mat-button color="primary">Create</button>
+      <button mat-button mat-dialog-close color="danger">Cancel</button>
+    </mat-dialog-actions>
+
+  </form>
+    <br>
+    <p>
+      <ngb-alert *ngIf="apiErr" [dismissible]="false">
+        <span *ngFor="let item of apiErr | keyvalue">
+          <li><strong>{{item.key}}: </strong>{{item.value}}</li>
+        </span>
+      </ngb-alert>
+    </p>
+
+</mat-dialog-content>
