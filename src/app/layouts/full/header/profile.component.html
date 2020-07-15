@@ -1,4 +1,4 @@
-<mat-dialog-content class="mat-typography">
+<mat-dialog-content *ngIf="!dData.type" class="mat-typography">
   <h2 mat-dialog-title>Profile</h2>
   <form [formGroup]="profileFC" enctype="multipart/form-data" (ngSubmit)="profileOperation()">
     <mat-form-field>
@@ -17,6 +17,15 @@
       <mat-label>Last Name</mat-label>
       <input matInput autocomplete="off" type="text" formControlName="last_name">
     </mat-form-field>
+    <div class="m-1">
+      <button type="submit" mat-button class="bg-danger m-r-10 text-white">Update</button>
+      <button mat-button mat-dialog-close class="bg-warning text-white">Cancel</button>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-content *ngIf="dData.type" class="mat-typography">
+  <h2 mat-dialog-title>Change Password</h2>
+  <form [formGroup]="chPassFC" enctype="multipart/form-data" (ngSubmit)="profileOperation('pass')">
     <mat-form-field>
       <mat-label>Old Password</mat-label>
       <input matInput autocomplete="off" type="password" formControlName="oldpassword">

@@ -4,3 +4,6 @@
     height: 60px;
     border-radius: 50%;
 }
+.ngb-toasts .toast:not(:last-child){
+    display: none !important;
+}

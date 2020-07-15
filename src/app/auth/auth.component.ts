@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Directive, ElementRef } from '@angular/core';
 import { ApiService } from '../api.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
@@ -17,12 +17,17 @@ interface TokenObj {
 export class AuthComponent implements OnInit {
 
   @Input() loginAction = true;
-  message: any;
+  message:any = '';
   authForm = new FormGroup({
     username: new FormControl(''),
     password: new FormControl('')
   });
 
+  regForm = new FormGroup({
+    username: new FormControl(''),
+    password: new FormControl(''),
+    email: new FormControl('')
+  });
   constructor(
     private apiService: ApiService,
     private cookieService: CookieService,
@@ -40,7 +45,7 @@ export class AuthComponent implements OnInit {
 
   authentication() {
     if (!this.loginAction) {
-      this.apiService.registerUser(this.authForm.value).subscribe(
+      this.apiService.registerUser(this.regForm.value).subscribe(
         result => {
           this.getTokenSubscriber();
         },
@@ -53,6 +58,7 @@ export class AuthComponent implements OnInit {
   }
 
   getTokenSubscriber() {
+  this.message = '';
     this.apiService.getToken(this.authForm.value).subscribe(
       (result: TokenObj) => {
         if (result["access"] != 'undefined') {
@@ -73,7 +79,15 @@ export class AuthComponent implements OnInit {
         }
       },
       error => {
-        this.message = {text: error.message, type: 'danger'};
+        let msg = '';
+        if (error.error['password']) {
+          msg = "Password: " + error.error['password'];
+        }
+        else if (error.error['username']) {
+          msg = "Username: " + error.error['username'];          
+        }
+        
+        this.message = {text: msg, type: 'danger'};
       }
     );
   }
@@ -87,6 +101,24 @@ export class AuthComponent implements OnInit {
     }
   }
 
+}
+
+@Directive({
+  selector: '[autofocus]'
+})
+export class AutofocusDirective {
+  private _autofocus;
+  constructor(private el: ElementRef) {
+  }
+
+  ngOnInit() {
+    if (this._autofocus || typeof this._autofocus === "undefined")
+      this.el.nativeElement.focus();      //For SSR (server side rendering) this is not safe. Use: https://github.com/angular/angular/issues/15008#issuecomment-285141070)
+  }
+
+  @Input() set autofocus(condition: boolean) {
+    this._autofocus = condition != false;
+  }
 }
 
 @Component({

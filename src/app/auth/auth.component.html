@@ -18,13 +18,13 @@
                 <button class="m-1" type="submit" mat-button>Login</button>
                 <button class="m-1" mat-button>Forgot password?</button>
             </mat-card-actions>
-            <div class="animated fadeIn" *ngIf="message">
+            <!-- <div class="animated fadeIn" *ngIf="message != ''">
                 <div class="alert alert-{{ message.type }}" role="alert">
                     {{ message.text }}
                 </div>
-            </div>
+            </div> -->
         </form>
-        <form *ngIf="!loginAction" [formGroup]="authForm" (ngSubmit)="authentication()">
+        <form *ngIf="!loginAction" [formGroup]="regForm" (ngSubmit)="authentication()">
             <mat-card-header>
                 <div mat-card-avatar class="example-header-image" style="width: 100%; text-align: center;height: 100px;">
                     <img src="../../assets/images/background/user-info.jpg">
@@ -33,20 +33,20 @@
             <mat-card-content>
                 <mat-form-field>
                     <mat-label>Username</mat-label>
-                    <input type="text" autocomplete="off" formControlName="username" [value]="" required matInput />
+                    <input type="text" autocomplete="off" formControlName="username" required matInput [autofocus]="true" />
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Email</mat-label>
-                    <input type="email" autocomplete="off" formControlName="Email" [value]="" required matInput />
+                    <input type="email" autocomplete="off" formControlName="email" required matInput />
                 </mat-form-field>
                 <mat-form-field>
                     <mat-label>Password</mat-label>
-                    <input type="password" autocomplete="off" formControlName="password" [value]="" autocomplete="new-password"
+                    <input type="password" autocomplete="off" formControlName="password" autocomplete="new-password"
                         required matInput />
                 </mat-form-field>
                <mat-form-field>
                    <mat-label>Repeat Password</mat-label>
-                    <input type="password" autocomplete="off" [value]="" autocomplete="new-password" required
+                    <input type="password" autocomplete="off" autocomplete="new-password" required
                         matInput />
                 </mat-form-field>
 
@@ -54,11 +54,11 @@
             <mat-card-actions>
                 <button type="submit" mat-button>Create</button>
             </mat-card-actions>
-            <div class="animated fadeIn" *ngIf="message">
+            <!-- <div class="animated fadeIn" *ngIf="message && message != ''">
                 <div class="alert alert-{{ message.type }}" role="alert">
                     {{ message.text }}
                 </div>
-            </div>
+            </div> -->
         </form>
         <span class="float-right loginActionToggle" (click)="loginActionToggle()">
             <a class="cus-cursor-pointer m-2" *ngIf="!loginAction">Login</a>

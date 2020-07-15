@@ -6,6 +6,8 @@ import { ApiService } from '../../../api.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, ErrorStateMatcher } from '@angular/material';
 import { FormBuilder, FormGroup, FormControl, Validators, FormGroupDirective, NgForm } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { NgxPermissionsService } from 'ngx-permissions';
+import { ToastService } from '../../../shared/toast/toast-service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -25,6 +27,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class AppHeaderComponent implements OnInit{
   apiUrl = environment.serverUrl;
   matcher = new MyErrorStateMatcher();
+  passChange = false;
 
   constructor(
     private cookieService: CookieService,
@@ -44,12 +47,14 @@ export class AppHeaderComponent implements OnInit{
     }
 
   }
-  goToUserProfile(){
+  goToUserProfile(data) {
+    this.passChange = data;
+
     const dialogRef = this.dialog.open(ProfileDialog, {
       data: {
         mainData: [],
         customer: [],
-        type: ''
+        type: data
       },
       maxHeight: '70vh',
       maxWidth: '600px',
@@ -65,6 +70,7 @@ export interface DialogData { }
   templateUrl: 'profile.component.html',
 })
 export class ProfileDialog implements OnInit {
+  perm = ["GUEST"];
 
   apiUrl = environment.serverUrl;
   matchPass:boolean = true;
@@ -75,9 +81,21 @@ export class ProfileDialog implements OnInit {
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public dData: DialogData,
     private _formBuilder: FormBuilder,
+    public permServ: NgxPermissionsService,
+    private toast: ToastService,
+    private router: Router,
   ) { }
 
   profileFC = this._formBuilder.group({
+    username: ['',],
+    email: ['',],
+    first_name: ['',],
+    last_name: ['',],
+    oldpassword: ['',],
+    password: ['',],
+    confirmPassword: ['',],
+  }); 
+  chPassFC = this._formBuilder.group({
     username: ['',],
     email: ['',],
     first_name: ['',],
@@ -91,6 +109,14 @@ export class ProfileDialog implements OnInit {
   ngOnInit() {
     this.api.loadAll('cuser').subscribe(
       result => {
+        if (result[0].is_superuser) {
+          this.perm = ["ADMIN"];
+        }
+        else {
+          this.perm = ["EDITOR"];
+        }
+        this.permServ.loadPermissions(this.perm);
+
         this.profileFC.setValue({
           username: result[0].username,
           email: result[0].email,
@@ -100,7 +126,16 @@ export class ProfileDialog implements OnInit {
           password: null,
           confirmPassword: null,
         })
-      
+        this.chPassFC.setValue({
+          username: result[0].username,
+          email: result[0].email,
+          first_name: result[0].first_name,
+          last_name: result[0].last_name,
+          oldpassword: null,
+          password: null,
+          confirmPassword: null,
+        })
+        
       },
       error => {
         this.dialogRef.close(error);
@@ -108,8 +143,18 @@ export class ProfileDialog implements OnInit {
     );
   }
 
-  profileOperation(){
-    let req = this.http.post(`${this.apiUrl}users/update/`, this.profileFC.value, {
+  profileOperation() {
+    let data:any = this.dData;
+    if(data.type){
+      data = this.chPassFC.value;
+      console.log(data);
+      
+    } else {
+      data = this.profileFC.value;
+      console.log(data);
+
+    }
+    let req = this.http.post(`${this.apiUrl}users/update/`, data, {
       headers: new HttpHeaders({
         "Authorization": "Bearer " + this.cookie.get('auth-token'),
       }),
@@ -117,7 +162,10 @@ export class ProfileDialog implements OnInit {
 
     req.subscribe(
       result => {
-        console.log(result);
+        this.toast.show("User updated.", { classname: 'bg-success text-light', delay: 5000 });
+        if (this.dData.type) {
+          this.router.navigate(['/login']);
+        }
       },
     )
   }

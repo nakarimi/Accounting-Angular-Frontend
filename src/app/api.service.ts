@@ -47,9 +47,6 @@ export class ApiService {
   loadAll(entity, sort = '', order= '', page = '') {
     const requestUrl = `${this.apiUrl}${entity}/`;
     let h;
-    
-    if (entity == 'cuser') {
-      console.log(entity);
       h = {
         headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -57,10 +54,6 @@ export class ApiService {
         })
       }
       return this.httpClient.get<any>(requestUrl, h);
-    }
-    else{
-      return this.httpClient.get<any>(requestUrl);
-    }
   }
   // Delete item based on content type.
   delete(id, type) {
