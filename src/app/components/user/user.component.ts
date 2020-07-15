@@ -36,7 +36,7 @@ export class UserComponent implements OnInit {
 
   loadUsers() {
     this.apiService.loadAll('users').subscribe(
-      result => {
+      (result: any) => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
         

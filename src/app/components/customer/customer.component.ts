@@ -42,7 +42,7 @@ export class CustomerComponent implements AfterViewInit {
   // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
   loadCustomers() {
     this.apiService.loadAll('csmr').subscribe(
-      result => {
+      (result: any) => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
       },

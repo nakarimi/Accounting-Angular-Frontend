@@ -77,7 +77,7 @@ export class AccountComponent implements OnInit {
 
   loadAccounts() {
     this.apiService.loadAll('acnt').subscribe(
-      result => {
+      (result: any) => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
         result.forEach(e => {

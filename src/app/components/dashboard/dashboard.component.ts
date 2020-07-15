@@ -92,14 +92,14 @@ export class DashboardComponent implements OnInit{
 
 	loadCustomers() {
 		this.apiService.loadAll('csmr').subscribe(
-			result => {
+			(result: any) => {
 				this.customers = result;
 			},
 		);
 	}
 	loadVendors() {
 		this.apiService.loadAll('vdr').subscribe(
-			result => {
+			(result: any) => {
 				this.vendors = result;
 			},
 		);
@@ -107,7 +107,7 @@ export class DashboardComponent implements OnInit{
 	loadInvBill() {
 		
 		this.apiService.loadAll('inv').subscribe(
-			result => {
+			(result: any) => {
 
 				result.forEach(e => {
 					let d = new Date(e.due_date);
@@ -121,7 +121,7 @@ export class DashboardComponent implements OnInit{
 					});					
 				});
 				this.apiService.loadAll('bil').subscribe(
-					result => {
+					(result: any) => {
 						result.forEach(e => {
 							let d = new Date(e.due_date);
 							this.callendarData.push({

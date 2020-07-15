@@ -42,7 +42,7 @@ export class VendorComponent implements AfterViewInit {
   // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
   loadVendors() {
     this.apiService.loadAll('vdr').subscribe(
-      result => {
+      (result: any) => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
       },

@@ -110,7 +110,7 @@ export class BillComponent implements AfterViewInit {
   // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
   loadBills() {
     this.apiService.loadAll('bil').subscribe(
-      result => {
+      (result: any) => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
       },
@@ -130,7 +130,7 @@ export class BillComponent implements AfterViewInit {
     });
     if (data) {
       this.apiService.loadAll('pay').subscribe(
-        result => {                    
+        (result: any) => {                    
           if (result.filter(x => x.ref_bill == data.id).length > 0) {
             dialogRef.close();
             this.toast.show("Edit not allowed for this item!\nThis Item has assigned Payment.", { classname: 'bg-danger text-light', delay: 5000 });
@@ -154,7 +154,7 @@ export class BillComponent implements AfterViewInit {
   // Delete Item From Server.
   delete(row){
     this.apiService.loadAll('pay').subscribe(
-      result => {
+      (result: any) => {
         if (result.filter(x => x.ref_bill == row.id).length > 0) {
           this.toast.show("Delete not allowed for this item!\nThis Item has assigned Payment.", { classname: 'bg-danger text-light', delay: 5000 });
         } else {
@@ -369,7 +369,7 @@ export class CuDialog implements OnInit{
 
   getLastInvNum() {    
     this.apiService.loadAll('last_bil').subscribe(
-      result => {
+      (result: any) => {
         this.bilNumber = 'Bill-' + result.bill;
         this.billFC.controls['bill_number'].disable();
         this.billFC.controls['total_price'].disable();

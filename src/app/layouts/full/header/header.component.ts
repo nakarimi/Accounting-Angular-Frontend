@@ -163,7 +163,8 @@ export class ProfileDialog implements OnInit {
     req.subscribe(
       result => {
         this.toast.show("User updated.", { classname: 'bg-success text-light', delay: 5000 });
-        if (this.dData.type) {
+        let dialog:any = this.dData;
+        if (dialog.type) {
           this.router.navigate(['/login']);
         }
       },

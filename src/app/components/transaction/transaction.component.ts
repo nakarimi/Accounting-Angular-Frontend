@@ -35,7 +35,7 @@ export class TransactionComponent implements OnInit {
 
   loadTransactions() {
     this.apiService.loadAll('trs').subscribe(
-      result => {
+      (result: any) => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
       },

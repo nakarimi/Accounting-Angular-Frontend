@@ -68,7 +68,7 @@ export class InvoiceComponent implements AfterViewInit {
   customers:any = [];
   editData;
   deleteNotAllow: Boolean;
-  payments = [];
+  payments:any = [];
   // Build the table data source based on table data.
   tableData: any = [];
   dataSource = new MatTableDataSource(this.tableData);
@@ -113,7 +113,7 @@ export class InvoiceComponent implements AfterViewInit {
   // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
   loadInvoices() {
     this.apiService.loadAll('inv').subscribe(
-      result => {
+      (result: any) => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
       },
@@ -135,7 +135,7 @@ export class InvoiceComponent implements AfterViewInit {
       this.apiService.loadAll('pay').subscribe(
         result => {
           this.payments = result;
-          if (result.filter(x => x.ref_inv == data.id).length > 0) {
+          if (this.payments.filter(x => x.ref_inv == data.id).length > 0) {
             dialogRef.close();
             this.toast.show("Edit not allowed for this item!\nThis Item has assigned Payment.", { classname: 'bg-danger text-light', delay: 5000 });
           }
@@ -158,10 +158,8 @@ export class InvoiceComponent implements AfterViewInit {
   // Delete Item From Server.
   delete(row){
     this.apiService.loadAll('pay').subscribe(
-      result => {
+      (result: any) => {
         this.payments = result;
-        console.log(result.filter(x => x.ref_inv == row.id));
-        
         if (result.filter(x => x.ref_inv == row.id).length > 0) {
           this.toast.show("Delete not allowed for this item!\nThis Item has assigned Payment.", { classname: 'bg-danger text-light', delay: 5000 });
         }else{
@@ -376,7 +374,7 @@ export class CuDialog implements OnInit{
 
   getLastInvNum() {    
     this.apiService.loadAll('last_inv').subscribe(
-      result => {
+      (result:any) => {
         this.invNumber = 'Invoice-' + result.invoice;
         this.invoiceFC.controls['inv_number'].disable();
         this.invoiceFC.controls['total_price'].disable();
