@@ -7,6 +7,8 @@ import { ToastService } from '../../shared/toast/toast-service';
 import { ChartOptions } from 'ng-chartist';
 import { Label, SingleDataSet, monkeyPatchChartJsLegend, monkeyPatchChartJsTooltip } from 'ng2-charts';
 import { ChartType } from 'chart.js';
+import { TransactionComponent } from '../transaction/transaction.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account',
@@ -63,17 +65,28 @@ export class AccountComponent implements OnInit {
     private apiService: ApiService,
     public dialog: MatDialog,
     private toast: ToastService,
-
+    private router: Router
   ) { 
     monkeyPatchChartJsTooltip();
     monkeyPatchChartJsLegend();
   }
 
   ngOnInit() {
-    this.loadAccounts();
-    
+    this.checkPerm();
   }
 
+  checkPerm() {
+    this.apiService.loadAll('cuser').subscribe(
+      result => {
+        if (result[0].is_superuser) {
+          this.loadAccounts();
+        }
+        else {
+          this.router.navigate(['/dashboard']);
+          this.toast.show("Permission denied!", { classname: 'bg-danger text-light', delay: 5000 });
+        }
+      })
+  }
 
   loadAccounts() {
     this.apiService.loadAll('acnt').subscribe(

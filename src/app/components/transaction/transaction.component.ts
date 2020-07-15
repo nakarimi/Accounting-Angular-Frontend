@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, ViewChild } from '@angular/core';
 import { ApiService } from '../../api.service';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { Router } from '@angular/router';
+import { ToastService } from '../../shared/toast/toast-service';
 
 @Component({
   selector: 'app-transaction',
@@ -23,16 +25,29 @@ export class TransactionComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) msort: MatSort;
-
+  perm;
   constructor(
     private apiService: ApiService,
-
+    private router: Router,
+    private toast: ToastService,
   ) { }
 
   ngOnInit() {
-    this.loadAccounts();
+    this.checkPerm();
   }
 
+  checkPerm(){
+    this.apiService.loadAll('cuser').subscribe(
+      result => {
+        if (result[0].is_superuser) {
+          this.loadAccounts();
+        }
+        else {
+          this.router.navigate(['/dashboard']);
+          this.toast.show("Permission denied!", { classname: 'bg-danger text-light', delay: 5000 });
+        }
+    })
+  }
   loadTransactions() {
     this.apiService.loadAll('trs').subscribe(
       (result: any) => {

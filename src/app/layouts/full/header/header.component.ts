@@ -28,12 +28,14 @@ export class AppHeaderComponent implements OnInit{
   apiUrl = environment.serverUrl;
   matcher = new MyErrorStateMatcher();
   passChange = false;
+  perm;
 
   constructor(
     private cookieService: CookieService,
     private router: Router,
     private api: ApiService,
     public dialog: MatDialog,
+    private permServ: NgxPermissionsService
   ) { }
 
   logOutUser() {
@@ -45,7 +47,18 @@ export class AppHeaderComponent implements OnInit{
     if (!this.cookieService.check('refresh-token')) {
       this.router.navigate(['/login']);
     }
-
+    else{
+      this.api.loadAll('cuser').subscribe(
+        result => {
+          if (result[0].is_superuser) {
+            this.perm = ["ADMIN"];
+          }
+          else {
+            this.perm = ["EDITOR"];
+          }
+          this.permServ.loadPermissions(this.perm);
+        })
+    }
   }
   goToUserProfile(data) {
     this.passChange = data;

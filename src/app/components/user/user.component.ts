@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../../api.service';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { ToastService } from '../../shared/toast/toast-service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -27,12 +28,27 @@ export class UserComponent implements OnInit {
 
   constructor(
     private apiService: ApiService,
-    public toast: ToastService
+    public toast: ToastService,
+    public router: Router
   ) { }
 
   ngOnInit() {
-    this.loadUsers();
+    this.checkPerm();
   }
+
+  checkPerm() {
+    this.apiService.loadAll('cuser').subscribe(
+      result => {
+        if (result[0].is_superuser) {
+          this.loadUsers();
+        }
+        else {
+          this.router.navigate(['/dashboard']);
+          this.toast.show("Permission denied!", { classname: 'bg-danger text-light', delay: 5000 });
+        }
+      })
+  }
+
 
   loadUsers() {
     this.apiService.loadAll('users').subscribe(
