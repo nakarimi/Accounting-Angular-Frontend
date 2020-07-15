@@ -7,3 +7,7 @@
 .ngb-toasts .toast:not(:last-child){
     display: none !important;
 }
+
+.mat-button[disabled], .mat-flat-button[disabled], .mat-icon-button[disabled], .mat-stroked-button[disabled]{
+    cursor: not-allowed !important;
+}

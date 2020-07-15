@@ -47,12 +47,14 @@
           </div>
         </div>
         <span *ngIf="type == 'e'">
-          <button type="submit" mat-button color="primary">Update</button>
+          <button type="submit" mat-button class="text-white"
+            [ngClass]="{'bg-danger': billFC.invalid, 'bg-info': billFC.valid}" [disabled]="billFC.invalid" >Update</button>
         </span>
 
         <span *ngIf="type == 'a'">
           <h5 *ngIf="bill">Bill Created, add items.</h5>
-          <button *ngIf="!bill" type="submit" mat-button color="primary">Create</button>
+          <button *ngIf="!bill" type="submit" mat-button class="text-white"
+            [ngClass]="{'bg-danger': billFC.invalid, 'bg-info': billFC.valid}" [disabled]="billFC.invalid" >Create</button>
         </span>
       </form>
         <div align="end">

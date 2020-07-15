@@ -87,10 +87,10 @@ export class ProfileDialog implements OnInit {
   ) { }
 
   profileFC = this._formBuilder.group({
-    username: ['',],
-    email: ['',],
-    first_name: ['',],
-    last_name: ['',],
+    username: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]],
+    email: ['', [Validators.email, Validators.required]],
+    first_name: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]],
+    last_name: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]],
     oldpassword: ['',],
     password: ['',],
     confirmPassword: ['',],
@@ -100,9 +100,9 @@ export class ProfileDialog implements OnInit {
     email: ['',],
     first_name: ['',],
     last_name: ['',],
-    oldpassword:['',],
-    password: ['',],
-    confirmPassword: ['',],
+    oldpassword: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]],
+    password: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]],
+    confirmPassword: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]],
   }, { validator: this.checkPasswords });
 
   editData;
@@ -144,33 +144,37 @@ export class ProfileDialog implements OnInit {
   }
 
   profileOperation() {
-    let data:any = this.dData;
-    if(data.type){
+    let data:any;
+    let tmp:any = this.dData;
+    if(tmp.type){
       data = this.chPassFC.value;
-      console.log(data);
-      
     } else {
       data = this.profileFC.value;
-      console.log(data);
-
     }
-    let req = this.http.post(`${this.apiUrl}users/update/`, data, {
-      headers: new HttpHeaders({
-        "Authorization": "Bearer " + this.cookie.get('auth-token'),
-      }),
-    });
-
-    req.subscribe(
-      result => {
-        this.toast.show("User updated.", { classname: 'bg-success text-light', delay: 5000 });
-        let dialog:any = this.dData;
-        if (dialog.type) {
-          this.router.navigate(['/login']);
-        }
-      },
-    )
+    console.log(this.chPassFC.valid);
+    
+    if (data) {
+      let req = this.http.post(`${this.apiUrl}users/update/`, data, {
+        headers: new HttpHeaders({
+          "Authorization": "Bearer " + this.cookie.get('auth-token'),
+        }),
+      });
+  
+      req.subscribe(
+        result => {
+          this.toast.show("User updated.", { classname: 'bg-success text-light', delay: 5000 });
+          let dialog:any = this.dData;
+          if (dialog.type) {
+            this.cookie.delete('auth-token');
+            this.router.navigate(['/login']);
+            this.dialogRef.close();
+          }
+        },
+      )      
+    }
   }
   checkPasswords(group: FormGroup){
+    
     let pass = group.controls.password;
     let confirmPass = group.controls.confirmPassword;
     return confirmPass.setErrors(

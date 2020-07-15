@@ -39,7 +39,9 @@
     <input id="form-image" type="file" (change)="onUpdateFile($event)" />
     <br>
     <mat-dialog-actions align="end">
-      <button [disabled]="!isFormValid"  align="end" type="submit" mat-button color="primary">Update</button>
+      <button 
+        [ngClass]="{'bg-danger': accountFC.invalid, 'bg-info': accountFC.valid}" [disabled]="accountFC.invalid"
+        align="end" type="submit" mat-button color="primary">Update</button>
       <button mat-button mat-dialog-close>Cancel</button>
     </mat-dialog-actions>
   </form>

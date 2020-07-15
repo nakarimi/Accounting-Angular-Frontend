@@ -192,7 +192,7 @@ export class AddDialog {
   ) { }
 
   accountFC = new FormGroup({
-    label: new FormControl(''),
+    label: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
     owner: new FormControl(''),
     balance: new FormControl(''),
     currency: new FormControl(''),

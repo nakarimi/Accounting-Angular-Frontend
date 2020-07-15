@@ -50,8 +50,14 @@
   
   
       <span *ngIf="editData">
-        <button type="submit" mat-button color="primary" *ngIf="invalid">Update</button>
-        <button mat-button disabled color="primary" *ngIf="!invalid">Update</button>
+        <button type="submit" mat-button *ngIf="invalid" 
+          class="text-white"
+          [ngClass]="{'bg-danger': paymentFC.invalid, 'bg-info': paymentFC.valid}" 
+          [disabled]="paymentFC.invalid" >Create</button>
+        <button mat-button disabled *ngIf="!invalid"
+          class="text-white"
+          [ngClass]="{'bg-danger': paymentFC.invalid, 'bg-info': paymentFC.valid}" 
+          [disabled]="paymentFC.invalid" >Update</button>
         <button mat-button color="accent" (click)="onResetForm()">Cancel</button>
       </span>
       <span *ngIf="!editData">

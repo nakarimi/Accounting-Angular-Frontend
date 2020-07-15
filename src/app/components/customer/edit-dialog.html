@@ -8,7 +8,7 @@
       <input matInput autocomplete="off" type="textarea" formControlName="owner" placeholder="Owner" required>
     </mat-form-field>
     <div>
-      <label>Status: </label>
+      <mat-label>Status</mat-label>
       <mat-checkbox formControlName="status">Active</mat-checkbox>
     </div>
     <mat-form-field>
@@ -18,7 +18,8 @@
       <input matInput autocomplete="off" type="email" formControlName="email" placeholder="Email" required>
     </mat-form-field>
     <mat-dialog-actions align="end">
-      <button type="submit" mat-button color="primary">Update</button>
+      <button type="submit" mat-button class="text-white"
+        [ngClass]="{'bg-danger': customerFC.invalid, 'bg-info': customerFC.valid}" [disabled]="customerFC.invalid" >Update</button>
       <button mat-button mat-dialog-close>Cancel</button>
     </mat-dialog-actions>
   </form>
