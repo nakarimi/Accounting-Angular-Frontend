@@ -1,0 +1,93 @@
+<h2 mat-dialog-title>Add User</h2>
+<mat-dialog-content class="mat-typography">
+          <form [formGroup]="regForm" (ngSubmit)="authentication()">
+              <mat-form-field>
+                <mat-label>Username</mat-label>
+                <input (change)="checkUsername()" type="text" autocomplete="off" formControlName="username" required matInput [autofocus]="true"
+                  [errorStateMatcher]="matcher">
+                <mat-error *ngIf="regForm.get('username').errors && regForm.get('username').errors.required">
+                  Username is required.
+                </mat-error>
+                <mat-error *ngIf="regForm.get('username').errors && regForm.get('username').errors.minlength">
+                  Username must be at least 5 characters long.
+                </mat-error>
+                <mat-error *ngIf="regForm.get('username').errors && regForm.get('username').errors.maxlength">
+                  Username must be at most 25 characters long.
+                </mat-error>
+                <mat-error *ngIf="regForm.get('username').errors && regForm.get('username').errors.custom">
+                  This username already exist.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Email</mat-label>
+                <input (change)="checkEmail()" type="email" autocomplete="off" formControlName="email" required matInput 
+                  [errorStateMatcher]="matcher">
+                <mat-error *ngIf="regForm.get('email').errors && regForm.get('email').errors.required">
+                  Email is required.
+                </mat-error>
+                <mat-error *ngIf="regForm.get('email').errors && regForm.get('email').errors.email">
+                  Email format is not correct.
+                </mat-error>
+                <mat-error *ngIf="regForm.get('email').errors && regForm.get('email').errors.custom">
+                  This email already exist.
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>First Name</mat-label>
+                <input type="text" autocomplete="off" formControlName="first_name" required matInput
+                  [errorStateMatcher]="matcher">
+                  <mat-error *ngIf="regForm.get('first_name').errors && regForm.get('first_name').errors.required">
+                    First Name is required.
+                  </mat-error>
+                  <mat-error *ngIf="regForm.get('first_name').errors && regForm.get('first_name').errors.minlength">
+                    First Name must be at least 5 characters long.
+                  </mat-error>
+                  <mat-error *ngIf="regForm.get('first_name').errors && regForm.get('first_name').errors.maxlength">
+                    First Name must be at most 25 characters long.
+                  </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Last Name</mat-label>
+                <input type="text" autocomplete="off" formControlName="last_name" required matInput 
+                  [errorStateMatcher]="matcher">
+                <mat-error *ngIf="regForm.get('last_name').errors && regForm.get('last_name').errors.required">
+                  Last Name is required.
+                </mat-error>
+                <mat-error *ngIf="regForm.get('last_name').errors && regForm.get('last_name').errors.minlength">
+                  Last Name must be at least 5 characters long.
+                </mat-error>
+                <mat-error *ngIf="regForm.get('last_name').errors && regForm.get('last_name').errors.maxlength">
+                  Last Name must be at most 25 characters long.
+                </mat-error>
+              </mat-form-field>
+              <div>
+                <label>Is Superuser: </label>
+                <mat-checkbox formControlName="is_superuser">Yes</mat-checkbox>
+              </div>
+              <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input type="password" autocomplete="off" formControlName="password" autocomplete="new-password" required
+                  matInput  [errorStateMatcher]="matcher">
+                <mat-error *ngIf="regForm.get('password').errors && regForm.get('password').errors.required">
+                  Password is required.
+                </mat-error>
+                <mat-error *ngIf="regForm.get('password').errors && regForm.get('password').errors.minlength">
+                  Password must be at least 5 characters long.
+                </mat-error>
+                <mat-error *ngIf="regForm.get('password').errors && regForm.get('password').errors.maxlength">
+                  Password must be at most 25 characters long.
+                </mat-error>
+
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Repeat Password</mat-label>
+                <input type="password" formControlName="conf_password" autocomplete="off" required matInput 
+                  [errorStateMatcher]="matcher">
+                <mat-error>
+                  Passwords do not match, please check passwords and try again.
+                </mat-error>
+              </mat-form-field>
+          
+              <button type="submit" mat-button>Create</button>
+          </form>
+</mat-dialog-content>

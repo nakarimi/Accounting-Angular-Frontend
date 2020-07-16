@@ -35,11 +35,14 @@ export class ApiService {
 
   registerUser(authData) {
     const body = JSON.stringify(authData);
-    const user = this.httpClient.post(`${this.apiUrl}users/`, body, {
+    let h;
+    h = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
+        "Authorization": "Bearer " + this.cookieService.get('auth-token'),
       })
-    });
+    }
+    const user = this.httpClient.post(`${this.apiUrl}users/`, body, h);
     return user;
   }
 
@@ -47,13 +50,13 @@ export class ApiService {
   loadAll(entity, sort = '', order= '', page = '') {
     const requestUrl = `${this.apiUrl}${entity}/`;
     let h;
-      h = {
-        headers: new HttpHeaders({
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + this.cookieService.get('auth-token'),
-        })
-      }
-      return this.httpClient.get<any>(requestUrl, h);
+    h = {
+      headers: new HttpHeaders({
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + this.cookieService.get('auth-token'),
+      })
+    }
+    return this.httpClient.get<any>(requestUrl, h);
   }
   // Delete item based on content type.
   delete(id, type) {

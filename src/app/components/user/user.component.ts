@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ApiService } from '../../api.service';
-import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatSort, MatPaginator, MatDialog, MatDialogRef } from '@angular/material';
 import { ToastService } from '../../shared/toast/toast-service';
 import { Router } from '@angular/router';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-user',
@@ -24,12 +25,11 @@ export class UserComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) msort: MatSort;
 
-
-
   constructor(
     private apiService: ApiService,
     public toast: ToastService,
-    public router: Router
+    public router: Router,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -103,5 +103,105 @@ export class UserComponent implements OnInit {
     this.dataSource = new MatTableDataSource<any>(this.tableData);
     this.dataSource.sort = this.msort;
   }
+  openAddDialog() {
+    const dialogRef = this.dialog.open(AddUserComponent, {
+      maxWidth: '50%',
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      // Do nothing on cancel and if it return value update table.
+      if (result) {
+        this.addToTable(result);
+      }
+    });
+  }
+
+}
+
+
+@Component({
+  selector: 'app-adduser',
+  templateUrl: './adduser.component.html',
+})
+export class AddUserComponent implements OnInit {
+
+  regForm = this._formBuilder.group({
+    username: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+    conf_password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    first_name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+    last_name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+    is_superuser: new FormControl('',),
+  }, { validator: [this.checkPasswords] });
+
+
+  constructor(
+    private apiService: ApiService,
+    public toast: ToastService,
+    public router: Router,
+    public dialogRef: MatDialogRef<any>,
+    private _formBuilder: FormBuilder,
+
+    // @Inject(MAT_DIALOG_DATA) public dData: DialogData,
+  ) { }
+
+  ngOnInit() {
+  }
+  authentication() {
+    this.apiService.registerUser(this.regForm.value).subscribe(
+      result => {
+        this.dialogRef.close(result);
+      },
+      error => console.error(error.name)
+    );
+  }
+
+  checkPasswords(group: FormGroup) {
+
+    let pass = group.controls.password;
+    let confirmPass = group.controls.conf_password;
+    return confirmPass.setErrors(
+      pass.value !== confirmPass.value ? { notEquivalent: true } : null
+    );
+  }
+  checkUsername() {
+    let username = this.regForm.controls.username;
+    let v = true;
+    if(username.errors){
+      v = !(username.errors.required || username.errors.maxlength || username.errors.minlength);
+    }
+    if (username.value && v) {
+
+      let r = this.findThisUserData('username', username.value);
+      return username.setErrors(
+        r ? { custom: true } : null
+      );
+    }
+    
+  }
+
+  checkEmail() {
+    let email = this.regForm.controls.email;
+
+    let v = true;
+    if (email.errors) {
+      v = !(email.errors.required || email.errors.email);
+    }
+    if (email.value && v) {
+
+      let r = this.findThisUserData('email', email.value);
+      return email.setErrors(
+        r ? { custom: true } : null
+      );
+
+    }
+  }
+
+  findThisUserData(field, value){
+    console.log(value);
+    console.log(field);
+    
+    return true;
+  }
 }
