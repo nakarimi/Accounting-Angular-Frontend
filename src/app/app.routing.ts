@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { FullComponent } from './layouts/full/full.component';
 import { AccountComponent } from './components/account/account.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ReportComponent } from './components/report/report.component';
 
 export const AppRoutes: Routes = [
   {
@@ -13,6 +14,10 @@ export const AppRoutes: Routes = [
         path: '',
         redirectTo: '/dashboard',
         pathMatch: 'full'
+      },
+      {
+        path: "report",
+        component: ReportComponent,
       },
       {
         path: 'dashboard',

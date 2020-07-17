@@ -39,13 +39,13 @@ export class DashboardComponent implements OnInit{
 	public barChartPlugins = [];
 	chartFullDate = [];
 	paymentsForCSV:any = [];
+	invoices;
+	bills;
+	dates;
 	dyIncome = [];
 	dyExpense = [];
 	dyProfit = [];
 	range = 'w';
-	invoices;
-	bills;
-	dates;
 	chartCurr = 'USD';
 	firstday;
 	lastday;
@@ -170,7 +170,6 @@ export class DashboardComponent implements OnInit{
 						height: 700,
 						// dateClick: this.handleDateClick.bind(this), // bind is important!
 						eventClick: function (info) {
-							console.log(info.event.extendedProps);
 							
 							let d = info.event.extendedProps.data;
 							let v = info.event.extendedProps.vendor;
@@ -351,7 +350,7 @@ export class DashboardComponent implements OnInit{
 		let start = this.pipe.transform(this.startDate.value, 'yyyy-MM-dd');
 		let end = this.pipe.transform(this.endDate.value, 'yyyy-MM-dd');
 
-		let filename = "Export Char (From " + start + ") (To " + end + ")";
+		let filename = "Export Chart (From " + start + ") (To " + end + ")";
 		let chartData = [];
 		this.chartFullDate.forEach((element ,key) => {
 			chartData.push([this.pipe.transform(element, 'MMMM-dd'),
@@ -362,9 +361,8 @@ export class DashboardComponent implements OnInit{
 		});
 		
 		this.exportCsv(filename, chartData, ["Date", "Expense", "Income", "Profit"]);
-		
-
 	}
+
 	diffAmounts(data){
 		let index = 0;
 		this.chartFullDate.forEach(e => {

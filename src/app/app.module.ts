@@ -25,6 +25,7 @@ import { NgbdToastGlobalModule } from './shared/toast/toast-global.module';
 import { NgbdToastGlobal } from './shared/toast/toast-global.component';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { TestComponent } from './test/test.component';
+import { ReportComponent } from './components/report/report.component';
 
 const routes: Routes = [
   {path: '', pathMatch: 'full', redirectTo: 'dashboard'}
@@ -40,6 +41,7 @@ const routes: Routes = [
     ToastsContainer,
     ProfileDialog,
     TestComponent,
+    ReportComponent,
   ],
   imports: [
     BrowserModule,
