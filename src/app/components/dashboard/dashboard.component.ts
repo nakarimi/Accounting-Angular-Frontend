@@ -7,6 +7,7 @@ import { ApiService } from '../../api.service';
 import { ToastService } from '../../shared/toast/toast-service';
 import { FormControl, Validators } from '@angular/forms';
 import { CalendarOptions } from '@fullcalendar/angular'; // useful for typechecking
+import { ExportToCsv } from 'export-to-csv';
 
 /**
  * @title Table with expandable rows
@@ -37,11 +38,13 @@ export class DashboardComponent implements OnInit{
 	public barChartLegend = true;
 	public barChartPlugins = [];
 	chartFullDate = [];
+	paymentsForCSV:any = [];
 	dyIncome = [];
 	dyExpense = [];
 	dyProfit = [];
 	range = 'w';
 	invoices;
+	bills;
 	dates;
 	chartCurr = 'USD';
 	firstday;
@@ -49,6 +52,8 @@ export class DashboardComponent implements OnInit{
 	todayC;
 	vendors=[];
 	customers=[];
+	accounts: any = [];
+
 	endDate = new FormControl(new Date, Validators.required);
 	d = new Date;
 	dd = this.d.setDate(this.d.getDate() - 6);
@@ -66,7 +71,6 @@ export class DashboardComponent implements OnInit{
 	constructor(
 		private apiService: ApiService,
 		public toast: ToastService,
-		
 	) { 
 		this.pipe = new DatePipe('en');
 	}
@@ -77,12 +81,40 @@ export class DashboardComponent implements OnInit{
 		this.genLast7Days();
 		this.loadInvBill();
 
-
 		this.todayC = new Date; // get this.todayCent date
 		var first = this.todayC.getDate() - this.todayC.getDay(); // First day is the day of the month - the day of the week
 		var last = first + 6; // last day is the first day + 6
 		this.lastday = new Date(this.todayC.setDate(last));
 	}
+
+	exportCsv(title, data, headers = null){
+		
+		console.log(title);
+		
+		let options = {
+			fieldSeparator: ',',
+			quoteStrings: '"',
+			decimalSeparator: '.',
+			showLabels: true,
+			showTitle: false,
+			title: title,
+			filename: title,
+			useTextFile: false,
+			useBom: true,
+			useKeysAsHeaders: true,
+			headers: []
+			//  <-- Won't work with useKeysAsHeaders present!
+		};
+		
+		if (headers) {
+			options.useKeysAsHeaders = false;
+			options.headers = headers; 
+		}
+		const csvExporter = new ExportToCsv(options);
+
+		csvExporter.generateCsv(data);
+		
+		}
 
 	calendarOptions: CalendarOptions;
 
@@ -147,15 +179,12 @@ export class DashboardComponent implements OnInit{
 							if (d.inv_number) {
 								
 								let sc = c.filter(x => x.id == d.customer)[0];
-								console.log(sc);
-
 								alert(`Inv Numver: ` + d.inv_number + `\nBalance: ` + d.balance 
 								+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nCustomer: ` + sc.label);
 							}
 							else{
 								
 								let sv = v.filter(x => x.id == d.vendor)[0];
-								console.log(sv);
 								alert(`Bill Numver: ` + d.bill_number + `\nBalance: ` + d.balance
 									+ `\nTotal Price: ` + d.total_price + `\nDue Date: ` + d.due_date + `\nVendor: ` + sv.label);
 
@@ -274,11 +303,68 @@ export class DashboardComponent implements OnInit{
 		let query = 'pay?start=' + start + '&end=' + end + '&curr=' + this.chartCurr+'&';
 		this.apiService.loadAll(query).subscribe(
 			result => {
+				this.paymentsForCSV = result;
 				this.diffAmounts(result);
 			},
 		);
 	}
 
+	exportPayments(){
+		let start = this.pipe.transform(this.startDate.value, 'yyyy-MM-dd');
+		let end = this.pipe.transform(this.endDate.value, 'yyyy-MM-dd');
+		let header = ['ID', 'Label', 'Type', 'Currency', "Amount", "Created", "Updated", 'Account', "Bill", "Invoice",];
+		let filename = "Payment (From " + start + ") (To " + end + ")";
+		this.apiService.loadAll('acnt').subscribe(
+				result => {
+					this.accounts = result;
+					this.apiService.loadAll('inv').subscribe(
+						(result: any) => {
+							this.invoices = result;
+							this.apiService.loadAll('bil').subscribe(
+								(result: any) => {
+									this.bills = result;
+									this.paymentsForCSV.forEach((e, k) => {
+										let a = this.accounts.filter(x => x.id == e.account)[0];
+										let i = this.invoices.filter(x => x.id == e.ref_inv)[0];
+										let b = this.bills.filter(x => x.id == e.ref_bill)[0];
+										console.log(i);
+										
+										if (a && a != undefined) {
+											this.paymentsForCSV[k].account = a.label;
+										}
+										if (i && i != undefined) {
+											this.paymentsForCSV[k].ref_inv = i.inv_number;
+										}
+										if (b && b != undefined) {
+											this.paymentsForCSV[k].ref_bill = b.bill_number;
+										}
+									});
+									this.exportCsv(filename, this.paymentsForCSV, header)
+								})
+						});
+				}
+			);
+
+	}
+
+	exportchart(){
+		let start = this.pipe.transform(this.startDate.value, 'yyyy-MM-dd');
+		let end = this.pipe.transform(this.endDate.value, 'yyyy-MM-dd');
+
+		let filename = "Export Char (From " + start + ") (To " + end + ")";
+		let chartData = [];
+		this.chartFullDate.forEach((element ,key) => {
+			chartData.push([this.pipe.transform(element, 'MMMM-dd'),
+				(this.dyExpense[key]) ? this.dyExpense[key]: 0,
+				(this.dyIncome[key]) ? this.dyIncome[key] : 0,
+				(this.dyProfit[key]) ? this.dyProfit[key] : 0
+			]);
+		});
+		
+		this.exportCsv(filename, chartData, ["Date", "Expense", "Income", "Profit"]);
+		
+
+	}
 	diffAmounts(data){
 		let index = 0;
 		this.chartFullDate.forEach(e => {
@@ -317,9 +403,9 @@ export class DashboardComponent implements OnInit{
 			});
 			index++;
 		});		
-		console.log(this.dyExpense);
-		console.log(this.dyIncome);
-		console.log(this.dyProfit);
+		// console.log(this.dyExpense);
+		// console.log(this.dyIncome);
+		// console.log(this.dyProfit);
 		
 	}
 }

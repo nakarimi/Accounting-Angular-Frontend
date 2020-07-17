@@ -4,6 +4,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 interface TokenObj {
   token: string;
@@ -23,14 +25,19 @@ export class AuthComponent implements OnInit {
     password: new FormControl('')
   });
 
-  regForm = new FormGroup({
+  forgotPassForm = new FormGroup({
     username: new FormControl(''),
     password: new FormControl(''),
+    conf_password: new FormControl(''),
     email: new FormControl('')
   });
+
+
   constructor(
     private apiService: ApiService,
     private cookieService: CookieService,
+    private http: HttpClient,
+
     private router: Router,
     private _snackBar: MatSnackBar
   ) { }
@@ -44,17 +51,9 @@ export class AuthComponent implements OnInit {
   }
 
   authentication() {
-    if (!this.loginAction) {
-      this.apiService.registerUser(this.regForm.value).subscribe(
-        result => {
-          this.getTokenSubscriber();
-        },
-        error => console.error(error.name)
-      );
-    } else {
+    if (this.loginAction) {
       this.getTokenSubscriber();
     }
-
   }
 
   getTokenSubscriber() {
@@ -101,6 +100,20 @@ export class AuthComponent implements OnInit {
     }
   }
 
+  forgotPassword(){
+    let data = this.forgotPassForm.value;
+    let req = this.http.post(`${environment.serverUrl}users/reset-pass/`, data, {
+      headers: new HttpHeaders({
+        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTk0OTE5OTMyLCJqdGkiOiJiZTJhM2IyNzg4NjA0MTI5YmI1MmIxMzliMDU3ZjE2YyIsInVzZXJfaWQiOjF9.z9yVUYSXWWwMT2XhD75hwlU_MUOh9IVizh4FFp6zMy4" ,
+      })
+    })
+    req.subscribe(
+      result => {
+        console.log(result);
+        
+      },
+    ) 
+  }
 }
 
 @Directive({

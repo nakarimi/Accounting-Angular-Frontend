@@ -68,6 +68,9 @@ export class TransactionComponent implements OnInit {
       },
     );
   }
+  findAccount(acid){
+    return this.accounts.filter(x => x.id == acid)[0];
+  }
 
   loadPayments() {
     this.apiService.loadAll('pay').subscribe(
@@ -78,9 +81,6 @@ export class TransactionComponent implements OnInit {
     );
   }
 
-  findAccount(acid){
-    return this.accounts.filter(x => x.id == acid)[0];
-  }
 
   findPay(payid){
     return this.payments.filter(x => x.id == payid)[0].label;
