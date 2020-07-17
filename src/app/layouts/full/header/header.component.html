@@ -8,9 +8,13 @@
 <mat-menu #profile="matMenu" class="mymegamenu">
     <!-- <button mat-menu-item>
         <mat-icon>settings</mat-icon> Settings </button> -->
-    <button mat-menu-item (click)="goToUserProfile()">
+    <button mat-menu-item (click)="goToUserProfile(false)">
         <mat-icon>account_box</mat-icon> Profile </button>
-    <a mat-menu-item href="/user">
+        
+    <button mat-menu-item (click)="goToUserProfile(true)">
+        <mat-icon>lock</mat-icon> Change Password
+    </button>
+    <a *ngxPermissionsOnly="['ADMIN']" mat-menu-item href="/user">
         <mat-icon>people_alt</mat-icon> Users
     </a>
     <button mat-menu-item (click)="logOutUser()">

@@ -1,9 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, Directive, ElementRef } from '@angular/core';
 import { ApiService } from '../api.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { ToastService } from '../shared/toast/toast-service';
 
 interface TokenObj {
   token: string;
@@ -17,21 +20,32 @@ interface TokenObj {
 export class AuthComponent implements OnInit {
 
   @Input() loginAction = true;
-  message: any;
+  message:any = '';
   authForm = new FormGroup({
     username: new FormControl(''),
     password: new FormControl('')
   });
+  resetPassForm = new FormGroup({
+  password: new FormControl(''),
+  });
+
+  forgotPassForm = new FormGroup({
+    email: new FormControl('')
+  });
+  resetToken;
 
   constructor(
     private apiService: ApiService,
     private cookieService: CookieService,
+    private http: HttpClient,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private toast: ToastService
+
   ) { }
 
   ngOnInit() {
-    
     // this.apiService.test().subscribe();
     // if (this.cookieService.check('auth-token')) {
     //   this.router.navigate(['/dashboard']);
@@ -39,20 +53,13 @@ export class AuthComponent implements OnInit {
   }
 
   authentication() {
-    if (!this.loginAction) {
-      this.apiService.registerUser(this.authForm.value).subscribe(
-        result => {
-          this.getTokenSubscriber();
-        },
-        error => console.error(error.name)
-      );
-    } else {
+    if (this.loginAction) {
       this.getTokenSubscriber();
     }
-
   }
 
   getTokenSubscriber() {
+  this.message = '';
     this.apiService.getToken(this.authForm.value).subscribe(
       (result: TokenObj) => {
         if (result["access"] != 'undefined') {
@@ -73,13 +80,20 @@ export class AuthComponent implements OnInit {
         }
       },
       error => {
-        this.message = {text: error.message, type: 'danger'};
+        let msg = '';
+        if (error.error['password']) {
+          msg = "Password: " + error.error['password'];
+        }
+        else if (error.error['username']) {
+          msg = "Username: " + error.error['username'];          
+        }
+        
+        this.message = {text: msg, type: 'danger'};
       }
     );
   }
 
   loginActionToggle() {
-    console.log(this.loginAction);
     if (this.loginAction) {
       this.loginAction = false;
     } else {
@@ -87,6 +101,50 @@ export class AuthComponent implements OnInit {
     }
   }
 
+  forgotPassword(){
+    let data = this.forgotPassForm.value;
+
+    let sendToken = this.http.post(`${environment.serverUrl}password-reset/` , data);
+    sendToken.subscribe(
+      result => {        
+        let req = this.http.get<any>(`${environment.serverUrl}users/reset-token?email=` + data.email);
+        req.subscribe(
+          result => {
+            this.resetToken = result;
+          },
+        ) 
+      },
+    ) 
+  }
+
+  resetforgotPassword(){
+    let sendToken = this.http.post(`${environment.serverUrl}password-reset/confirm/`,
+      {token: this.resetToken, password: this.resetPassForm.value.password});
+    sendToken.subscribe(
+      result => {
+        this.loginAction = true;
+        this.toast.show("Password changed, please login!", { classname: 'bg-success text-light', delay: 5000 });
+      })
+
+  }
+}
+
+@Directive({
+  selector: '[autofocus]'
+})
+export class AutofocusDirective {
+  private _autofocus;
+  constructor(private el: ElementRef) {
+  }
+
+  ngOnInit() {
+    if (this._autofocus || typeof this._autofocus === "undefined")
+      this.el.nativeElement.focus();      //For SSR (server side rendering) this is not safe. Use: https://github.com/angular/angular/issues/15008#issuecomment-285141070)
+  }
+
+  @Input() set autofocus(condition: boolean) {
+    this._autofocus = condition != false;
+  }
 }
 
 @Component({

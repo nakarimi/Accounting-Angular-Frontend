@@ -3,7 +3,17 @@
   <form class="example-container" [formGroup]="accountFC" enctype="multipart/form-data"
     (ngSubmit)="createAcc()">
     <mat-form-field>
-      <input matInput autocomplete="off" type="text" formControlName="label" placeholder="Label">
+      <input matInput id="label" autocomplete="off" type="text" formControlName="label" placeholder="Label" required
+      [errorStateMatcher]="matcher">
+      <mat-error *ngIf="accountFC.get('label').errors && accountFC.get('label').errors.required">
+        Label is required.
+      </mat-error>
+      <mat-error *ngIf="accountFC.get('label').errors && accountFC.get('label').errors.minlength">
+        Label must be at least 5 characters long.
+      </mat-error>
+      <mat-error *ngIf="accountFC.get('label').errors && accountFC.get('label').errors.maxlength">
+        Label must be at most 25 characters long.
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
       <input matInput autocomplete="off" type="textarea" formControlName="owner" placeholder="Owner" required>
@@ -32,7 +42,9 @@
     <br>
     <span style="color: #e91e63;" *ngIf="!isFormValid">Choose a valid image file.</span>
     <mat-dialog-actions align="end">
-      <button [disabled]="!isFormValid" align="end" type="submit" mat-button color="primary">Create</button>
+      <button 
+      [ngClass]="{'bg-danger': accountFC.invalid, 'bg-info': accountFC.valid}" [disabled]="accountFC.invalid"
+       align="end" type="submit" mat-button color="primary">Create</button>
       <button mat-button mat-dialog-close color="danger">Cancel</button>
     </mat-dialog-actions>
 

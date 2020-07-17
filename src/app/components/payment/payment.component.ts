@@ -70,7 +70,7 @@ export class PaymentComponent implements OnInit {
 
   loadPayments() {
     this.apiService.loadAll('pay').subscribe(
-      result => {
+      (result: any) => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
       },
@@ -82,7 +82,7 @@ export class PaymentComponent implements OnInit {
 
   loadAccounts() {
     this.apiService.loadAll('acnt').subscribe(
-      result => {
+      (result: any) => {
         this.accounts = result;
         console.log(this.accounts);
         
@@ -98,7 +98,7 @@ export class PaymentComponent implements OnInit {
       result => {
         this.invoices = result;
         this.apiService.loadAll('csmr').subscribe(
-          result => {
+          (result: any) => {
             result.forEach(element => {
               this.customers[element.id] = element; 
             });
@@ -145,7 +145,7 @@ export class PaymentComponent implements OnInit {
       result => {
         this.bills = result;
         this.apiService.loadAll('vdr').subscribe(
-          result => {
+          (result: any) => {
             result.forEach(element => {
               this.vendors[element.id] = element;
             });

@@ -17,22 +17,9 @@ export class AppComponent implements OnInit {
   constructor(
     private cookieService: CookieService,
     private api: ApiService,
-    public permServ: NgxPermissionsService,
-    private http: HttpClient,
   ) { }
 
   ngOnInit(): void {
-    this.api.loadAll('cuser').subscribe(
-      result => {
-        if (result[0].is_superuser) {
-          this.perm = ["ADMIN"];
-        }
-        else{
-          this.perm = ["EDITOR"];
-        }
-        this.permServ.loadPermissions(this.perm);
-      }
-    );
   }
 
   logoutUser() {

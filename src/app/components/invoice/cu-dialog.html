@@ -46,12 +46,18 @@
           </div>
         </div>
         <span *ngIf="type == 'e'">
-          <button type="submit" mat-button color="primary">Update</button>
+          <button type="submit" mat-button 
+            class="text-white"
+            [ngClass]="{'bg-danger': invoiceFC.invalid, 'bg-info': invoiceFC.valid}" 
+            [disabled]="invoiceFC.invalid" >Update</button>
         </span>
 
         <span *ngIf="type == 'a'">
           <h5 *ngIf="invoice">Invoice Created, add items.</h5>
-          <button *ngIf="!invoice" type="submit" mat-button color="primary">Create</button>
+          <button *ngIf="!invoice" type="submit" mat-button
+            class="text-white"
+            [ngClass]="{'bg-danger': invoiceFC.invalid, 'bg-info': invoiceFC.valid}" 
+            [disabled]="invoiceFC.invalid" >Create</button>
         </span>
       </form>
         <div align="end">

@@ -3,10 +3,12 @@
 <!-- ============================================================== -->
 <mat-nav-list appAccordion>
     <mat-list-item appAccordionLink *ngFor="let menuitem of menuItems.getMenuitem()" routerLinkActive="selected" group="{{menuitem.state}}">
-        <a [ngClass]="'sidebar-menu'" appAccordionToggle [routerLink]="['/', menuitem.state]" *ngIf="menuitem.type === 'link'">
-            <mat-icon>{{ menuitem.icon }}</mat-icon> 
-            <span [ngClass]="'sidebar-menu-text'">{{ menuitem.name }}</span> 
-        </a>
+        <span *ngxPermissionsOnly="menuitem.perm">
+            <a [ngClass]="'sidebar-menu'" appAccordionToggle [routerLink]="['/', menuitem.state]" *ngIf="menuitem.type === 'link'">
+                <mat-icon>{{ menuitem.icon }}</mat-icon> 
+                <span [ngClass]="'sidebar-menu-text'">{{ menuitem.name }}</span> 
+            </a>
+        </span>
         <!-- <span class="sub-item">
             <mat-list-item appAccordionLink *ngFor="let subitem of menuitem.submenu" routerLinkActive="selected"
                 group="{{subitem.state}}">

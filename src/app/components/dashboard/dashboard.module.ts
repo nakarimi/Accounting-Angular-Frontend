@@ -29,7 +29,6 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(DashboardRoutes),
-    
   ],
   declarations: [
     DashboardComponent,

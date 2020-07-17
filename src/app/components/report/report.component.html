@@ -1,0 +1,40 @@
+<div class="container mat-typography ">
+  <form [formGroup]="reportFC">
+    <div class="col-5">
+
+    <mat-form-field>
+      <mat-label>Start</mat-label>
+      <input matInput [max]="(endDate)? endDate.value : ''" [matDatepicker]="pickerStart" formControlName="startDate"
+        required>
+      <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
+      <mat-datepicker #pickerStart></mat-datepicker>
+    </mat-form-field>
+    </div>
+    <div class="col-5">
+
+    <mat-form-field>
+      <mat-label>End</mat-label>
+      <input matInput [min]="(startDate)? startDate.value : ''" [matDatepicker]="pickerEnd" formControlName="endDate"
+        required>
+      <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+      <mat-datepicker #pickerEnd></mat-datepicker>
+    </mat-form-field>
+    </div>
+    <div class="col-5">
+
+    <mat-form-field>
+      <mat-label>Currency</mat-label>
+      <mat-select formControlName="currency" required>
+        <mat-option *ngFor="let i of ['USD', 'AF']" [value]="i">
+          {{i}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    </div>
+  </form>
+  <div class="col-auto">
+    <button type="submit" class="m-1 bg-info text-white" [ngClass]="{'bg-danger': reportFC.invalid}" [disabled]="reportFC.invalid" (click)="invoiceReport()" mat-raised-button mat-button>Invoice Report</button>
+    <button type="submit" class="m-1 bg-info text-white" [ngClass]="{'bg-danger': reportFC.invalid}" [disabled]="reportFC.invalid" (click)="billReport()" mat-raised-button mat-button>Bill Report</button>
+    <button type="submit" class="m-1 bg-info text-white" [ngClass]="{'bg-danger': reportFC.invalid}" [disabled]="reportFC.invalid" (click)="paymentReport()" mat-raised-button mat-button>Payment Report</button>
+  </div>
+</div>

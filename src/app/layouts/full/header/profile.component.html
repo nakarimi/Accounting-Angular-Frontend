@@ -1,29 +1,96 @@
-<mat-dialog-content class="mat-typography">
+<mat-dialog-content *ngIf="!dData.type" class="mat-typography">
   <h2 mat-dialog-title>Profile</h2>
   <form [formGroup]="profileFC" enctype="multipart/form-data" (ngSubmit)="profileOperation()">
     <mat-form-field>
       <mat-label>Username</mat-label>
-      <input matInput autocomplete="off" type="text" formControlName="username">
+      <input matInput autocomplete="off" type="text" formControlName="username"
+        [errorStateMatcher]="matcher">
+        <mat-error *ngIf="profileFC.get('username').errors && profileFC.get('username').errors.required">
+          Username is required.
+        </mat-error>
+        <mat-error *ngIf="profileFC.get('username').errors && profileFC.get('username').errors.minlength">
+          Username must be at least 3 characters long.
+        </mat-error>
+        <mat-error *ngIf="profileFC.get('username').errors && profileFC.get('username').errors.maxlength">
+          Username must be at most 25 characters long.
+        </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Email</mat-label>
-      <input matInput autocomplete="off" type="email" formControlName="email">
+      <input matInput autocomplete="off" type="email" formControlName="email"
+        [errorStateMatcher]="matcher">
+        <mat-error *ngIf="profileFC.get('email').errors && profileFC.get('email').errors.required">
+          Email is required.
+        </mat-error>
+        <mat-error *ngIf="profileFC.get('email').errors && profileFC.get('email').errors.email">
+          Use email with correct format.
+        </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>First Name</mat-label>
-      <input matInput autocomplete="off" type="text" formControlName="first_name">
+      <input matInput autocomplete="off" type="text" formControlName="first_name"
+        [errorStateMatcher]="matcher">
+        <mat-error *ngIf="profileFC.get('first_name').errors && profileFC.get('first_name').errors.required">
+          First Name is required.
+        </mat-error>
+        <mat-error *ngIf="profileFC.get('first_name').errors && profileFC.get('first_name').errors.minlength">
+          First Name must be at least 3 characters long.
+        </mat-error>
+        <mat-error *ngIf="profileFC.get('first_name').errors && profileFC.get('first_name').errors.maxlength">
+          First Name must be at most 25 characters long.
+        </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Last Name</mat-label>
-      <input matInput autocomplete="off" type="text" formControlName="last_name">
+      <input matInput autocomplete="off" type="text" formControlName="last_name"
+        [errorStateMatcher]="matcher">
+        <mat-error *ngIf="profileFC.get('last_name').errors && profileFC.get('last_name').errors.required">
+          Last Name is required.
+        </mat-error>
+        <mat-error *ngIf="profileFC.get('last_name').errors && profileFC.get('last_name').errors.minlength">
+          Last Name must be at least 3 characters long.
+        </mat-error>
+        <mat-error *ngIf="profileFC.get('last_name').errors && profileFC.get('last_name').errors.maxlength">
+          Last Name must be at most 25 characters long.
+        </mat-error>
     </mat-form-field>
+    <div class="m-1">
+      <button type="submit" mat-button class="m-r-10 text-white"
+        [ngClass]="{'bg-danger': profileFC.invalid, 'bg-info': profileFC.valid}" [disabled]="profileFC.invalid">Update</button>
+      <button mat-button mat-dialog-close class="bg-warning text-white">Cancel</button>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-content *ngIf="dData.type" class="mat-typography">
+  <h2 mat-dialog-title>Change Password</h2>
+  <form [formGroup]="chPassFC" enctype="multipart/form-data" (ngSubmit)="profileOperation('pass')">
     <mat-form-field>
       <mat-label>Old Password</mat-label>
-      <input matInput autocomplete="off" type="password" formControlName="oldpassword">
+      <input matInput autocomplete="off" type="password" formControlName="oldpassword"
+        [errorStateMatcher]="matcher">
+        <mat-error *ngIf="chPassFC.get('oldpassword').errors && chPassFC.get('oldpassword').errors.required">
+          Old Password is required.
+        </mat-error>
+        <mat-error *ngIf="chPassFC.get('oldpassword').errors && chPassFC.get('oldpassword').errors.minlength">
+          Old Password must be at least 3 characters long.
+        </mat-error>
+        <mat-error *ngIf="chPassFC.get('oldpassword').errors && chPassFC.get('oldpassword').errors.maxlength">
+          Old Password must be at most 25 characters long.
+        </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>New Password</mat-label>
-      <input matInput autocomplete="off" type="password" formControlName="password">
+      <input matInput autocomplete="off" type="password" formControlName="password"
+        [errorStateMatcher]="matcher">
+        <mat-error *ngIf="chPassFC.get('password').errors && chPassFC.get('password').errors.required">
+          Password is required.
+        </mat-error>
+        <mat-error *ngIf="chPassFC.get('password').errors && chPassFC.get('password').errors.minlength">
+          Password must be at least 3 characters long.
+        </mat-error>
+        <mat-error *ngIf="chPassFC.get('password').errors && chPassFC.get('password').errors.maxlength">
+          Password must be at most 25 characters long.
+        </mat-error>
     </mat-form-field>
     <mat-form-field>
       <mat-label>Confirm Password</mat-label>
@@ -34,7 +101,7 @@
       </mat-error>
     </mat-form-field>
     <div class="m-1">
-      <button type="submit" mat-button class="bg-danger m-r-10 text-white">Update</button>
+      <button type="submit" mat-button class="m-r-10 text-white" [ngClass]="{'bg-danger': chPassFC.invalid, 'bg-info': chPassFC.valid}" [disabled]="chPassFC.invalid">Update</button>
       <button mat-button mat-dialog-close class="bg-warning text-white">Cancel</button>
     </div>
   </form>
