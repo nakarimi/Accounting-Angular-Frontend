@@ -29,7 +29,16 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {        
         let errorMessage = '';
         let hRMsg = '';        
-        if (error.status == 401) {
+        if (error.status == 400) {
+          if(error.error){
+            error.error.password.forEach(element => {
+              hRMsg = element;
+              console.log(element);
+              
+            });
+          }
+        }
+        else if (error.status == 401) {
           if (request.method == "GET") {
             this.router.navigate(['/login']);
             hRMsg = 'Session expired, please login!';
@@ -50,14 +59,15 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           //       console.log(error);
           //     }
           //   );
-        } else if (error.status == 403) {
+        } 
+        else if (error.status == 403) {
           this.router.navigate(['/login']);
           hRMsg = 'Session expired, please login!';
         } 
-          else if (error.status == 0) {            
-            hRMsg = 'Server down, try later!';
-          }
-          else{
+        else if (error.status == 0) {            
+          hRMsg = 'Server down, try later!';
+        }
+        else if (error.status != 200){
             if (error){
                 if (error.error instanceof ErrorEvent) {
                   errorMessage = `Error: ${error.error.message}`;

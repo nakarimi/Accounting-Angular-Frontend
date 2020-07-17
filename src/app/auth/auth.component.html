@@ -1,12 +1,12 @@
 <div class="container" fxLayout="row" fxLayoutAlign="center center">
     <mat-card >
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image" style="width: 100%; text-align: center;height: 100px;">
+                <img src="../../assets/images/background/user-info.jpg" alt="">
+            </div>
+        </mat-card-header>
+        <mat-card-content>
         <form *ngIf="loginAction" [formGroup]="authForm" (ngSubmit)="authentication()">
-            <mat-card-header>
-                <div mat-card-avatar class="example-header-image" style="width: 100%; text-align: center;height: 100px;">
-                    <img src="../../assets/images/background/user-info.jpg" alt="">
-                </div>
-            </mat-card-header>
-            <mat-card-content>
                 <mat-form-field>
                     <input type="text" formControlName="username" required placeholder="Username" matInput />
                 </mat-form-field>
@@ -15,39 +15,29 @@
                 </mat-form-field>
                 <button *ngIf="authForm.valid" class="m-1 text-white bg-success" type="submit" mat-button>Login</button>
                 <button *ngIf="authForm.invalid" class="m-1 text-white bg-danger" disabled mat-button>Login</button>
-            </mat-card-content>
-        </form>
-        <form *ngIf="!loginAction" [formGroup]="forgotPassForm" (ngSubmit)="forgotPassword()">
-            <mat-card-header>
-                <div mat-card-avatar class="example-header-image" style="width: 100%; text-align: center;height: 100px;">
-                    <img src="../../assets/images/background/user-info.jpg">
-                </div>
-            </mat-card-header>
-            <mat-card-content>
-                <mat-form-field>
-                    <input type="text" formControlName="username" required placeholder="Username" matInput />
-                </mat-form-field>
+            </form>
+            <form *ngIf="!loginAction && !resetToken" [formGroup]="forgotPassForm" (ngSubmit)="forgotPassword()">
                 <mat-form-field>
                     <mat-label>Email</mat-label>
                     <input type="email" autocomplete="off" formControlName="email" required matInput />
                 </mat-form-field>
-                <mat-form-field>
-                    <mat-label>Password</mat-label>
-                    <input type="password" autocomplete="off" formControlName="password" required matInput />
-                </mat-form-field>
-               <mat-form-field>
-                   <mat-label>Repeat Password</mat-label>
-                    <input type="password" autocomplete="off" formControlName="conf_password" required
-                        matInput />
-                </mat-form-field>
+
                 <button *ngIf="forgotPassForm.valid" class="m-1 text-white bg-success" type="submit" mat-button>Send</button>
                 <button *ngIf="forgotPassForm.invalid" class="m-1 text-white bg-success" type="submit" mat-button>Send</button>
-            </mat-card-content>
+            </form>
+            <form *ngIf="!loginAction && resetToken" (ngSubmit)="resetforgotPassword()" [formGroup]="resetPassForm">
+                <mat-form-field>
+                <mat-label>Password</mat-label>
+                <input type="password" autocomplete="off" formControlName="password" required matInput />
+            </mat-form-field>
+            <button *ngIf="resetPassForm.valid" class="m-1 text-white bg-success" type="submit" mat-button>Send</button>
+            <button *ngIf="resetPassForm.invalid" class="m-1 text-white bg-success" type="submit" mat-button>Send</button>
         </form>
         <span class="float-right loginActionToggle m-2" (click)="loginActionToggle()">
             <a class="cus-cursor-pointer m-2" *ngIf="!loginAction">Login</a>
             <a class="cus-cursor-pointer m-2" *ngIf="loginAction">Forgot Password</a>
         </span>
+    </mat-card-content>
     </mat-card>
 </div>
 <ng-template #snackBarTemplate>

@@ -2,10 +2,11 @@ import { Component, OnInit, Input, Output, EventEmitter, Directive, ElementRef }
 import { ApiService } from '../api.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { ToastService } from '../shared/toast/toast-service';
 
 interface TokenObj {
   token: string;
@@ -24,26 +25,27 @@ export class AuthComponent implements OnInit {
     username: new FormControl(''),
     password: new FormControl('')
   });
-
-  forgotPassForm = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl(''),
-    conf_password: new FormControl(''),
-    email: new FormControl('')
+  resetPassForm = new FormGroup({
+  password: new FormControl(''),
   });
 
+  forgotPassForm = new FormGroup({
+    email: new FormControl('')
+  });
+  resetToken;
 
   constructor(
     private apiService: ApiService,
     private cookieService: CookieService,
     private http: HttpClient,
-
+    private activatedRoute: ActivatedRoute,
     private router: Router,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private toast: ToastService
+
   ) { }
 
   ngOnInit() {
-    
     // this.apiService.test().subscribe();
     // if (this.cookieService.check('auth-token')) {
     //   this.router.navigate(['/dashboard']);
@@ -92,7 +94,6 @@ export class AuthComponent implements OnInit {
   }
 
   loginActionToggle() {
-    console.log(this.loginAction);
     if (this.loginAction) {
       this.loginAction = false;
     } else {
@@ -102,17 +103,29 @@ export class AuthComponent implements OnInit {
 
   forgotPassword(){
     let data = this.forgotPassForm.value;
-    let req = this.http.post(`${environment.serverUrl}users/reset-pass/`, data, {
-      headers: new HttpHeaders({
-        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTk0OTE5OTMyLCJqdGkiOiJiZTJhM2IyNzg4NjA0MTI5YmI1MmIxMzliMDU3ZjE2YyIsInVzZXJfaWQiOjF9.z9yVUYSXWWwMT2XhD75hwlU_MUOh9IVizh4FFp6zMy4" ,
-      })
-    })
-    req.subscribe(
-      result => {
-        console.log(result);
-        
+
+    let sendToken = this.http.post(`${environment.serverUrl}password-reset/` , data);
+    sendToken.subscribe(
+      result => {        
+        let req = this.http.get<any>(`${environment.serverUrl}users/reset-token?email=` + data.email);
+        req.subscribe(
+          result => {
+            this.resetToken = result;
+          },
+        ) 
       },
     ) 
+  }
+
+  resetforgotPassword(){
+    let sendToken = this.http.post(`${environment.serverUrl}password-reset/confirm/`,
+      {token: this.resetToken, password: this.resetPassForm.value.password});
+    sendToken.subscribe(
+      result => {
+        this.loginAction = true;
+        this.toast.show("Password changed, please login!", { classname: 'bg-success text-light', delay: 5000 });
+      })
+
   }
 }
 
