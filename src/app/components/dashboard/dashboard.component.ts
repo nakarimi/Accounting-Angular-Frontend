@@ -66,7 +66,7 @@ export class DashboardComponent implements OnInit{
 	];
 	days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-	
+	admin = true;
 	
 	constructor(
 		private apiService: ApiService,
@@ -85,6 +85,11 @@ export class DashboardComponent implements OnInit{
 		var first = this.todayC.getDate() - this.todayC.getDay(); // First day is the day of the month - the day of the week
 		var last = first + 6; // last day is the first day + 6
 		this.lastday = new Date(this.todayC.setDate(last));
+		this.apiService.loadAll('cuser').subscribe(
+			result => {
+				this.admin = result[0].is_superuser;
+			}
+		)
 	}
 
 	exportCsv(title, data, headers = null){

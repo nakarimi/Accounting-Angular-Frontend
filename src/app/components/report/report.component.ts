@@ -3,6 +3,8 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { ApiService } from '../../api.service';
 import { DatePipe } from '@angular/common';
 import { ExportToCsv } from 'export-to-csv';
+import { Router } from '@angular/router';
+import { ToastService } from '../../shared/toast/toast-service';
 
 
 @Component({
@@ -25,12 +27,25 @@ export class ReportComponent implements OnInit {
   customers:any = [];
   vendors:any = [];
   constructor(
-    private api: ApiService
+    private api: ApiService,
+    private router: Router,
+    private toast: ToastService
   ) { 
     this.pipe = new DatePipe('en');
   }
 
   ngOnInit() {
+    this.checkPerm();
+  }
+
+  checkPerm() {
+    this.api.loadAll('cuser').subscribe(
+      result => {
+        if (!result[0].is_superuser) {
+          this.router.navigate(['/dashboard']);
+          this.toast.show("Permission denied!", { classname: 'bg-danger text-light', delay: 5000 });
+        }
+      })
   }
 
   invoiceReport() { 
