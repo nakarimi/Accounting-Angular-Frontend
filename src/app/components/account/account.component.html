@@ -22,7 +22,8 @@
 
 
 <div class="csmr-table-actions table-actions">
-  <button class="m-1 text-white bg-success" mat-raised-button mat-button (click)="openAddDialog()">Add</button>
+  <button class="m-1 text-white bg-success" mat-raised-button mat-button (click)="openAddDialog()">
+    Add <mat-icon>add</mat-icon></button>
   <mat-form-field>
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
@@ -39,7 +40,7 @@
   </ng-container>
   <ng-container matColumnDef="owner">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Owner</th>
-    <td mat-cell *matCellDef="let row">{{row.owner}}</td>
+    <td mat-cell *matCellDef="let row">{{ findOwnerName(row.owner) }}</td>
   </ng-container>
   <ng-container matColumnDef="balance">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Balance</th>
@@ -59,14 +60,16 @@
   <ng-container matColumnDef="file">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>File</th>
     <td mat-cell *matCellDef="let row">
-      <img height="50px" src="http://localhost:8000{{row.file}}">
+      <img height="50px" src="{{serverDomain + row.file}}">
     </td>
   </ng-container>
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
     <td mat-cell *matCellDef="let row">
-      <button class="m-1 text-white bg-info" mat-raised-button mat-button (click)="openEditDialog(row)" align="end" tabindex="-1">Edit</button>
-      <button class="m-1 text-white bg-danger" mat-raised-button mat-button (click)="delete(row)" align="end" tabindex="-1">Delete</button>
+      <button class="m-1 text-white bg-info" mat-raised-button mat-button (click)="openEditDialog(row)" align="end" tabindex="-1">
+        Edit <mat-icon>edit</mat-icon></button>
+      <button class="m-1 text-white bg-danger" mat-raised-button mat-button (click)="delete(row)" align="end" tabindex="-1">
+        Delete <mat-icon>delete</mat-icon></button>
     </td>
   </ng-container>
 

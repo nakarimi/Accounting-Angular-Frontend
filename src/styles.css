@@ -11,3 +11,6 @@
 .mat-button[disabled], .mat-flat-button[disabled], .mat-icon-button[disabled], .mat-stroked-button[disabled]{
     cursor: not-allowed !important;
 }
+button .material-icons{
+    font-size: 20px;
+}

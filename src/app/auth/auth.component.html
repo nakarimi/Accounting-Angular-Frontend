@@ -23,15 +23,29 @@
                 </mat-form-field>
 
                 <button *ngIf="forgotPassForm.valid" class="m-1 text-white bg-success" type="submit" mat-button>Send</button>
-                <button *ngIf="forgotPassForm.invalid" class="m-1 text-white bg-success" type="submit" mat-button>Send</button>
+                <button *ngIf="forgotPassForm.invalid" class="m-1 text-white bg-danger" disabled type="submit" mat-button>Send</button>
             </form>
             <form *ngIf="!loginAction && resetToken" (ngSubmit)="resetforgotPassword()" [formGroup]="resetPassForm">
                 <mat-form-field>
                 <mat-label>Password</mat-label>
-                <input type="password" autocomplete="off" formControlName="password" required matInput />
+                <input type="password" autocomplete="off" formControlName="password" required matInput 
+                    [errorStateMatcher]="matcher">
+                    <mat-error *ngIf="resetPassForm.get('password').errors && resetPassForm.get('password').errors.required">
+                        Password is required.
+                    </mat-error>
+                    <mat-error *ngIf="resetPassForm.get('password').errors && resetPassForm.get('password').errors.minlength">
+                        This password is too short. It must contain at least 8 characters.
+                    </mat-error>
+                    <mat-error *ngIf="resetPassForm.get('password').errors && resetPassForm.get('password').errors.maxlength">
+                        Password must be at most 25 characters long.
+                    </mat-error>
+                    <mat-error *ngIf="resetPassForm.get('password').errors && resetPassForm.get('password').errors.pattern && !resetPassForm.get('password').errors.minlength">
+                        This password is too common, use atleast one number, upper and lower char.
+                    </mat-error>
             </mat-form-field>
+            <br>
             <button *ngIf="resetPassForm.valid" class="m-1 text-white bg-success" type="submit" mat-button>Send</button>
-            <button *ngIf="resetPassForm.invalid" class="m-1 text-white bg-success" type="submit" mat-button>Send</button>
+            <button *ngIf="resetPassForm.invalid" class="m-1 text-white bg-danger" disabled type="submit" mat-button>Send</button>
         </form>
         <span class="float-right loginActionToggle m-2" (click)="loginActionToggle()">
             <a class="cus-cursor-pointer m-2" *ngIf="!loginAction">Login</a>

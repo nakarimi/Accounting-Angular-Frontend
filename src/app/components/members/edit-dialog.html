@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>Edit Member</h2>
+<mat-dialog-content class="mat-typography">
+  <form class="example-container" [formGroup]="memberFC" enctype="multipart/form-data" (ngSubmit)="update(data)">
+    <mat-form-field class="col-auto">
+      <input matInput autocomplete="off" type="text" formControlName="first_name" placeholder="First Name"
+        [errorStateMatcher]="matcher">
+      <mat-error *ngIf="memberFC.get('first_name').errors && memberFC.get('first_name').errors.required">
+        First Name is required.
+      </mat-error>
+      <mat-error *ngIf="memberFC.get('first_name').errors && memberFC.get('first_name').errors.minlength">
+        First Name must be at least 5 characters long.
+      </mat-error>
+      <mat-error *ngIf="memberFC.get('first_name').errors && memberFC.get('first_name').errors.maxlength">
+        First Name must be at most 25 characters long.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="col-auto">
+      <input matInput autocomplete="off" type="text" formControlName="last_name" placeholder="Last Name" required
+        [errorStateMatcher]="matcher">
+      <mat-error *ngIf="memberFC.get('last_name').errors && memberFC.get('last_name').errors.required">
+        Last Name is required.
+      </mat-error>
+      <mat-error *ngIf="memberFC.get('last_name').errors && memberFC.get('last_name').errors.minlength">
+        Last Name must be at least 5 characters long.
+      </mat-error>
+      <mat-error *ngIf="memberFC.get('last_name').errors && memberFC.get('last_name').errors.maxlength">
+        Last Name must be at most 25 characters long.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="col-auto">
+      <input matInput autocomplete="off" type="text" formControlName="posistion" placeholder="Posistion" required
+        [errorStateMatcher]="matcher">
+      <mat-error *ngIf="memberFC.get('posistion').errors && memberFC.get('posistion').errors.required">
+        Posistion is required.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="col-auto">
+      <input matInput autocomplete="off" type="number" formControlName="phone" placeholder="Phone" required
+        [errorStateMatcher]="matcher">
+      <mat-error *ngIf="memberFC.get('phone').errors && memberFC.get('phone').errors.required">
+        Phone is required.
+      </mat-error>
+      <mat-error *ngIf="memberFC.get('phone').errors && memberFC.get('phone').errors.pattern">
+        Phone must be 10 digits and start with 0.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="col-auto">
+      <input matInput autocomplete="off" type="email" formControlName="email" placeholder="Email" required
+        [errorStateMatcher]="matcher">
+      <mat-error *ngIf="memberFC.get('email').errors && memberFC.get('email').errors.required">
+        Email is required.
+      </mat-error>
+      <mat-error *ngIf="memberFC.get('email').errors && memberFC.get('email').errors.email">
+        Email format is not correct.
+      </mat-error>
+      <mat-error *ngIf="memberFC.get('email').errors && memberFC.get('email').errors.custom">
+        This email already exist.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-dialog-actions align="end">
+      <button type="submit" mat-button class="text-white"
+        [ngClass]="{'bg-danger': memberFC.invalid, 'bg-info': memberFC.valid}" [disabled]="memberFC.invalid" >Update</button>
+      <button mat-button mat-dialog-close>Cancel</button>
+    </mat-dialog-actions>
+  </form>
+</mat-dialog-content>

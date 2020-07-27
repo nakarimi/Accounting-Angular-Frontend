@@ -212,7 +212,13 @@ export class InvoiceComponent implements AfterViewInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
   findCsutomer(id) {
-    return this.customers.filter(x => x.id == id)[0];
+    let c = this.customers.filter(x => x.id == id)[0];
+    if (c) {
+      return c.label;
+    }
+    else{
+      return '';
+    }
   }
 }
 

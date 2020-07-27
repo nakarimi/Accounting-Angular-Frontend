@@ -6,7 +6,14 @@
       <input matInput autocomplete="off" type="text" formControlName="label" placeholder="Label">
     </mat-form-field>
     <mat-form-field>
-      <input matInput autocomplete="off" type="textarea" formControlName="owner" placeholder="Owner" required>
+      <mat-label>Owner</mat-label>
+      <mat-select formControlName="owner">
+        <span *ngFor="let c of owners">
+          <mat-option [value]="c.id">
+            {{c.first_name}} {{c.last_name}}
+          </mat-option>
+        </span>
+      </mat-select>
     </mat-form-field>
     <div>
       <label>Status: </label>
@@ -41,7 +48,7 @@
     <mat-dialog-actions align="end">
       <button 
         [ngClass]="{'bg-danger': accountFC.invalid, 'bg-info': accountFC.valid}" [disabled]="accountFC.invalid"
-        align="end" type="submit" mat-button color="primary">Update</button>
+        align="end" type="submit" mat-button class="btn text-white">Update</button>
       <button mat-button mat-dialog-close>Cancel</button>
     </mat-dialog-actions>
   </form>

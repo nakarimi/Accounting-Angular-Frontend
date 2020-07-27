@@ -29,13 +29,20 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       catchError((error: HttpErrorResponse) => {        
         let errorMessage = '';
         let hRMsg = '';        
-        if (error.status == 400) {
+        if (error.status == 400) {          
           if(error.error){
-            error.error.password.forEach(element => {
-              hRMsg = element;
-              console.log(element);
+            if(error.error.password){
+              hRMsg = error.error.password;
+            }
+            else if (error.error.email){
+              hRMsg = error.error.email;
+            }
+            // let e:any = error.error;
+            // e.forEach((element, key) => {
+            //   hRMsg = element;
+            //   console.log(key);
               
-            });
+            // });
           }
         }
         else if (error.status == 401) {

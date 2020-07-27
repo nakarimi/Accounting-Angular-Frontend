@@ -17,7 +17,8 @@ const MENUITEMS = [
   { state: 'vendor', name: 'Vendor', type: 'link', icon: 'business', perm: ["ADMIN", "EDITOR"] },
   { state: 'report', name: 'Report', type: 'link', icon: 'show_chart', perm: ["ADMIN"] },
   { state: 'trans', name: 'Transaction', type: 'link', icon: 'request_quote', perm: ["ADMIN"] },
-  { state: 'account', name: 'Bank Account', type: 'link', icon: 'account_balance', perm: ["ADMIN"] },
+  { state: 'account', name: 'Account Summary', type: 'link', icon: 'account_balance', perm: ["ADMIN"] },
+  { state: 'members', name: 'Members', type: 'link', icon: 'people', perm: ["ADMIN"] },
 ];
 
 @Injectable()

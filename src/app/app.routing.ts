@@ -65,6 +65,11 @@ export const AppRoutes: Routes = [
         loadChildren: () => import('./components/user/user.module')
           .then(m => m.UserModule)
       },
+      {
+        path: 'members',
+        loadChildren: () => import('./components/members/members.module')
+          .then(m => m.MembersModule)
+      },
 
     ]
   }

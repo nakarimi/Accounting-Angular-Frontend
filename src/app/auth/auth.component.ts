@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, Directive, ElementRef } from '@angular/core';
 import { ApiService } from '../api.service';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { CookieService } from 'ngx-cookie-service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
@@ -26,11 +26,13 @@ export class AuthComponent implements OnInit {
     password: new FormControl('')
   });
   resetPassForm = new FormGroup({
-  password: new FormControl(''),
+    password: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(8),
+    Validators.pattern(/^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}$/)
+    ]),
   });
 
   forgotPassForm = new FormGroup({
-    email: new FormControl('')
+    email: new FormControl('', Validators.email)
   });
   resetToken;
 

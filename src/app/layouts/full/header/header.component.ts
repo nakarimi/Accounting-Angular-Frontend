@@ -114,14 +114,18 @@ export class ProfileDialog implements OnInit {
     first_name: ['',],
     last_name: ['',],
     oldpassword: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]],
-    password: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]],
-    confirmPassword: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(3)]],
+    password: ['', [Validators.required, Validators.maxLength(50), Validators.minLength(8),
+      Validators.pattern(/^(?=\D*\d)(?=[^a-z]*[a-z])(?=[^A-Z]*[A-Z]).{8,30}$/)
+    ]],
+    confirmPassword: ['', [Validators.required]],
   }, { validator: this.checkPasswords });
 
   editData;
   ngOnInit() {
     this.api.loadAll('cuser').subscribe(
       result => {
+        console.log(result);
+        
         if (result[0].is_superuser) {
           this.perm = ["ADMIN"];
         }
@@ -163,9 +167,7 @@ export class ProfileDialog implements OnInit {
       data = this.chPassFC.value;
     } else {
       data = this.profileFC.value;
-    }
-    console.log(this.chPassFC.valid);
-    
+    }    
     if (data) {
       let req = this.http.post(`${this.apiUrl}users/update/`, data, {
         headers: new HttpHeaders({
@@ -180,8 +182,8 @@ export class ProfileDialog implements OnInit {
           if (dialog.type) {
             this.cookie.delete('auth-token');
             this.router.navigate(['/login']);
-            this.dialogRef.close();
           }
+          this.dialogRef.close();
         },
       )      
     }
