@@ -1,8 +1,19 @@
-<div class="vdr-table-actions table-actions">
-  <button class="bg-success text-white" mat-raised-button mat-button (click)="openAddDialog()">Add</button>
-  <mat-form-field>
+<div class="vdr-table-actions table-actions mat-typography">
+  <button class="bg-success text-white" mat-raised-button mat-button (click)="openAddDialog()">Add <mat-icon>add</mat-icon></button>
+  <mat-form-field class="ml-2">
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
+  </mat-form-field>
+  <mat-form-field class="ml-2">
+    <mat-label>Column</mat-label>
+    <mat-select (selectionChange)="filterCulChange($event)">
+      <mat-option value="all">All</mat-option>
+      <span *ngFor="let c of filterColumns">
+        <mat-option [value]="c" *ngIf="c != 'id'" class="text-capitalize">
+          {{ c.replace('_', ' ') }}
+        </mat-option>
+      </span>
+    </mat-select>
   </mat-form-field>
 </div>
 
@@ -43,8 +54,8 @@
   <ng-container matColumnDef="id">
     <th mat-header-cell *matHeaderCellDef>Action</th>
     <td mat-cell *matCellDef="let row">
-      <button class="bg-info text-white m-1" mat-raised-button mat-button (click)="openEditDialog(row)" align="end" tabindex="-1">Edit</button>
-      <button class="bg-danger text-white m-1" mat-raised-button mat-button (click)="delete(row)" align="end" tabindex="-1">Delete</button>
+      <button class="bg-info text-white m-1" mat-raised-button mat-button (click)="openEditDialog(row)" align="end" tabindex="-1">Edit <mat-icon>edit</mat-icon></button>
+      <button class="bg-danger text-white m-1" mat-raised-button mat-button (click)="delete(row)" align="end" tabindex="-1">Delete <mat-icon>delete</mat-icon></button>
     </td>
   </ng-container>
 

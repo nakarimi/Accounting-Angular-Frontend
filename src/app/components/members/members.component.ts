@@ -1,26 +1,23 @@
-import { Component, OnInit, Inject, Output, Input, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Output, ViewChild, Inject } from '@angular/core';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { ApiService } from '../../api.service';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
-import { FormGroup, FormControl } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
-import { merge, Observable, of as observableOf } from 'rxjs';
-
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.css']
+  selector: 'app-members',
+  templateUrl: './members.component.html',
+  styleUrls: ['./members.component.css']
 })
-
-export class CustomerComponent implements AfterViewInit {
+export class MembersComponent implements OnInit {
   filterCul = 'all';
   // Define all the variable
-  displayedColumns: string[] = ['label', 'owner', 'phone', 'email', 'status', 'id'];
-  filterColumns: string[] = ['label', 'owner', 'phone', 'email'];
+  displayedColumns: string[] = ['first_name', 'last_name', 'phone', 'email', 'posistion', 'id'];
+  filterColumns: string[] = ['first_name', 'last_name', 'phone', 'email', 'posistion'];
+
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
-  
+
   // Build the table data source based on table data.
   tableData: any = [];
   dataSource = new MatTableDataSource(this.tableData);
@@ -28,20 +25,19 @@ export class CustomerComponent implements AfterViewInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: false }) msort: MatSort;
 
-  @Output() customers: any
+  @Output() members: any
 
   constructor(
     private apiService: ApiService,
     public dialog: MatDialog,
   ) { }
 
-  ngAfterViewInit() {
-    this.loadCustomers();
+  ngOnInit() {
+    this.loadMembers();
   }
-
   // _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-  loadCustomers() {
-    this.apiService.loadAll('csmr').subscribe(
+  loadMembers() {
+    this.apiService.loadAll('memb').subscribe(
       (result: any) => {
         this.dataSource.data = result;
         this.dataSource.sort = this.msort;
@@ -54,8 +50,7 @@ export class CustomerComponent implements AfterViewInit {
 
   openAddDialog() {
     const dialogRef = this.dialog.open(AddDialog, {
-      // maxHeight: '80%',
-      // maxWidth: '80%',
+      maxWidth: '500px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -65,29 +60,30 @@ export class CustomerComponent implements AfterViewInit {
       }
     });
   }
-  
+
   // Update handling Serverside and client side.
-  openEditDialog(data) { 
-    
+  openEditDialog(data) {
+
     const dialogRef = this.dialog.open(EditDialog, {
       data: data,
+      maxWidth: '500px',
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result){
+      if (result) {
         this.updateTable(data, result);
       }
     });
   }
 
   // Delete Item From Server.
-  delete(row){
+  delete(row) {
     if (confirm('Are sure to delete?')) {
-      this.apiService.delete(row.id, 'csmr').subscribe(
+      this.apiService.delete(row.id, 'memb').subscribe(
         result => {
           this.deleteUI(row);
         }
-      );      
+      );
     }
   }
 
@@ -100,7 +96,7 @@ export class CustomerComponent implements AfterViewInit {
     this.dataSource.sort = this.msort;
   }
 
-  addToTable(data){
+  addToTable(data) {
     this.tableData = this.dataSource.data;
     this.dataSource.data = this.tableData.push(data);
     this.dataSource = new MatTableDataSource<any>(this.tableData);
@@ -110,10 +106,10 @@ export class CustomerComponent implements AfterViewInit {
   updateTable(oldRow, newRow) {
     this.tableData = this.dataSource.data;
     // Remove the old data from table.
-    let index: number = this.tableData.findIndex(data => data === oldRow);
-    this.tableData.splice(index, 1);
+    this.tableData = this.tableData.filter(item => item.id != oldRow.id);
+
     // Add update row.
-    this.dataSource.data = this.tableData.push(newRow);
+    this.tableData.push(newRow);
     this.dataSource = new MatTableDataSource<any>(this.tableData);
     this.dataSource.sort = this.msort;
   }
@@ -157,18 +153,17 @@ export class AddDialog {
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
-  customerFC = new FormGroup({
-    label: new FormControl(''),
-    owner: new FormControl(''),
-    phone: new FormControl(''),
-    email: new FormControl(''),
-    status: new FormControl(''),
+  memberFC = new FormGroup({
+    first_name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+    last_name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+    phone: new FormControl('', [Validators.required, 
+      Validators.pattern(/^(?=\D*\d).{9}$/)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    posistion: new FormControl('', Validators.required),
   });
 
-  create(){
-    console.log(this.customerFC.value);
-    
-    this.apiService.create(this.customerFC.value, 'csmr').subscribe(
+  create() {
+    this.apiService.create(this.memberFC.value, 'memb').subscribe(
       (result: any) => {
         if (result.error) {
           console.log(result.error);
@@ -181,7 +176,7 @@ export class AddDialog {
         // this.dialogRef.close();
       }
     );
-    
+
   }
 }
 
@@ -191,41 +186,43 @@ export interface DialogData { }
   templateUrl: 'edit-dialog.html',
 })
 
-export class EditDialog implements OnInit{
-  
-  editData : any
+export class EditDialog implements OnInit {
+
+  editData: any
   constructor(
     private apiService: ApiService,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
   ) { }
 
-  customerFC = new FormGroup({
-    label: new FormControl(''),
-    owner: new FormControl(''),
-    phone: new FormControl(''),
-    email: new FormControl(''),
-    status: new FormControl(''),
+  memberFC = new FormGroup({
+    first_name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+    last_name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+    phone: new FormControl('', [Validators.required,
+    Validators.pattern(/^(?=\D*\d).{9}$/)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    posistion: new FormControl('', Validators.required),
   });
 
-  ngOnInit(){
+
+  ngOnInit() {
 
     // Assign Dialog data to new variable.
     // Because it return error when trying to get data.
     this.editData = this.data;
-      
-    this.customerFC.setValue({
-      label: this.editData.label,
-      owner: this.editData.owner,
+
+    this.memberFC.setValue({
+      first_name: this.editData.first_name,
+      last_name: this.editData.last_name,
       phone: this.editData.phone,
       email: this.editData.email,
-      status: this.editData.status,
+      posistion: this.editData.posistion,
     });
-    
+
   }
   update(data) {
-    
-    this.apiService.update(data.id, this.customerFC.value, 'csmr').subscribe(
+
+    this.apiService.update(data.id, this.memberFC.value, 'memb').subscribe(
       (result: any) => {
         if (result.error) {
           console.log(result.error);

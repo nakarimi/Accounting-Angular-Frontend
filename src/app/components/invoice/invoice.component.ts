@@ -22,7 +22,7 @@ import { ToastService } from '../../shared/toast/toast-service';
 })
 
 export class InvoiceComponent implements AfterViewInit {
-
+  filterCul = 'all';
   // Define all the variable
   displayedColumns: string[] = [
     'inv_number',
@@ -33,7 +33,13 @@ export class InvoiceComponent implements AfterViewInit {
     'status',
     'id'
   ];
-
+  filterColumns: string[] = [
+    'inv_number',
+    'customer',
+    'total_price',
+    'balance',
+    'due_date',
+  ];
       // Define all the variable
   readableColumns = {
     inv_number: 'Invoice Number',
@@ -208,11 +214,34 @@ export class InvoiceComponent implements AfterViewInit {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value;    
+    if (this.filterCul == 'all') {
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+    else{
+      this.dataSource.filterPredicate = function(data:any, filter):boolean {
+        filter = JSON.parse(filter);
+        let term = filter[0];
+        let key = filter[1];
+        return data[key].toLowerCase().includes(term);
+      }
+      this.dataSource.filter = JSON.stringify([filterValue.trim().toLowerCase(), this.filterCul]);
+    }
   }
+
+  filterCulChange(data){
+    this.filterCul = data.value;
+  }
+
+
   findCsutomer(id) {
-    return this.customers.filter(x => x.id == id)[0];
+    let c = this.customers.filter(x => x.id == id)[0];
+    if (c) {
+      return c.label;
+    }
+    else{
+      return '';
+    }
   }
 }
 

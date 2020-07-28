@@ -22,7 +22,7 @@ import { ToastService } from '../../shared/toast/toast-service';
 })
 
 export class BillComponent implements AfterViewInit {
-
+  filterCul = 'all';
   // Define all the variable
   displayedColumns: string[] = [
     'bill_number',
@@ -33,7 +33,13 @@ export class BillComponent implements AfterViewInit {
     'status',
     'id'
   ];
-
+  filterColumns: string[] = [
+    'bill_number',
+    'vendor',
+    'total_price',
+    'balance',
+    'due_date',
+  ];
       // Define all the variable
   readableColumns = {
     bill_number: 'Bill Number',
@@ -203,9 +209,26 @@ export class BillComponent implements AfterViewInit {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value;    
+    if (this.filterCul == 'all') {
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+    else{
+      this.dataSource.filterPredicate = function(data:any, filter):boolean {
+        filter = JSON.parse(filter);
+        let term = filter[0];
+        let key = filter[1];
+        return data[key].toLowerCase().includes(term);
+      }
+      this.dataSource.filter = JSON.stringify([filterValue.trim().toLowerCase(), this.filterCul]);
+    }
   }
+
+  filterCulChange(data){
+    this.filterCul = data.value;
+  }
+
+
   findVendor(id) {
     return this.vendors.filter(x => x.id == id)[0];
   }

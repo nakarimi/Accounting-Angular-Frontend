@@ -9,6 +9,7 @@ import { Label, SingleDataSet, monkeyPatchChartJsLegend, monkeyPatchChartJsToolt
 import { ChartType } from 'chart.js';
 import { TransactionComponent } from '../transaction/transaction.component';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-account',
@@ -16,12 +17,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./account.component.css']
 })
 export class AccountComponent implements OnInit {
+  serverDomain = environment.serverDomain;
+  filterCul = 'all';
   // Define all the variable
   @Output() accounts: any
 
   // Define all the variable
   displayedColumns: string[] = ['label', 'owner', 'balance', 'status', 'desc', 'file', 'id'];
-
+  filterColumns: string[] = ['label', 'owner', 'balance', 'desc'];
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
@@ -37,6 +40,7 @@ export class AccountComponent implements OnInit {
   labels = [];
   singleDataSetAf = [];
   labelsAf = [];
+  owners:any;
   public pieChartOptions: ChartOptions = {
     // responsive: true,
   };
@@ -47,6 +51,7 @@ export class AccountComponent implements OnInit {
   public pieChartData: SingleDataSet = this.singleDataSet;
   public pieChartType: ChartType = 'pie';
   public pieChartLegend = true;
+  // public pieChartPercentage = true;
   public pieChartPlugins = [];
 
 
@@ -72,6 +77,7 @@ export class AccountComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadMembers();
     this.checkPerm();
   }
 
@@ -91,9 +97,10 @@ export class AccountComponent implements OnInit {
   loadAccounts() {
     this.apiService.loadAll('acnt').subscribe(
       (result: any) => {
-        this.dataSource.data = result;
-        this.dataSource.sort = this.msort;
         result.forEach(e => {
+          e.owner = this.findOwnerName(e.owner);
+          
+          this.addToTable(e);
           if (e.currency == "USD") {
             this.labels.push(e.label);
             this.singleDataSet.push(e.balance);
@@ -141,18 +148,47 @@ export class AccountComponent implements OnInit {
 
   // Delete Item From Server.
   delete(row) {
-    if (confirm('Are sure to delete?')) {
-      this.apiService.delete(row.id, 'acnt').subscribe(
-        result => {
-          this.deleteUI(row);
-          this.toast.show('Account deleted successfully!',
-            { classname: 'bg-warning text-light', delay: 5000 }	
-          );
+    this.apiService.loadAll('pay').subscribe(
+      result => {
+        let pays: any = result;
+        if (pays.filter(x => x.account == row.id).length > 0) {
+          this.toast.show("Delete not allowed for this Account!\nThis Account has assigned Payment.", { classname: 'bg-danger text-light', delay: 5000 });
         }
-      );
-    }
+        else{
+          if (confirm('Are sure to delete?')) {
+            this.apiService.delete(row.id, 'acnt').subscribe(
+              result => {
+                this.deleteUI(row);
+                this.toast.show('Account deleted successfully!',
+                  { classname: 'bg-warning text-light', delay: 5000 }	
+                );
+              }
+            );
+          }
+        }
+      }
+    )
+  }
+  loadMembers() {
+    this.apiService.loadAll('memb').subscribe(
+      (result: any) => {
+        this.owners = result;
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
+  findOwnerName(owner){
+    let o = this.owners.filter(x => x.id == owner)[0];
+    if (o) {
+      return o.first_name +' '+ o.last_name;
+    }
+    else{
+      return '';
+    }
+  }
   // Delete Item From UI
   deleteUI(row) {
     this.tableData = this.dataSource.data;
@@ -181,9 +217,25 @@ export class AccountComponent implements OnInit {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value;    
+    if (this.filterCul == 'all') {
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+    else{
+      this.dataSource.filterPredicate = function(data:any, filter):boolean {
+        filter = JSON.parse(filter);
+        let term = filter[0];
+        let key = filter[1];
+        return data[key].toLowerCase().includes(term);
+      }
+      this.dataSource.filter = JSON.stringify([filterValue.trim().toLowerCase(), this.filterCul]);
+    }
   }
+
+  filterCulChange(data){
+    this.filterCul = data.value;
+  }
+
 }
 
 
@@ -197,13 +249,25 @@ export class AddDialog {
   isFormValid: boolean = true;
   isNewFile: boolean = false;
   apiErr;
+  owners;
   constructor(
     private apiService: ApiService,
     private toast: ToastService,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) { }
-
+  ) {
+    this.loadMembers();
+  }
+  loadMembers() {
+    this.apiService.loadAll('memb').subscribe(
+      (result: any) => {
+        this.owners = result;
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
   accountFC = new FormGroup({
     label: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
     owner: new FormControl(''),
@@ -279,18 +343,30 @@ export class EditDialog implements OnInit{
   isNewFile: boolean = false;
 
   apiErr;
+  owners;
 
   constructor(
     private apiService: ApiService,
     public dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData
-  ) { }
-
+  ) { 
+    this.loadMembers();
+  }
+  loadMembers() {
+    this.apiService.loadAll('memb').subscribe(
+      (result: any) => {
+        this.owners = result;
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
   accountFC = new FormGroup({
     label: new FormControl(''),
     owner: new FormControl(''),
-    balance: new FormControl(''),
-    currency: new FormControl(''),
+    balance: new FormControl({ value: '', disabled: true }),
+    currency: new FormControl({ value: '', disabled: true }),
     desc: new FormControl(''),
     status: new FormControl(''),
     file: new FormControl(Validators.required),
