@@ -5,6 +5,6 @@
 
 export const environment = {
   production: false,
-  serverUrl: "http://localhost:8000/api/",
-  serverDomain: "http://localhost:8000",
+  serverUrl: "http://karimi73.pythonanywhere.com/api/",
+  serverDomain: "http://karimi73.pythonanywhere.com",
 };
