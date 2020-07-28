@@ -9,8 +9,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./members.component.css']
 })
 export class MembersComponent implements OnInit {
+  filterCul = 'all';
   // Define all the variable
   displayedColumns: string[] = ['first_name', 'last_name', 'phone', 'email', 'posistion', 'id'];
+  filterColumns: string[] = ['first_name', 'last_name', 'phone', 'email', 'posistion'];
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -113,9 +115,26 @@ export class MembersComponent implements OnInit {
   }
 
   applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value;    
+    if (this.filterCul == 'all') {
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+    else{
+      this.dataSource.filterPredicate = function(data:any, filter):boolean {
+        filter = JSON.parse(filter);
+        let term = filter[0];
+        let key = filter[1];
+        return data[key].toLowerCase().includes(term);
+      }
+      this.dataSource.filter = JSON.stringify([filterValue.trim().toLowerCase(), this.filterCul]);
+    }
   }
+
+  filterCulChange(data){
+    this.filterCul = data.value;
+  }
+
+
 
 }
 

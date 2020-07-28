@@ -1,10 +1,22 @@
-<div class="csmr-table-actions table-actions">
+<div class="csmr-table-actions table-actions mat-typography">
   <button class="m-1 text-white bg-success" mat-raised-button mat-button (click)="openAddDialog()">Add <mat-icon>add
     </mat-icon></button>
-  <mat-form-field>
-    <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
-  </mat-form-field>
+    <mat-form-field class="ml-2">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium">
+    </mat-form-field>
+    <mat-form-field class="ml-2">
+      <mat-label>Column</mat-label>
+      <mat-select (selectionChange)="filterCulChange($event)">
+        <mat-option value="all">All</mat-option>
+        <span *ngFor="let c of filterColumns">
+          <mat-option [value]="c" *ngIf="c != 'id'" class="text-capitalize">
+            {{ c.replace('_', ' ') }}
+          </mat-option>
+        </span>
+      </mat-select>
+    </mat-form-field>
+
 </div>
 
 <table width="100%" mat-table [dataSource]="dataSource" matSort matSortActive="id" matSortDisableClear
