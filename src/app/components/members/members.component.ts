@@ -124,7 +124,7 @@ export class MembersComponent implements OnInit {
         filter = JSON.parse(filter);
         let term = filter[0];
         let key = filter[1];
-        return data[key].toLowerCase().includes(term);
+        return data[key].toString().toLowerCase().includes(term);
       }
       this.dataSource.filter = JSON.stringify([filterValue.trim().toLowerCase(), this.filterCul]);
     }
