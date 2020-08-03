@@ -340,7 +340,7 @@ export class CuDialog implements OnInit{
   calTotal(){
     let count = 0;
     this.billItems.forEach(element => {
-      count += element.total;
+      count = +Number(count) + +Number(element.total);
     });
     this.bilTotalPrice = count;
   }
@@ -393,7 +393,12 @@ export class CuDialog implements OnInit{
   getLastInvNum() {    
     this.apiService.loadAll('last_bil').subscribe(
       (result: any) => {
-        this.bilNumber = 'Bill-' + result.bill;
+        if (result.bill) {
+          this.bilNumber = 'Bill-' + (result.bill + 1);
+        }
+        else{
+          this.bilNumber = 'Bill-' + 1;
+        }
         this.billFC.controls['bill_number'].disable();
         this.billFC.controls['total_price'].disable();
         this.billFC.controls['balance'].disable();

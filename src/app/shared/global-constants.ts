@@ -1,6 +1,6 @@
 export var GlobalVariable = {
 
-  apiURL: "http://karimi73.pythonanywhere.com/",
+  apiURL: "http://localhost:8000/",
   siteTitle: "This is example of ItSolutionStuff.com",
 
 }

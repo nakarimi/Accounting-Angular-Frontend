@@ -1959,7 +1959,7 @@ var __importDefault = (undefined && undefined.__importDefault) || function (mod)
   return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 var GlobalVariable = {
-    apiURL: "http://karimi73.pythonanywhere.com/",
+    apiURL: "http://localhost:8000/",
     siteTitle: "This is example of ItSolutionStuff.com",
 };
 
@@ -2419,8 +2419,8 @@ var __importDefault = (undefined && undefined.__importDefault) || function (mod)
 };
 const environment = {
     production: false,
-    serverUrl: "http://karimi73.pythonanywhere.com/api/",
-    serverDomain: "http://karimi73.pythonanywhere.com",
+    serverUrl: "http://localhost:8000/api/",
+    serverDomain: "http://localhost:8000",
 };
 
 

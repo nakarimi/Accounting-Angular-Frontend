@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, Output, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { ApiService } from '../../api.service';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog, MatSort, MatPaginator, MatTableDataSource } from '@angular/material';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { merge, Observable, of as observableOf } from 'rxjs';
 
@@ -158,10 +158,11 @@ export class AddDialog {
   ) { }
 
   customerFC = new FormGroup({
-    label: new FormControl(''),
-    owner: new FormControl(''),
-    phone: new FormControl(''),
-    email: new FormControl(''),
+    label: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
+    owner: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
+    phone: new FormControl('', [Validators.required,
+    Validators.pattern(/^(?=\D*\d).{9}$/)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     status: new FormControl(''),
   });
 
@@ -201,10 +202,11 @@ export class EditDialog implements OnInit{
   ) { }
 
   customerFC = new FormGroup({
-    label: new FormControl(''),
-    owner: new FormControl(''),
-    phone: new FormControl(''),
-    email: new FormControl(''),
+    label: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
+    owner: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
+    phone: new FormControl('', [Validators.required,
+    Validators.pattern(/^(?=\D*\d).{9}$/)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     status: new FormControl(''),
   });
 

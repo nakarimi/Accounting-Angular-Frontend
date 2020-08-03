@@ -3060,7 +3060,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     };
 
     var GlobalVariable = {
-      apiURL: "http://karimi73.pythonanywhere.com/",
+      apiURL: "http://localhost:8000/",
       siteTitle: "This is example of ItSolutionStuff.com"
     };
     /***/
@@ -3845,8 +3845,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
     var environment = {
       production: false,
-      serverUrl: "http://karimi73.pythonanywhere.com/api/",
-      serverDomain: "http://karimi73.pythonanywhere.com"
+      serverUrl: "http://localhost:8000/api/",
+      serverDomain: "http://localhost:8000"
     };
     /***/
   },

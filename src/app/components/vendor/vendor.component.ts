@@ -158,11 +158,12 @@ export class AddDialog {
   ) { }
 
   vendorFC = new FormGroup({
-    label: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(5)]),
-    owner: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(5)]),
-    phone: new FormControl('', [Validators.required,]),
-    email: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(5)]),
-    status: new FormControl('',),
+    label: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
+    owner: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
+    phone: new FormControl('', [Validators.required,
+    Validators.pattern(/^(?=\D*\d).{9}$/)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    status: new FormControl(''),
     desc: new FormControl('',),
   });
 
@@ -197,10 +198,11 @@ export class EditDialog implements OnInit{
   ) { }
 
   vendorFC = new FormGroup({
-    label: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(5)]),
-    owner: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(5)]),
-    phone: new FormControl('', [Validators.required, Validators.pattern("[0-9 ]{11}")]),
-    email: new FormControl('', [Validators.required, Validators.maxLength(50), Validators.minLength(5)]),
+    label: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
+    owner: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
+    phone: new FormControl('', [Validators.required,
+    Validators.pattern(/^(?=\D*\d).{9}$/)]),
+    email: new FormControl('', [Validators.required, Validators.email]),
     status: new FormControl(''),
     desc: new FormControl(''),
   });

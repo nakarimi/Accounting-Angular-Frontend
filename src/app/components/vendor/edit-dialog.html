@@ -2,24 +2,57 @@
 <mat-dialog-content class="mat-typography">
   <form class="example-container" [formGroup]="vendorFC" enctype="multipart/form-data" (ngSubmit)="update(data)">
     <mat-form-field>
-      <input matInput autocomplete="off" type="text" formControlName="label" placeholder="Label" required>
+      <input matInput autocomplete="off" type="text" formControlName="label" placeholder="Label"
+        [errorStateMatcher]="matcher">
+      <mat-error *ngIf="vendorFC.get('label').hasError('required')">
+        Label is required.
+      </mat-error>
+      <mat-error *ngIf="vendorFC.get('label').hasError('minlength')">
+        Label must be at least 3 characters long.
+      </mat-error>
+      <mat-error *ngIf="vendorFC.get('label').hasError('maxlength')">
+        Label must be at most 25 characters long.
+      </mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input matInput autocomplete="off" type="textarea" formControlName="owner" placeholder="Owner" required>
+      <input matInput autocomplete="off" type="textarea" formControlName="owner" placeholder="Owner" required
+        [errorStateMatcher]="matcher">
+      <mat-error *ngIf="vendorFC.get('owner').hasError('required')">
+        Owner is required.
+      </mat-error>
+      <mat-error *ngIf="vendorFC.get('owner').hasError('minlength')">
+        Owner must be at least 3 characters long.
+      </mat-error>
+      <mat-error *ngIf="vendorFC.get('owner').hasError('maxlength')">
+        Owner must be at most 25 characters long.
+      </mat-error>
     </mat-form-field>
     <div>
-      <mat-label>Status</mat-label>
+      <label>Status: </label>
       <mat-checkbox formControlName="status">Active</mat-checkbox>
     </div>
     <mat-form-field>
-      <input matInput autocomplete="off" type="number" formControlName="phone" placeholder="Phone" required>
+      <input matInput autocomplete="off" type="number" formControlName="phone" placeholder="Phone" required
+        [errorStateMatcher]="matcher">
+      <mat-error *ngIf="vendorFC.get('phone').errors && vendorFC.get('phone').errors.required">
+        Phone is required.
+      </mat-error>
+      <mat-error *ngIf="vendorFC.get('phone').errors && vendorFC.get('phone').errors.pattern">
+        Phone must be 10 digits and start with 0.
+      </mat-error>
+    
     </mat-form-field>
     <mat-form-field>
-      <input matInput autocomplete="off" type="email" formControlName="email" placeholder="Email" required>
+      <input matInput autocomplete="off" type="email" formControlName="email" placeholder="Email" required
+        [errorStateMatcher]="matcher">
+      <mat-error *ngIf="vendorFC.get('email').errors && vendorFC.get('email').errors.required">
+        Email is required.
+      </mat-error>
+      <mat-error *ngIf="vendorFC.get('email').errors && vendorFC.get('email').errors.email">
+        Email format is not correct.
+      </mat-error>
     </mat-form-field>
-    <mat-form-field>
-      <input matInput autocomplete="off" type="textarea" formControlName="desc" placeholder="Description">
-    </mat-form-field>
+
     <mat-dialog-actions align="end">
       <button type="submit" mat-button
         class="text-white"
