@@ -377,10 +377,10 @@ export class DashboardComponent implements OnInit{
 			matchPay.forEach(pay => {
 				if (pay.type == 'Expense') {
 					if (this.dyExpense[index]) {
-						this.dyExpense[index] += pay.amount;
+						this.dyExpense[index] -= pay.amount;
 					}
 					else {
-						this.dyExpense[index] = pay.amount;
+						this.dyExpense[index] = -pay.amount;
 					}
 					if (this.dyProfit[index]) {
 						this.dyProfit[index] -= pay.amount;
@@ -406,9 +406,9 @@ export class DashboardComponent implements OnInit{
 			});
 			index++;
 		});		
-		// console.log(this.dyExpense);
-		// console.log(this.dyIncome);
-		// console.log(this.dyProfit);
+		console.log(this.dyExpense);
+		console.log(this.dyIncome);
+		console.log(this.dyProfit);
 		
 	}
 }

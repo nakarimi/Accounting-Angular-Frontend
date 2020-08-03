@@ -218,7 +218,7 @@ export class BillComponent implements AfterViewInit {
         filter = JSON.parse(filter);
         let term = filter[0];
         let key = filter[1];
-        return data[key].toLowerCase().includes(term);
+        return data[key].toString().toLowerCase().includes(term);
       }
       this.dataSource.filter = JSON.stringify([filterValue.trim().toLowerCase(), this.filterCul]);
     }
@@ -340,7 +340,7 @@ export class CuDialog implements OnInit{
   calTotal(){
     let count = 0;
     this.billItems.forEach(element => {
-      count += element.total;
+      count = +Number(count) + +Number(element.total);
     });
     this.bilTotalPrice = count;
   }
@@ -393,7 +393,12 @@ export class CuDialog implements OnInit{
   getLastInvNum() {    
     this.apiService.loadAll('last_bil').subscribe(
       (result: any) => {
-        this.bilNumber = 'Bill-' + result.bill;
+        if (result.bill) {
+          this.bilNumber = 'Bill-' + (result.bill + 1);
+        }
+        else{
+          this.bilNumber = 'Bill-' + 1;
+        }
         this.billFC.controls['bill_number'].disable();
         this.billFC.controls['total_price'].disable();
         this.billFC.controls['balance'].disable();

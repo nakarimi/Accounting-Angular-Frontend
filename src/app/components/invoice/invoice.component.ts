@@ -223,7 +223,7 @@ export class InvoiceComponent implements AfterViewInit {
         filter = JSON.parse(filter);
         let term = filter[0];
         let key = filter[1];
-        return data[key].toLowerCase().includes(term);
+        return data[key].toString().toLowerCase().includes(term);
       }
       this.dataSource.filter = JSON.stringify([filterValue.trim().toLowerCase(), this.filterCul]);
     }
@@ -350,7 +350,7 @@ export class CuDialog implements OnInit{
   calTotal(){
     let count = 0;
     this.invoiceItems.forEach(element => {
-      count += element.total;
+      count = +Number(count) + +Number(element.total);
     });
     this.invTotalPrice = count;
     this.invBalance = count;
@@ -404,7 +404,12 @@ export class CuDialog implements OnInit{
   getLastInvNum() {    
     this.apiService.loadAll('last_inv').subscribe(
       (result:any) => {
-        this.invNumber = 'Invoice-' + result.invoice;
+        if (result.invoice) {
+          this.invNumber = 'Invoice-' + (result.invoice + 1);
+        }
+        else{
+          this.invNumber = 'Invoice-' + 1;
+        }
         this.invoiceFC.controls['inv_number'].disable();
         this.invoiceFC.controls['total_price'].disable();
         this.invoiceFC.controls['balance'].disable();
@@ -427,6 +432,8 @@ export class CuDialog implements OnInit{
           this.itemSource = new MatTableDataSource(this.invoiceItems);          
           this.itemsFC.reset();
         }
+        console.log(this.errors);
+        
       },
     );
   }

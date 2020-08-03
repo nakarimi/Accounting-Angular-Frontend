@@ -9,7 +9,7 @@
           First Name is required.
         </mat-error>
         <mat-error *ngIf="memberFC.get('first_name').hasError('minlength')">
-          First Name must be at least 5 characters long.
+          First Name must be at least 3 characters long.
         </mat-error>
         <mat-error *ngIf="memberFC.get('first_name').hasError('maxlength')">
           First Name must be at most 25 characters long.
@@ -22,7 +22,7 @@
           Last Name is required.
         </mat-error>
         <mat-error *ngIf="memberFC.get('last_name').hasError('minlength')">
-          Last Name must be at least 5 characters long.
+          Last Name must be at least 3 characters long.
         </mat-error>
         <mat-error *ngIf="memberFC.get('last_name').hasError('maxlength')">
           Last Name must be at most 25 characters long.

@@ -14,9 +14,6 @@
                 <mat-error *ngIf="regForm.get('username').errors && regForm.get('username').errors.maxlength">
                   Username must be at most 25 characters long.
                 </mat-error>
-                <mat-error *ngIf="regForm.get('username').errors && regForm.get('username').errors.custom">
-                  This username already exist.
-                </mat-error>
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Email</mat-label>
@@ -27,9 +24,6 @@
                 </mat-error>
                 <mat-error *ngIf="regForm.get('email').errors && regForm.get('email').errors.email">
                   Email format is not correct.
-                </mat-error>
-                <mat-error *ngIf="regForm.get('email').errors && regForm.get('email').errors.custom">
-                  This email already exist.
                 </mat-error>
               </mat-form-field>
               <mat-form-field>

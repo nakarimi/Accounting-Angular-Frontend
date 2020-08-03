@@ -124,7 +124,7 @@ export class MembersComponent implements OnInit {
         filter = JSON.parse(filter);
         let term = filter[0];
         let key = filter[1];
-        return data[key].toLowerCase().includes(term);
+        return data[key].toString().toLowerCase().includes(term);
       }
       this.dataSource.filter = JSON.stringify([filterValue.trim().toLowerCase(), this.filterCul]);
     }
@@ -154,8 +154,8 @@ export class AddDialog {
   ) { }
 
   memberFC = new FormGroup({
-    first_name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
-    last_name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+    first_name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
+    last_name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
     phone: new FormControl('', [Validators.required, 
       Validators.pattern(/^(?=\D*\d).{9}$/)]),
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -196,10 +196,10 @@ export class EditDialog implements OnInit {
   ) { }
 
   memberFC = new FormGroup({
-    first_name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
-    last_name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
+    first_name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
+    last_name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(25)]),
     phone: new FormControl('', [Validators.required,
-    Validators.pattern(/^(?=\D*\d).{9}$/)]),
+      Validators.pattern(/^(?=\D*\d).{9}$/)]),
     email: new FormControl('', [Validators.required, Validators.email]),
     posistion: new FormControl('', Validators.required),
   });
