@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 import { ExportToCsv } from 'export-to-csv';
 import { Router } from '@angular/router';
 import { ToastService } from '../../shared/toast/toast-service';
+import { count } from 'rxjs/operators';
 
 
 @Component({
@@ -168,31 +169,33 @@ export class ReportComponent implements OnInit {
   }
   exportCsv(title, data, headers = null) {
 
-    console.log(title);
-
-    let options = {
-      fieldSeparator: ',',
-      quoteStrings: '"',
-      decimalSeparator: '.',
-      showLabels: true,
-      showTitle: false,
-      title: title,
-      filename: title,
-      useTextFile: false,
-      useBom: true,
-      useKeysAsHeaders: true,
-      headers: []
-      //  <-- Won't work with useKeysAsHeaders present!
-    };
-
-    if (headers) {
-      options.useKeysAsHeaders = false;
-      options.headers = headers;
+    if (data.length > 0) {
+      let options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: false,
+        title: title,
+        filename: title,
+        useTextFile: false,
+        useBom: true,
+        useKeysAsHeaders: true,
+        headers: []
+        //  <-- Won't work with useKeysAsHeaders present!
+      };
+  
+      if (headers) {
+        options.useKeysAsHeaders = false;
+        options.headers = headers;
+      }
+      const csvExporter = new ExportToCsv(options);
+  
+      csvExporter.generateCsv(data);
     }
-    const csvExporter = new ExportToCsv(options);
-
-    csvExporter.generateCsv(data);
-
+    else{
+      this.toast.show("Data not found, check another option!", { classname: 'bg-danger text-light', delay: 5000 });
+    }
   }
 
 
