@@ -4,6 +4,8 @@ import { MatTableDataSource, MatSort, MatPaginator, MatDialog, MatDialogRef } fr
 import { ToastService } from '../../shared/toast/toast-service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-user',
@@ -29,7 +31,8 @@ export class UserComponent implements OnInit {
     private apiService: ApiService,
     public toast: ToastService,
     public router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private http: HttpClient
   ) { }
 
   ngOnInit() {
@@ -124,7 +127,7 @@ export class UserComponent implements OnInit {
   templateUrl: './adduser.component.html',
 })
 export class AddUserComponent implements OnInit {
-
+  findUserResp = false;
   regForm = this._formBuilder.group({
     username: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
     password: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(25)]),
@@ -142,6 +145,7 @@ export class AddUserComponent implements OnInit {
     public router: Router,
     public dialogRef: MatDialogRef<any>,
     private _formBuilder: FormBuilder,
+    private http: HttpClient
 
     // @Inject(MAT_DIALOG_DATA) public dData: DialogData,
   ) { }
@@ -165,43 +169,5 @@ export class AddUserComponent implements OnInit {
       pass.value !== confirmPass.value ? { notEquivalent: true } : null
     );
   }
-  checkUsername() {
-    let username = this.regForm.controls.username;
-    let v = true;
-    if(username.errors){
-      v = !(username.errors.required || username.errors.maxlength || username.errors.minlength);
-    }
-    if (username.value && v) {
 
-      let r = this.findThisUserData('username', username.value);
-      return username.setErrors(
-        r ? { custom: true } : null
-      );
-    }
-    
-  }
-
-  checkEmail() {
-    let email = this.regForm.controls.email;
-
-    let v = true;
-    if (email.errors) {
-      v = !(email.errors.required || email.errors.email);
-    }
-    if (email.value && v) {
-
-      let r = this.findThisUserData('email', email.value);
-      return email.setErrors(
-        r ? { custom: true } : null
-      );
-
-    }
-  }
-
-  findThisUserData(field, value){
-    console.log(value);
-    console.log(field);
-    
-    return true;
-  }
 }
