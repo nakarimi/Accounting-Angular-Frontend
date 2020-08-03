@@ -343,7 +343,7 @@ export class EditDialog implements OnInit{
   editData : any;
   isFormValid: boolean = true;
   isNewFile: boolean = false;
-
+  site_url = environment.serverDomain;
   apiErr;
   owners;
 
