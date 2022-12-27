@@ -1,4 +1,6 @@
-1- Define the main path of each component on the app.routing.ts
-2- in each item got to item.module.ts and then set the child path.
-https://www.techiediaries.com/angular-django-formdata-multiple-file-upload-tutorial/
-https://www.techiediaries.com/django-rest-image-file-upload-tutorial/
+# Accounting Web Application (Frontend Angular)
+
+A web application powred by JavaScript and Pythong with the Angular and Django Frameworks.
+Facilitates the management on the Almo Tech Office. Managing the users, bills, customers, vendors, invoices, payments and transactions.
+Enhances the reports, and insights for better and clear decistion taking for the company and future actions.
+Integrated with Django Rest Framework, MongoDB and many other third party servies.
