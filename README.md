@@ -5,3 +5,6 @@ Facilitates the management on the Almo Tech Office. Managing the users, bills, c
 Enhances the reports, and insights for better and clear decistion taking for the company and future actions.
 
 Integrated with Django Rest Framework, MongoDB and many other third party servies.
+
+# Django Backend
+https://github.com/nakarimi/Accounting-Django-Backend 
